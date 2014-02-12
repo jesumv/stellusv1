@@ -1,0 +1,117 @@
+body {
+	
+            font-family:Arial, Helvetica, sans-serif;
+            font-size:14px;
+
+}
+
+
+#bandasup{
+	
+	background-color:#004080;
+	height: 10em;
+	padding-left: 1em;
+	padding-bottom: 1em;
+	color:#ffffff;
+}
+
+#divi1{
+
+width:600px;
+float:left;
+margin-right:6em;
+}
+
+
+
+#titpag {
+
+	margin-top:1em;
+}
+
+#logo{
+
+}
+
+#logoprinc1{
+	width:95px;
+	height:95px;
+	margin-top:.4em;
+	float:left;
+}
+
+#titprinc{
+	font:Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 2em;	
+}
+
+#loginbox{
+	float:right;
+	margin:1em;
+}
+
+#derarr{
+	float:left;
+	padding-left:1em;
+	margin:1em;
+	clear:right;
+	width:750px;	
+}
+
+#fecha{
+	float:right;
+	margin-right:1em;
+	margin-top:1em;
+}
+
+#actionbox{
+	float:left;
+	margin:10px;
+	margin-left: 4em;
+	margin-right:1em;
+	background-color:#FF8533;
+	clear:right;
+	width:760px;
+	border: solid 1px #333333; 
+}
+
+#saluda{
+	float:right;
+	margin-right:2em;
+}
+
+#cajacent{
+	width:575px;
+	margin-top: 1em;
+	margin-left: auto ;
+  	margin-right: auto ;
+}
+
+
+
+#footer{
+	margin-top:1em;
+	background-color:#8080ff;
+	border-top:solid 10px;
+	height: 3em;
+	padding-left: 1em;
+	padding-bottom: 1em;
+}
+
+/*----------------------------------------------------------------------------*/
+/*tablas */
+
+table.n1 th{
+	width:150px;
+}
+
+
+table.n1 td.enc{
+	background-color: #808080;
+	text-align:center;
+}
+
+
+#impr{
+	float: left;
+}
