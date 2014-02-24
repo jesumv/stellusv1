@@ -75,8 +75,8 @@ if(isset($_POST['altaprod'])){
             $id = $row2[0];
             $elid = -$row2[0];
             echo '<tr>';
-            echo '<td class= ed id='.$id.'><a href ="modifprod.php"><img src="img/edita.jpg" ALT="editar"></a></td>';
-            echo '<td class = el id='.$elid.'><a href ="elimprod.php"><img src="img/elimina.jpg" ALT="eliminar"></a></td>';
+            echo '<td class= ed id='.$id.'><a href ="modifprod.php?nid='.$id.'"><img src="img/edita.jpg" ALT="editar"></a></td>';
+            echo '<td class = el id='.$elid.'><a href ="elimprod.php?nid='.$elid.'"><img src="img/elimina.jpg" ALT="eliminar"></a></td>';
             foreach($row2 as $key=>$value) {
                 echo '<td>',$value,'</td>';
             }

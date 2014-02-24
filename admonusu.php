@@ -65,7 +65,7 @@ $nivel = $_POST['nivel'];
     
 <head>
     
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 
 
 <!--links a hojas de estilo ----------------------------------------------------->

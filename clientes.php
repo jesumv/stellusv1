@@ -78,8 +78,8 @@ if(isset($_POST['altacte'])){
             $id = $row2[0];
             $elid = -$row2[0];
             echo '<tr>';
-            echo '<td class= ed id='.$id.'><a href ="modifprov.php"><img src="img/edita.jpg" ALT="editar"></a></td>';
-            echo '<td class = el id='.$elid.'><a href ="elimprov.php"><img src="img/elimina.jpg" ALT="eliminar"></a></td>';
+            echo '<td class= ed id='.$id.'><a href ="modifcte2.php?nid='.$id.'"><img src="img/edita.jpg" ALT="editar"></a></td>';
+            echo '<td class = el id='.$elid.'><a href ="elimcte.php?nid='.$elid.'"><img src="img/elimina.jpg" ALT="eliminar"></a></td>';
             foreach($row2 as $key=>$value) {
                 echo '<td>',$value,'</td>';
             }

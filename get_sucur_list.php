@@ -14,17 +14,20 @@
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
 	
-    
-	$req = "SELECT idproveedores,razon_social FROM proveedores where razon_social like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
-
+    $req = "SELECT idsuccliente,nom_sucursal FROM succliente where nom_sucursal like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
     $query = mysqli_query($mysqli,$req);
     
     while($row = mysqli_fetch_array($query))
     {
-        $results[] = array('label' => $row['razon_social']);
+        $results[] = array('label' => $row['nom_sucursal'],'idsuccliente' => $row['idsuccliente']);
     }
+	
+	 /* liberar la serie de resultados */
+	    mysqli_free_result($query);
+	    /* cerrar la conexion */
+	    mysqli_close($mysqli);
     
-    echo json_encode($results);
+    	echo json_encode($results);
 
 
 ?>

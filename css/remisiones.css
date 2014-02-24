@@ -1,0 +1,48 @@
+#logo{
+	width:75 px;
+	height:50 px;
+}
+
+
+/*estilos para las tablas*/
+
+table.tablap 		{ border:1px solid #000000; margin:auto; width:98%;}
+table.tablap th		{ background:#eee; padding:5px ;border-left:1px solid #ccc; border-top:1px solid #ccc; }
+table.tablap.exten td {}
+table.tablap td		{ padding:5px; border: 1px solid #ccc; }
+table.tablap td #logo{
+
+}
+table.tablap td#logo img{
+	height: 130px;
+ 	width: 500px;
+ 	margin-left: 7em;
+} 
+
+table.tablap td.colorida {
+	background-color:#AAAAAA;
+	font-size:xx-large;
+	text-align:center;
+}
+
+table.tablap td.contenido{
+	font-family:Times;
+	font-size:xx-large;
+	color:#000080;
+	text-align:center;
+}
+
+table.tablap td.coloridachic{
+	width:10%;
+	background-color:#AAAAAA;
+}
+
+table.tablap td.celda{
+	height:10px;
+}
+
+
+.centraelem{
+	margin:auto;
+	text-align:center;
+}

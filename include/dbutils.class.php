@@ -70,7 +70,31 @@
             }
         }
         
-        
+        public function numremi($mysqli){
+        	/*lee el ultimo numero de remision emitido*/
+        	$sql= "SELECT MAX(idremisiones) FROM remisiones";
+            $result = mysqli_query($mysqli,$sql);
+            $result2 = mysqli_fetch_row($result);
+			$dato = $result2[0];
+            /* liberar la serie de resultados */
+                  mysqli_free_result($result);
+                  /* cerrar la conexion */
+                  mysqli_close($mysqli);
+            if($result2){
+              return $dato;  
+            }
+            else {
+                 die('no hay resultados para el numero de remision');
+            }
+        }
+		
+		public function compledom($calleno,$col,$del,$ciudad,$estado,$cp){
+			/*toma los elementos del domicilio y los une en una cadena */
+			$completo = $calleno." ".$col." ".$del." c.p.".$cp." ".$ciudad.", ".$estado;
+			return $completo;
+			
+		}
+        	
 	
 	}/*** fin de la clase ***/
 	
