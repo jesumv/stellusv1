@@ -76,10 +76,6 @@
             $result = mysqli_query($mysqli,$sql);
             $result2 = mysqli_fetch_row($result);
 			$dato = $result2[0];
-            /* liberar la serie de resultados */
-                  mysqli_free_result($result);
-                  /* cerrar la conexion */
-                  mysqli_close($mysqli);
             if($result2){
               return $dato;  
             }
@@ -95,6 +91,23 @@
 			
 		}
         	
+		public function llenaarts($mysqli,$remision,$codigo,$descripcion,$precio,$cantidad,$importe){
+			$table = 'artremision';
+			/*llena la tabla artremision con los articulos de cada remision*/
+			$sqlCommand= "INSERT INTO $table (codigo,remision,descripcion,precio_unitario,cantidad,importe)
+	    	VALUES ($codigo,$remision,'$descripcion',$precio,$cantidad,$importe)"
+	    or die('insercion cancelada '.$table);
+			
+	    // Execute the query here now
+	    if($query=mysqli_query($mysqli, $sqlCommand)){
+	    	return 0;
+	    }else{
+	    	return $mysqli->connect_error;
+	    }
+	    
+			
+		}
+		
 	
 	}/*** fin de la clase ***/
 	

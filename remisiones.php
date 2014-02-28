@@ -15,9 +15,81 @@
 /***lee el numero de remision ***/
 		$remiact= $funcbase->numremi($mysqli)+1;
 		
+		function oprimio($mysqli,$remiact){
+	//esta funcion hace las consultas de actualizacion
+		$table = 'remisiones';
+	    $idcliente =strtoupper($_POST ['idclientes']) ;
+		$fecha =strtoupper($_POST ['fecha']) ;
+	    $usu = $_SESSION['username'];
+		$cliente = $_POST ['cliente'];
+		$sucursal = $_POST ['sucursal'];
+		$doctor= $_POST ['doctor'];
+		$procedimiento = $_POST ['procedimiento'];
+		$paciente = $_POST ['paciente'];
+		$registro = $_POST ['registro'];
+		$subtotal =  $_POST ['insubtotal'];
+		$iva =  $_POST ['iniva'];
+		$total =  $_POST ['intotal'];
+		$intotletra = $_POST ['intotletra'];
+
+		
+//insercion en la tabla de remisiones		
+	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,sucursal,doctor,procedimiento,
+	    paciente,registro,subtotal,iva,total,con_letra)
+	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente','$sucursal','$doctor','$procedimiento','$paciente','$registro',
+	    $subtotal,$iva,$total,'$intotletra')"
+	    or die('insercion cancelada '.$table);
+			
+	    // Execute the query here now
+	    $query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+//insercion en la tabla de artremisiones--------------------------------------------------------
+
+		//obtencion de valores del html 
+			$table = 'artremision';
+			$codigo=  $_POST ['cod0'];
+			$precio = $_POST ['inprecio0'];
+			$cantidad = $_POST ['cant0'];
+			$importe= $_POST ['inimpor0'];
+			
+			$sqlCommand= "INSERT INTO $table (codigo,remision,precio_unitario,cantidad,importe)
+	    	VALUES ('$codigo',$remiact,$precio,$cantidad,$importe)"
+	    	or die('insercion cancelada '.$table);
+			// Execute the query here now
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+//insercion en la tabla de inventarios	    	
+	   		//obtencion de valores
+	   		$idproductos= $_POST ['inidprod0'];
+	   //disminucion de almacen central   		
+	   		$table = 'inventarios';
+	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
+	    	VALUES ($idproductos,'$fecha',1,2,-$cantidad,$remiact,'$usu',1)"
+	    	or die('insercion cancelada '.$table);
+			// Execute the query here now
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	   //Incremento en almacen de destino
+	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
+	    	VALUES ($idproductos,'$fecha',$idcliente,1,$cantidad,$remiact,'$usu',1)"
+	    	or die('insercion cancelada '.$table);
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	}
+	
+	
+		if(isset($_POST['enviorem'])){
+			
+		    oprimio($mysqli,$remiact);
+			
+			/* cerrar la conexion */
+	    	mysqli_close($mysqli);  
+		    // ojo: aqui va la hoja de pdf: 
+		    header('Location: remisiones.php');
+		}
+		
     } else {
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
+	
+
+
 	
 ?>
 
@@ -79,6 +151,7 @@
  							var trans4 = $("#fecha").val();
  							var trans5 = $("#agente").val();
  							var trans6 = $("#domicilio").val();
+ 							var trans7 = $("#idclientes").val();
             				$("#clientprint").append(" "+trans1);
             				$("#sucurprint").append(" "+trans2);
             				$("#rfcprint").append(" "+trans3);
@@ -96,26 +169,45 @@
         	minLength: 2,
         	select:function(event,ui){
         		event.preventDefault();
-        		this.value = ui.item.codigo;
+        		var codigo = ui.item.codigo
+        		this.value = codigo;
         		var des0 = ui.item.desc;
-        		$("#des0").append(des0);
-        		$("#precio0").val("8000");
+        		var alg = ui.item.alg;
+        		var cliente = $("#idclientes").val();
+        		var idproducto =  ui.item.idproductos;
+        		var nivel = $("#nivel").val();
+        		if(cliente == 21){
+        		$("#des0").append(des0+" ALG-"+alg)	
+        		}else{ $("#des0").append(des0)
+        				$("#indes0").val(des0);
+        			}
+        		$.getJSON("php/get_precio.php", {idproductos: idproducto , nivel: nivel}, function(data){
+        			var precio1 = data[0].precio;
+	   				$("#precio0").append(precio1);
+	        		$("#inprecio0").val(precio1);
+				});
+        		$("#inidprod0").val(idproducto);
         		$("#cant0").focus();
         	}
 
         })
         
         $( "#cant0" ).change(function() {
-        	var precio = $("#precio0").val();
+        	var precio = $("#inprecio0").val();
         	var cant = parseInt(this.value);
 			var importe = precio* cant;
 			$("#impor0").append(importe);
+			$("#inimpor0").val(importe);
 			$("#subtotal").append(importe);
-			var iva = calciva(importe)	;
+			$("#insubtotal").val(importe);
+			var iva = calciva(importe);
 			$("#iva").append(iva);
-			var total = importe+iva;
+			$("#iniva").val(iva);
+			var total = (importe+iva).toString();
 			$("#total").append(total);
-			var totletra = total;
+			$("#intotal").val(total);
+			var totletra = covertirNumLetras(total);
+			$("#intotletra").val(totletra);
 			$("#totletra").append(totletra);
 		});
     	  
@@ -142,13 +234,13 @@
 </div>
 
 <br />
- <form>
+ <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
 	 <div class = "ui-widget-header">
 	 	<legend>Datos de la Remisión:</legend>
 	 	<label for="cliente">Cliente: </label>
 	 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
 	 	<input type="hidden" id="razon" class="ui-autocomplete-content"/>
-	 	<input type="hidden" id="idclientes" />
+	 	<input type="hidden" id="idclientes" name="idclientes"/>
 	 	<input type="hidden" id="rfc" class="ui-autocomplete-content"/>
 	 	<input type="hidden" id="domicilio" class="ui-autocomplete-content" length= "200"/>
 	 	<input type="hidden" id="nivel" class="ui-autocomplete-content"/>
@@ -189,11 +281,11 @@
 <p></p>
 <div>
 	<table class="tablap">
-		<tr><td class="coloridachic">DOCTOR</td><td><input type = "text" id="doctor" size = "60"/></td>
-			<td class="coloridachic">PROCEDIMIENTO</td><td><input type = "text" id="procedimiento" size = "60"/></td>
+		<tr><td class="coloridachic">DOCTOR</td><td><input type = "text" id="doctor" name = "doctor" size = "60"/></td>
+			<td class="coloridachic">PROCEDIMIENTO</td><td><input type = "text" id="procedimiento" name = "procedimiento" size = "60"/></td>
 		</tr>
-		<tr><td class="coloridachic">PACIENTE</td><td><input type = "text" id="paciemte" size = "60"/></td>
-			<td class="coloridachic">N.REGISTRO</td><td><input type = "text" id="registro" size= "60"/></td>
+		<tr><td class="coloridachic">PACIENTE</td><td><input type = "text" id="paciente" name ="paciente" size = "60"/></td>
+			<td class="coloridachic">N.REGISTRO</td><td><input type = "text" id="registro" name = "registro" size= "60"/></td>
 		</tr>
 	</table>
 </div>
@@ -204,24 +296,25 @@
 		<?php
 		for($i=0;$i<13;$i++){
 			echo"<tr>
-				<td class='ui-autocomplete-content' class='art'><input type='text' id='cod$i'/></td>
-				<td id='des$i'></td>
-				<td class='ui-autocomplete-content' class='art'><input type='number' id='precio$i' disabled/></td>
-				<td class='ui-autocomplete-content' class='art'><input type='number' id='cant$i'/></td>
-				</td><td id='impor$i'></td>
+				<td class='ui-autocomplete-content' class='art'><input type='text' id='cod$i' name ='cod$i' /></td>
+				<td id='des$i'></td><input type='hidden' id='indes$i' name ='indes$i' /><input type='hidden' id='inidprod$i' name ='inidprod$i' />
+				<td id= 'precio$i'></td><input type='hidden' id='inprecio$i' name ='inprecio$i' />
+				<td class='ui-autocomplete-content' class='art'><input type='number' id='cant$i' name='cant$i'/></td>
+				<td  id = 'impor$i'></td><input type='hidden' id='inimpor$i' name ='inimpor$i' />
 			</tr>";	
 		}
 		
 		?>
-		<tr><td colspan="3"></td><td class="coloridachic">SUBTOTAL</td><td id="subtotal"></td></tr>
-		<tr><td colspan="3"></td><td class="coloridachic">I.V.A.</td><td id="iva"></td></tr>
-		<tr><td class="coloridachic">TOTAL CON LETRA</td><td colspan="2" id="totletra"><td class="coloridachic">TOTAL</td><td id="total"></td></tr>
+		<tr><td colspan="3"></td><td class="coloridachic">SUBTOTAL</td><td id="subtotal"></td><input type="hidden" name = "insubtotal" id="insubtotal"/></tr>
+		<tr><td colspan="3"></td><td class="coloridachic">I.V.A.</td><td id="iva"></td><input type="hidden" name = "iniva" id="iniva"/></tr>
+		<tr><td class="coloridachic">TOTAL CON LETRA</td><td colspan="2" id="totletra"></td><input type="hidden" name = "intotletra" id="intotletra"/>
+		<td class="coloridachic">TOTAL</td><td id="total"></td><input type="hidden" name = "intotal" id="intotal"/></tr>
 		
 	</table>
 	
 </div>
 <p></p>
-<div class="centraelem"><input type="submit" value="IMPRIMIR REMISION"/></div>
+<div class="centraelem"><input type="submit" name ="enviorem" value="IMPRIMIR REMISION"/></div>
 </form>
 <div id="footer"></div>
 

@@ -20,7 +20,7 @@
     
     while($row = mysqli_fetch_array($query))
     {
-    	$domi1 = $row['calleno']." ".$row['col'].$row['del']." C.P.".$row['cp'].$row['ciudad'].",".$row['estado'];
+    	$domi1 = $row['calleno']." ".$row['col']." ".$row['del']." C.P.".$row['cp']." ".$row['ciudad'].",".$row['estado'];
         $results[] = array('label' => $row['nom_corto'],'idclientes' 
         => $row['idclientes'],'razon'=>$row['razon_social'],'rfc'=>$row['rfc'],
 		'domicilio'=> $domi1,'nivel'=>$row['nivel']);

@@ -1,7 +1,7 @@
 <?php
 	/*** Autoload class files ***/ 
     function __autoload($class){
-      require('include/' . strtolower($class) . '.class.php');
+      require('../include/' . strtolower($class) . '.class.php');
     }
     
     $funcbase = new dbutils;
@@ -14,13 +14,12 @@
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
 	
-    $req = "SELECT idproductos,nom_corto,codigo,descripcion,alg FROM productos where nom_corto like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
+    $req = "SELECT precio".mysql_real_escape_string($_GET['nivel'])." FROM productos where idproductos = " . mysql_real_escape_string($_GET['idproductos']) ; 
     $query = mysqli_query($mysqli,$req);
     
     while($row = mysqli_fetch_array($query))
     {
-        $results[] = array('label' => $row['nom_corto'],'idproductos' => $row['idproductos'],
-        'codigo' => $row['codigo'],'desc' =>$row['descripcion'],'alg' =>$row['alg']);
+        $results[] = array('precio' => $row[0]);
     }
 	
 	 /* liberar la serie de resultados */
