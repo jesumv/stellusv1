@@ -23,6 +23,7 @@
 	    $usu = $_SESSION['username'];
 		$cliente = $_POST ['cliente'];
 		$sucursal = $_POST ['sucursal'];
+		$agente = $_POST ['agente'];
 		$doctor= $_POST ['doctor'];
 		$procedimiento = $_POST ['procedimiento'];
 		$paciente = $_POST ['paciente'];
@@ -34,9 +35,9 @@
 
 		
 //insercion en la tabla de remisiones		
-	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,sucursal,doctor,procedimiento,
+	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,sucursal,agente,doctor,procedimiento,
 	    paciente,registro,subtotal,iva,total,con_letra)
-	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente','$sucursal','$doctor','$procedimiento','$paciente','$registro',
+	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente','$sucursal','$agente','$doctor','$procedimiento','$paciente','$registro',
 	    $subtotal,$iva,$total,'$intotletra')"
 	    or die('insercion cancelada '.$table);
 			
@@ -80,8 +81,11 @@
 			
 			/* cerrar la conexion */
 	    	mysqli_close($mysqli);  
-		    // ojo: aqui va la hoja de pdf: 
-		    header('Location: remisiones.php');
+			
+		    // redirección a la hoja pdf mediante javascript
+		    echo '<script type="text/javascript" language="Javascript">
+		    			window.open("php/rremision.php?r='.$remiact.'");  
+                  </script>'; 
 		}
 		
     } else {
@@ -108,11 +112,11 @@
 <script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
 <script type="text/javascript" src="js/funaux.js">	</script>
+<script type="text/javascript" src="js/jquery.number.js">	</script>
 
 <script>
 	$(function(){
 		$('#cliente').focus(); 
-		$( "#radio" ).buttonset();
 	    $('#cliente').autocomplete({
 			autoFocus: true,
             source: "get_client_list.php",
@@ -183,7 +187,8 @@
         			}
         		$.getJSON("php/get_precio.php", {idproductos: idproducto , nivel: nivel}, function(data){
         			var precio1 = data[0].precio;
-	   				$("#precio0").append(precio1);
+        			var preciof = $.number(precio1,2);
+	   				$("#precio0").append(preciof);
 	        		$("#inprecio0").val(precio1);
 				});
         		$("#inidprod0").val(idproducto);
@@ -196,15 +201,18 @@
         	var precio = $("#inprecio0").val();
         	var cant = parseInt(this.value);
 			var importe = precio* cant;
-			$("#impor0").append(importe);
+			var importef=$.number(importe,2);
+			$("#impor0").append(importef);
 			$("#inimpor0").val(importe);
-			$("#subtotal").append(importe);
+			$("#subtotal").append(importef);
 			$("#insubtotal").val(importe);
 			var iva = calciva(importe);
-			$("#iva").append(iva);
+			var ivaf=$.number(iva,2);
+			$("#iva").append(ivaf);
 			$("#iniva").val(iva);
 			var total = (importe+iva).toString();
-			$("#total").append(total);
+			var totalf = $.number(total,2);
+			$("#total").append(totalf);
 			$("#intotal").val(total);
 			var totletra = covertirNumLetras(total);
 			$("#intotletra").val(totletra);
@@ -226,12 +234,6 @@
   include_once "include/barrasup.php";
   ?> 
  
-<div id="radio" class="centraelem">
-	<legend>Tipo de Remisión</legend>
-	<input type="radio" id="radio1" name="radio"  checked="checked"><label for="radio1">Cliente</label>
-	<input type="radio" id="radio2" name="radio"><label for="radio2">Vendedor</label>
-	<input type="radio" id="radio3" name="radio"><label for="radio3">Otra</label>
-</div>
 
 <br />
  <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">

@@ -1,4 +1,3 @@
-
 <div id="menuPositioner" >
     <div id="menuHolder">
             <ul id="menu">
@@ -8,10 +7,10 @@
                         <li><a href="entradas.php">Entradas</a></li>
                         <li class="currentsub"><a class="fly"href="#url">Salidas</a>
                             <ul class="fly2">
-                                <li><a href="remisiones.php">Remisiones</a></li>
-                                <li class="currentfly"><a href="#url">Dropdown 2.3</a></li>
-                                <li><a href="#url">Dropdown 2.4</a></li>
-                                <li><a href="#url">Dropdown 2.5</a></li>
+                                <li class="currentfly"><a href="remisiones.php">Rem Clientes</a></li>
+                                <li ><a href="#url">Rem Vendedores</a></li>
+                                <li><a href="#url">Rem Manuales</a></li>
+                                <li><a href="salidafact.php">Facturación</a></li>
                             </ul>
                         </li>
                     </li>
@@ -28,5 +27,5 @@
                     </li>
                     <li><a href="index.php"><b>Salir</b></a></li>
             </ul>
-    </div>
+	</div>
 </div>

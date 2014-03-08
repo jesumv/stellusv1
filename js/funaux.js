@@ -378,3 +378,11 @@ function leehoja(){
 	 /* esta funcion lee el html de la hoja remisiones y agrega los valores a variables*/
 	$( "" ).text()
 }
+
+function abrehoja(hoja){
+	 /* esta funcion abre la hoja recibida como parametro 1 en una ventana nueva,
+	  * que debe traer todos sus parametros */
+	
+	window.open(hoja);
+	
+}

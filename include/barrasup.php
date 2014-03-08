@@ -27,7 +27,7 @@
     
 <!--INCLUSION DE LA BARRA DE MENU -->
 <?php
-    include_once "menu1.php";
+    	include_once "menu1.php";
 ?>
 
 

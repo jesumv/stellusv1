@@ -84,6 +84,22 @@
             }
         }
 		
+		public function numinv($mysqli){
+			//lee el ultimo movimiento del inventario. esta funcion no ha sido aplicada, porque marco inexistente, revisar
+			$sql= "SELECT MAX(idinventarios) FROM inventarios";
+            $result = mysqli_query($mysqli,$sql);
+            $result2 = mysqli_fetch_row($result);
+			$dato = $result2[0];
+            if($result2){
+              return $dato;  
+            }
+            else {
+                 die('no hay resultados para el numero de movimiento inventario');
+            }
+			
+		}
+		
+		
 		public function compledom($calleno,$col,$del,$ciudad,$estado,$cp){
 			/*toma los elementos del domicilio y los une en una cadena */
 			$completo = $calleno." ".$col." ".$del." c.p.".$cp." ".$ciudad.", ".$estado;
