@@ -22,25 +22,20 @@
 			$ref= $_POST ['fact'];
 			$usu = $_SESSION['username'];
 			$idclientes = $_POST ['idclientes'];
-			$idsuccliente = $_POST ['idsuccliente'];
 			$oc= $_POST ['oc'];
 			$subtotal= $_POST ['subtot'];
 			$iva= $_POST ['iva'];
 			$total= $_POST ['total'];
 			$observaciones = $_POST ['obser'];
-		//construccion del numero de almacen
-			$almacen = $idclientes.$idsuccliente;
-	   //disminucion de almacen central   		
-	   		$table = 'inventarios';
-	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$ref,'$usu',5)";
-			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+			
 		//Incremento en almacen de destino
+		//construccción de numero de almacen
+		
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$ref,'$usu',5)";
+	    	VALUES ($idproductos,'$fecha',$idclientes,1,$cantidad,$ref,'$usu',5)";
 
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+			
 		//insercion en la tabla de facturas
 			//obtencion del numero de movimiento del inventario
 			$sql= "SELECT MAX(idinventarios) FROM inventarios";
@@ -49,8 +44,8 @@
 			$invact= $result2[0];
 			
 			$table = 'facturas';
-	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,agente,idsuccliente,observaciones,usu,idinventarios)
-	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,$agente,'$idsuccliente','$observaciones','$usu',$invact)";
+	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,agente,sucursal,observaciones,usu,idinventarios)
+	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,'$agente','$sucursal','$observaciones','$usu',$invact)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("facturas ".mysqli_error($mysqli)); 
 
@@ -103,10 +98,7 @@
         $('#sucursal').autocomplete({
 			autoFocus: true,
             source: "get_sucur_list.php",
-            minLength: 2,
-            select:function(event, ui){
-            	$("#idsuccliente").val(ui.item.idsuccliente);	
-            }			                
+            minLength: 2,			                
         }); 
         
 		    $('#fecha').datepicker({
@@ -120,9 +112,9 @@
 			autoFocus: true,
             source: "get_agent_list.php",
             minLength: 2,
-            select: function( event, ui ) {
+            select: function( event, ui ) {	
             	var idrepresentantes =  ui.item.idrepresentantes;	
-            	$("#idrepresentantes").val(idrepresentantes);								
+            	$("#idrepresentantes").val(idrepresentantes);						
             	$("#cod").focus();      						
             }  
         });
@@ -181,7 +173,7 @@
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
 
     <?php 
-  $titulo = "SALIDA POR FACTURACION";
+  $titulo = "ORDENES DE COMPRA";
   include_once "include/barrasup.php";
   ?> 
  
@@ -189,7 +181,7 @@
 <br />
  <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
 	 <div class = "ui-widget-header">
-	 	<legend>Datos de la Factura:</legend>
+	 	<legend>Datos de la Orden de Compra:</legend>
 			 	<label for="cliente">Cliente: </label>
 			 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
 			 	<input type="hidden" id="razon" class="ui-autocomplete-content"/>
@@ -197,7 +189,6 @@
 			 	<input type="hidden" id="nivel" class="ui-autocomplete-content"/>
 			 	<label for="sucursal">Sucursal: </label>
 			 	<input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/> 
-			 	<input type="hidden" id="idsuccliente" name="idsuccliente"/>
 			 	<label for="fecha">Fecha: </label>
 			 	<input type="text" id="fecha"  name="fecha"/>   
 			 	<label for="agente">Agente: </label>

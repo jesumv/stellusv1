@@ -10,7 +10,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         // username and password sent from form 
 		$myusername=mysqli_real_escape_string ($mysqli,$_POST['username']);
         $mypassword=mysqli_real_escape_string($mysqli,$_POST['password']); 
-        $sql=sprintf("SELECT id,nombre,empresa,nivel FROM usuarios WHERE username='$myusername' 
+        $sql=sprintf("SELECT id,nombre,empresa,nivel,username FROM usuarios WHERE username='$myusername' 
         and passcode=(AES_ENCRYPT('%s','%s'))",$mypassword,$mypassword);
         $result=mysqli_query($mysqli,$sql);
         $row=mysqli_fetch_array($result);

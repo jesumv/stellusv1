@@ -32,7 +32,7 @@ if(isset($_POST['altacte'])){
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
 <title>STELLUS MEDEVICES</title>
 
- <script src="js/jquery-1.11.0.js"></script>
+ <script src="js/jquery-1.10.2.js"></script>
   <script>
   $( document ).ready(function() {
             $( ".ed" ).click(function(eventObject ) {
@@ -63,13 +63,13 @@ if(isset($_POST['altacte'])){
 
 //-----CONSTRUCCION DE LA TABLA------------------------------------------------------------------------
  $table = 'clientes';
- $sql= "SELECT idclientes,razon_social,rfc,sucursal,nom_corto,calleno,col,del,ciudad,estado,cp,nivel FROM $table WHERE status != 2 ";
+ $sql= "SELECT idclientes,razon_social,rfc,nom_corto,calleno,col,del,ciudad,estado,cp,nivel FROM $table WHERE status != 2 ";
  $result2 = mysqli_query($mysqli,$sql) or die('no hay resultados para '.$table);
 
     if(mysqli_num_rows($result2)) {
         echo '<table cellpadding="0" cellspacing="0" class="db-table">';
         echo '<tr>
-        <th>Editar</th><th>Eliminar</th><th>No.</th><th>Nombre</th><th>rfc</th><th>sucursal</th><th>Nombre Corto</th><th>Calle y No.</th>
+        <th>Editar</th><th>Eliminar</th><th>No.</th><th>Nombre</th><th>rfc</th><th>Nombre Corto</th><th>Calle y No.</th>
         <th>Colonia</th><th>Delegación</th><th>ciudad</th><th>estado</th><th>CP</th><th>nivel</th>
         </tr>';
         //inicializacion de contador de renglon

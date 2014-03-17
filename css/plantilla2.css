@@ -72,6 +72,11 @@ body {
   	margin-right: auto ;
 }
 
+.centraelem{
+	margin:auto;
+	text-align:center;
+}
+
 /*estilos para las tablas*/
 
 table.db-table 		{ border-right:1px solid #ccc; border-bottom:1px solid #ccc; margin:auto}

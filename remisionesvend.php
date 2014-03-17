@@ -22,13 +22,6 @@
 		$fecha =strtoupper($_POST ['fecha']) ;
 	    $usu = $_SESSION['login_user'];
 		$cliente = $_POST ['cliente'];
-		$sucursal = $_POST ['sucursal'];
-		$idsuccliente = $_POST ['idsuccliente'];
-		$agente = $_POST ['idrepresentantes'];
-		$doctor= $_POST ['doctor'];
-		$procedimiento = $_POST ['procedimiento'];
-		$paciente = $_POST ['paciente'];
-		$registro = $_POST ['registro'];
 		$subtotal =  $_POST ['insubtotal'];
 		$iva =  $_POST ['iniva'];
 		$total =  $_POST ['intotal'];
@@ -36,10 +29,9 @@
 
 		
 //insercion en la tabla de remisiones		
-	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,sucursal,agente,doctor,procedimiento,
-	    paciente,registro,subtotal,iva,total,con_letra,tiporem)
-	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente','$sucursal','$agente','$doctor','$procedimiento','$paciente','$registro',
-	    $subtotal,$iva,$total,'$intotletra',0)";
+	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,subtotal,iva,total,con_letra,tiporem)
+	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente',$subtotal,$iva,$total,'$intotletra',1)"
+	    or die('insercion cancelada '.$table);
 			
 	    // Execute the query here now
 	    $query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
@@ -61,12 +53,8 @@
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['inidprod0'];
 			//construccion del numero de almacen
-			if($sucursal==""){
-				$almacen = $idcliente.'0';	
-			}else{
-				$almacen = $idcliente.$idsuccliente;
-			}
-		
+			$almacen = '100'.$idcliente;	
+			
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
@@ -126,57 +114,28 @@
 		$('#cliente').focus(); 
 	    $('#cliente').autocomplete({
 			autoFocus: true,
-            source: "get_client_list.php",
+            source: "get_rep_list.php",
             minLength: 2,
             select: function( event, ui ) {
-					$( "#idclientes" ).val( ui.item.idclientes );
-					$( "#razon" ).val( ui.item.razon );
-					$("#rfc").val(ui.item.rfc);
-					$("#domicilio").val(ui.item.domicilio);
-					$("#nivel").val(ui.item.nivel);
+					$( "#idclientes" ).val( ui.item.idrepresentantes );
+					$( "#razon" ).val( ui.item.completo );
+					$("#fecha").focus();
 				}
 				                
         });
-        $('#sucursal').autocomplete({
-			autoFocus: true,
-            source: "get_sucur_list.php",
-            minLength: 2,
-            select:function(event, ui){
-            	$("#idsuccliente").val(ui.item.idsuccliente);	
-            }
-		                
-        }); 
         
 		    $('#fecha').datepicker({
 		dateFormat: "yy-mm-dd",
 		onClose: function(dateText, inst) {
-		      $('#agente').focus();
+		      				var trans1 = $("#razon").val();
+ 							var trans4 = $("#fecha").val();
+ 							var trans7 = $("#idclientes").val();
+            				$("#clientprint").append(" "+trans1);
+            				$("#fechaprint").append(" "+trans4);
+            				$("#cod0").focus();
 		   }	  
 	   });
 	   
-	   $('#agente').autocomplete({
-			autoFocus: true,
-            source: "get_agent_list.php",
-            minLength: 2,
-            select: function( event, ui ) {
- 							$("#idrepresentantes").val( ui.item.idrepresentantes );
- 							var trans1 = $("#razon").val();
- 							var trans2 = $("#sucursal").val();
- 							var trans3 = $("#rfc").val();
- 							var trans4 = $("#fecha").val();
- 							var trans5 = $("#agente").val();
- 							var trans6 = $("#domicilio").val();
- 							var trans7 = $("#idclientes").val();
-            				$("#clientprint").append(" "+trans1);
-            				$("#sucurprint").append(" "+trans2);
-            				$("#rfcprint").append(" "+trans3);
-            				$("#fechaprint").append(" "+trans4);
-            				$("#agentprint").append(" "+trans5);
-            				$("#domiprint").append(" "+trans6);	
-            				$("#doctor").focus();
-            						
-            }  
-        });
         
         $('#cod0').autocomplete({
         	autoFocus: true,
@@ -187,16 +146,11 @@
         		var codigo = ui.item.codigo
         		this.value = codigo;
         		var des0 = ui.item.desc;
-        		var alg = ui.item.alg;
-        		var cliente = $("#idclientes").val();
         		var idproducto =  ui.item.idproductos;
-        		var nivel = $("#nivel").val();
-        		if(cliente == 1){
-        		$("#des0").append(des0+" ALG-"+alg)	
-        		}else{ $("#des0").append(des0)
-        				$("#indes0").val(des0);
-        			}
-        		$.getJSON("php/get_precio.php", {idproductos: idproducto , nivel: nivel}, function(data){
+        		var cliente = $("#idclientes").val();		
+				$("#des0").append(des0)
+        		$("#indes0").val(des0);    			
+        		$.getJSON("php/get_preciost.php", {idproductos: idproducto }, function(data){
         			var precio1 = data[0].precio;
         			var preciof = $.number(precio1,2);
 	   				$("#precio0").append(preciof);
@@ -241,7 +195,7 @@
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
 
     <?php 
-  $titulo = "REMISIONES CLIENTES";
+  $titulo = "REMISIONES VENDEDORES";
   include_once "include/barrasup.php";
   ?> 
  
@@ -254,17 +208,8 @@
 	 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
 	 	<input type="hidden" id="razon" class="ui-autocomplete-content"/>
 	 	<input type="hidden" id="idclientes" name="idclientes"/>
-	 	<input type="hidden" id="rfc" class="ui-autocomplete-content"/>
-	 	<input type="hidden" id="domicilio" class="ui-autocomplete-content" length= "200"/>
-	 	<input type="hidden" id="nivel" class="ui-autocomplete-content"/>
-	 	<label for="sucursal">Sucursal: </label>
-	 	<td><input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/></td> 
-	 	<input type="hidden" id="idsuccliente" name="idsuccliente"/>
 	 	<label for="fecha">Fecha: </label>
 	 	<td><input type="text" id="fecha"  name="fecha"/></td>   
-	 	<label for="agente">Agente: </label>
-	 	<td><input type="text" id="agente"  name="agente" class="ui-autocomplete-content"/></td>
-	 	<input type="hidden" id="idrepresentantes" name="idrepresentantes"/>  
 	 </div>
 <p></p>       
 

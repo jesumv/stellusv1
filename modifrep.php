@@ -95,7 +95,7 @@ if(isset($_POST['enviomod'])){
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
 <title>STELLUS MEDEVICES</title>
 
-<script src="js/jquery-1.11.0.js"></script>
+<script src="js/jquery-1.10.2.js"></script>
   <script>
   $( document ).ready(function() {
        $('#inic').focus();  

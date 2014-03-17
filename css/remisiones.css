@@ -46,3 +46,21 @@ table.tablap td.celda{
 	margin:auto;
 	text-align:center;
 }
+
+/*estilo para el dialogo modal*/
+
+div.dialogo{
+	z-index:1000;
+	}
+
+input.cajita{
+	display:block;
+}
+
+label.cajita{
+	display:block;
+}
+
+input.cajita.text { margin-bottom:12px; width:95%; padding: .4em; }
+
+fieldset.cajita { padding:0; border:0; margin-top:25px; }

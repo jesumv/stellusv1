@@ -84,6 +84,18 @@
             }
         }
 		
+		public function ultcliente($mysqli){
+			/*esta funcion trae el ultimo numero de cliente registrado */
+			$sql= "SELECT MAX(idclientes) FROM clientes";
+			$result = mysqli_query($mysqli,$sql);
+            $result2 = mysqli_fetch_row($result);
+			$dato = $result2[0];
+            if($result2){
+              return $dato;  
+			} 	
+		}
+		
+		
 		public function numinv($mysqli){
 			//lee el ultimo movimiento del inventario. esta funcion no ha sido aplicada, porque marco inexistente, revisar
 			$sql= "SELECT MAX(idinventarios) FROM inventarios";

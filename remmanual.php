@@ -18,12 +18,12 @@
 		function oprimio($mysqli,$remiact){
 	//esta funcion hace las consultas de actualizacion
 		$table = 'remisiones';
-	    $idcliente =strtoupper($_POST ['idclientes']) ;
+	// LAS REMISIONES EN BLANCO VAN AL CLIENTE 2 OTROS
+	    $idcliente = 2 ;
 		$fecha =strtoupper($_POST ['fecha']) ;
 	    $usu = $_SESSION['login_user'];
 		$cliente = $_POST ['cliente'];
 		$sucursal = $_POST ['sucursal'];
-		$idsuccliente = $_POST ['idsuccliente'];
 		$agente = $_POST ['idrepresentantes'];
 		$doctor= $_POST ['doctor'];
 		$procedimiento = $_POST ['procedimiento'];
@@ -33,13 +33,15 @@
 		$iva =  $_POST ['iniva'];
 		$total =  $_POST ['intotal'];
 		$intotletra = $_POST ['intotletra'];
-
+		$domicilio = strtoupper($_POST ['domicilio']);
+		$rfc = strtoupper($_POST ['rfc']);
 		
 //insercion en la tabla de remisiones		
 	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,sucursal,agente,doctor,procedimiento,
-	    paciente,registro,subtotal,iva,total,con_letra,tiporem)
-	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente','$sucursal','$agente','$doctor','$procedimiento','$paciente','$registro',
-	    $subtotal,$iva,$total,'$intotletra',0)";
+	    paciente,registro,subtotal,iva,total,con_letra,tiporem,domicilio,rfc)
+	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente','$sucursal',$agente,'$doctor','$procedimiento','$paciente','$registro',
+	    $subtotal,$iva,$total,'$intotletra',0,'$domicilio','$rfc')"
+	    or die('insercion cancelada '.$table);
 			
 	    // Execute the query here now
 	    $query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
@@ -60,12 +62,8 @@
 //insercion en la tabla de inventarios	    	
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['inidprod0'];
-			//construccion del numero de almacen
-			if($sucursal==""){
+			//construccion del numero de almacen. en remisiones manuales siempre es 0
 				$almacen = $idcliente.'0';	
-			}else{
-				$almacen = $idcliente.$idsuccliente;
-			}
 		
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
@@ -91,7 +89,7 @@
 			
 		    // redirección a la hoja pdf mediante javascript
 		    echo '<script type="text/javascript" language="Javascript">
-		    			window.open("php/rremision.php?r='.$remiact.'");  
+		    			window.open("php/rremmanual.php?r='.$remiact.'");  
                   </script>'; 
 		}
 		
@@ -123,31 +121,11 @@
 
 <script>
 	$(function(){
-		$('#cliente').focus(); 
-	    $('#cliente').autocomplete({
-			autoFocus: true,
-            source: "get_client_list.php",
-            minLength: 2,
-            select: function( event, ui ) {
-					$( "#idclientes" ).val( ui.item.idclientes );
-					$( "#razon" ).val( ui.item.razon );
-					$("#rfc").val(ui.item.rfc);
-					$("#domicilio").val(ui.item.domicilio);
-					$("#nivel").val(ui.item.nivel);
-				}
-				                
-        });
-        $('#sucursal').autocomplete({
-			autoFocus: true,
-            source: "get_sucur_list.php",
-            minLength: 2,
-            select:function(event, ui){
-            	$("#idsuccliente").val(ui.item.idsuccliente);	
-            }
-		                
-        }); 
-        
-		    $('#fecha').datepicker({
+		$('#cliente').focus();  
+		$('#cliente').change(function(){
+			$('#sucursal').focus();
+		});
+		$('#fecha').datepicker({
 		dateFormat: "yy-mm-dd",
 		onClose: function(dateText, inst) {
 		      $('#agente').focus();
@@ -159,21 +137,9 @@
             source: "get_agent_list.php",
             minLength: 2,
             select: function( event, ui ) {
- 							$("#idrepresentantes").val( ui.item.idrepresentantes );
- 							var trans1 = $("#razon").val();
- 							var trans2 = $("#sucursal").val();
- 							var trans3 = $("#rfc").val();
- 							var trans4 = $("#fecha").val();
- 							var trans5 = $("#agente").val();
- 							var trans6 = $("#domicilio").val();
- 							var trans7 = $("#idclientes").val();
-            				$("#clientprint").append(" "+trans1);
-            				$("#sucurprint").append(" "+trans2);
-            				$("#rfcprint").append(" "+trans3);
-            				$("#fechaprint").append(" "+trans4);
-            				$("#agentprint").append(" "+trans5);
-            				$("#domiprint").append(" "+trans6);	
-            				$("#doctor").focus();
+            	var idrepresentantes =  ui.item.idrepresentantes;	
+            	$("#idrepresentantes").val(idrepresentantes);		
+            	$("#domicilio").focus();
             						
             }  
         });
@@ -187,23 +153,10 @@
         		var codigo = ui.item.codigo
         		this.value = codigo;
         		var des0 = ui.item.desc;
-        		var alg = ui.item.alg;
-        		var cliente = $("#idclientes").val();
         		var idproducto =  ui.item.idproductos;
-        		var nivel = $("#nivel").val();
-        		if(cliente == 1){
-        		$("#des0").append(des0+" ALG-"+alg)	
-        		}else{ $("#des0").append(des0)
-        				$("#indes0").val(des0);
-        			}
-        		$.getJSON("php/get_precio.php", {idproductos: idproducto , nivel: nivel}, function(data){
-        			var precio1 = data[0].precio;
-        			var preciof = $.number(precio1,2);
-	   				$("#precio0").append(preciof);
-	        		$("#inprecio0").val(precio1);
-				});
         		$("#inidprod0").val(idproducto);
-        		$("#cant0").focus();
+        		$("#indes0").val(des0);
+        		$("#inprecio0").focus();
         	}
 
         })
@@ -241,32 +194,13 @@
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
 
     <?php 
-  $titulo = "REMISIONES CLIENTES";
+  $titulo = "REMISIONES MANUALES";
   include_once "include/barrasup.php";
   ?> 
  
 
 <br />
  <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
-	 <div class = "ui-widget-header">
-	 	<legend>Datos de la Remisión:</legend>
-	 	<label for="cliente">Cliente: </label>
-	 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
-	 	<input type="hidden" id="razon" class="ui-autocomplete-content"/>
-	 	<input type="hidden" id="idclientes" name="idclientes"/>
-	 	<input type="hidden" id="rfc" class="ui-autocomplete-content"/>
-	 	<input type="hidden" id="domicilio" class="ui-autocomplete-content" length= "200"/>
-	 	<input type="hidden" id="nivel" class="ui-autocomplete-content"/>
-	 	<label for="sucursal">Sucursal: </label>
-	 	<td><input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/></td> 
-	 	<input type="hidden" id="idsuccliente" name="idsuccliente"/>
-	 	<label for="fecha">Fecha: </label>
-	 	<td><input type="text" id="fecha"  name="fecha"/></td>   
-	 	<label for="agente">Agente: </label>
-	 	<td><input type="text" id="agente"  name="agente" class="ui-autocomplete-content"/></td>
-	 	<input type="hidden" id="idrepresentantes" name="idrepresentantes"/>  
-	 </div>
-<p></p>       
 
 	<table id= "remision" class="tablap">
 			<tr>
@@ -282,15 +216,23 @@
 				
 
 			<tr>
-				<td colspan="3" id="clientprint"><b>CLIENTE:</b>:</td>
-				<td colspan="3" id="sucurprint"><b>SUCURSAL:</b></td>              
-				<td colspan="2" id="rfcprint"><b>RFC:</b></td>					
+				<td id="clientprint"><b>CLIENTE:</b>:</td>
+				<td><input type="text"  id="cliente" name = "cliente" size="60"/></td>
+				<td id="sucurprint"><b>SUCURSAL:</b></td>  
+				<td><input type="text"  id="sucursal" name = "sucursal" size="30"/></td>            
+				<td id="rfcprint"><b>RFC:</b></td>
+				<td><input type="text"  id="rfc" name = "rfc" size="13"/></td> 				
 			</tr>
 			<tr>	
-				<td colspan="3" id="fechaprint"><b>FECHA:</b></td>	
-				  <td colspan="4" id="agentprint"><b>AGENTE:</b></td>	
+				<td id="fechaprint"><b>FECHA:</b></td>
+				<td><input type="text"  id="fecha" name = "fecha" size="15"/></td> 	
+				<td id="agentprint"><b>AGENTE:</b></td>
+				<td colspan="3"><input type="text"  id="agente" name = "agente" size="30"/></td> 
+				<input type "hidden"  id="idrepresentantes" name="idrepresentantes"/>	
 			</tr>
-			<tr><td colspan="7" id="domiprint"><b>DOMICILIO:</b></td></tr>
+			<tr><td  id="domiprint"><b>DOMICILIO:</b></td>
+				<td colspan="6"><input type="text"  id="domicilio" name = "domicilio" size="180"/></td> 
+			</tr>
 				
 	</table>
 <p></p>
@@ -312,8 +254,8 @@
 		for($i=0;$i<13;$i++){
 			echo"<tr>
 				<td class='ui-autocomplete-content' class='art'><input type='text' id='cod$i' name ='cod$i' /></td>
-				<td id='des$i'></td><input type='hidden' id='indes$i' name ='indes$i' /><input type='hidden' id='inidprod$i' name ='inidprod$i' />
-				<td id= 'precio$i'></td><input type='hidden' id='inprecio$i' name ='inprecio$i' />
+				<td id='des$i'><input type='text' id='indes$i' name ='indes$i' size='60' disabled /></td><input type='hidden' id='inidprod$i' name ='inidprod$i' />
+				<td id= 'precio$i'><input type='text' id='inprecio$i' name ='inprecio$i' /></td>
 				<td class='ui-autocomplete-content' class='art'><input type='number' id='cant$i' name='cant$i'/></td>
 				<td  id = 'impor$i'></td><input type='hidden' id='inimpor$i' name ='inimpor$i' />
 			</tr>";	

@@ -21,7 +21,6 @@ global $num;
 	 	$nivel =strtoupper($_POST ['nivel']) ;
 	    $nombre =strtoupper($_POST ['nom']) ;
 		$rfc=strtoupper($_POST ['rfc']) ;
-		$suc=strtoupper($_POST ['suc']) ;
 	    $corto =strtoupper($_POST ['corto']) ;
 		$calleno =strtoupper($_POST ['calleno']) ;
 	    $col=strtoupper($_POST ['col']) ;
@@ -30,16 +29,16 @@ global $num;
 		$estado=strtoupper($_POST ['estado']) ;
 		$cp=strtoupper($_POST ['cp']) ;
 		
-	    $usu = $_SESSION['username'];
+	    $usu = $_SESSION['login_user'];
 
 	 
 	    if (!is_numeric($numid)) {
-	        $sqlCommand= "INSERT INTO $table (razon_social,rfc,sucursal,nom_corto,calleno,col,del,ciudad,estado,cp,nivel,usu,status)
-	        VALUES ('$nombre','$rfc','$suc','$corto','$calleno','$col','$del','$ciudad','$estado','$cp','$nivel','$usu',0)"
+	        $sqlCommand= "INSERT INTO $table (razon_social,rfc,nom_corto,calleno,col,del,ciudad,estado,cp,nivel,usu,status)
+	        VALUES ('$nombre','$rfc','$corto','$calleno','$col','$del','$ciudad','$estado','$cp','$nivel','$usu',0)"
 	        or die('insercion cancelada '.$table);
 			
 	    }else {
-	        $sqlCommand = "UPDATE $table SET razon_social ='$nombre', rfc='$rfc',sucursal='$suc',nom_corto='$corto',
+	        $sqlCommand = "UPDATE $table SET razon_social ='$nombre', rfc='$rfc',nom_corto='$corto',
 	         calleno= '$calleno', col='$col',del='$del',ciudad='$ciudad',estado='$estado',cp='$cp',nivel='$nivel',usu = '$usu',status = 1 
 	         WHERE idclientes= $numid LIMIT 1"
 	         or die('actualizacion cancelada '.$table);
@@ -56,7 +55,7 @@ global $num;
 if(isset($_POST['enviomod'])){
 	$numero = strtoupper($_POST ['num']) ;	
     oprimio($mysqli, $numero);
-    header('Location: clientes.php');
+    header('Location: include/altasucdialog.xhtml');
 }
 	
 /***obtiene los datos de acuerdo con el parametro recibido en la pagina***/
@@ -66,7 +65,6 @@ if(isset($_POST['enviomod'])){
                 $num = "";
                 $nombre = "";
                 $rfc="";
-                $suc="";
                 $corto = "";
                 $calleno= "";
 				$col="";
@@ -84,15 +82,14 @@ if(isset($_POST['enviomod'])){
                 $num = $sqlsresul[0];
                 $nombre = $sqlsresul[1];
 				$rfc= $sqlsresul[2];
-                $suc= $sqlsresul[3];
-                $corto= $sqlsresul[4];
-				$calleno= $sqlsresul[5];
-				$col=$sqlsresul[6];
-				$del=$sqlsresul[7];
-				$ciudad=$sqlsresul[8];
-				$estado = $sqlsresul[9];
-				$cp=$sqlsresul[10];
-				$nivel = $sqlsresul[11];
+                $corto= $sqlsresul[3];
+				$calleno= $sqlsresul[4];
+				$col=$sqlsresul[5];
+				$del=$sqlsresul[6];
+				$ciudad=$sqlsresul[7];
+				$estado = $sqlsresul[8];
+				$cp=$sqlsresul[9];
+				$nivel = $sqlsresul[10];
                 $titbot = "Actualizar";
                 
             }
@@ -110,25 +107,26 @@ if(isset($_POST['enviomod'])){
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
+<link rel="stylesheet" href="css/cupertino/jquery-ui-1.10.4.custom.css">
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/jquery-ui-1.10.4.custom.js"></script>
+
 <title>STELLUS MEDEVICES</title>
 
-<script src="js/jquery-1.11.0.js"></script>
-  <script>
-  $( document ).ready(function() {
-       $('#inic').focus();  
-});
-  </script>
-</head>
+  </head>
 
 <body
 
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
     <?php 
-  $titulo = "ACTUALIZACION CLIENTES";
-  include_once "include/barrasup.php";
+	  $titulo = "ACTUALIZACION CLIENTES";
+	  include_once "include/barrasup.php";
   ?> 
+  
+<p></p> 
+  
 
  <!-- la forma. ------>
   <div class="cajacentra">
@@ -156,13 +154,11 @@ if(isset($_POST['enviomod'])){
             echo "</tr>";
             echo "<tr>";
                 echo "<td >NOMBRE O RAZON SOCIAL:</td> ";
-                echo "<td><input id='inic' name ='nom' value = '$nombre'  size = '60'/> </td>";
-                echo "<td >RFC</td> ";
-                echo "<td ><input name ='rfc' value = '$rfc' /></td>";
+                echo "<td colspan = '4'><input id='inic' name ='nom' value = '$nombre'  size = '150'/> </td>";
 			echo "</tr>";
 			echo "<tr>";
-				echo "<td >SUCURSAL</td> ";
-                echo "<td ><input name ='suc' value = '$suc' /></td>";
+				echo "<td >RFC</td> ";
+                echo "<td ><input name ='rfc' value = '$rfc' /></td>";
                 echo " <td>NOMBRE CORTO</td>";
                 echo "<td ><input name ='corto' value = '$corto' /></td>";
             echo "</tr>";
