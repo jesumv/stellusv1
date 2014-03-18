@@ -28,9 +28,9 @@ if(isset($_POST['altaprod'])){
 <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
+<script src="js/jquery-1.10.2.js"></script>
 <title>STELLUS MEDEVICES</title>
 
- <script src="js/jquery-1.11.0.js"></script>
   <script>
   $( document ).ready(function() {
             $( ".ed" ).click(function(eventObject ) {
@@ -61,14 +61,17 @@ if(isset($_POST['altaprod'])){
 
 //-----CONSTRUCCION DE LA TABLA------------------------------------------------------------------------
  $table = 'productos';
- $sql= "SELECT idproductos,descripcion,unidad,precio1,precio2,precio3,precio4,codigo,idproveedores FROM $table WHERE status != 2 ";
+ $table2 = 'proveedores';
+ $sql= "SELECT t1.idproductos,t1.descripcion,t1.unidad,t1.precio1,t1.precio2,t1.precio3,t1.precio4,t1.precio5,t1.precio6,
+ t1.preciost,t1.codigo,t2.nom_corto FROM $table as t1 LEFT JOIN $table2 as t2 ON t1.idproveedores = t2.idproveedores 
+ WHERE t1.status != 2 ";
  $result2 = mysqli_query($mysqli,$sql) or die('no hay resultados para '.$table);
 
     if(mysqli_num_rows($result2)) {
         echo '<table cellpadding="0" cellspacing="0" class="db-table">';
         echo '<tr>
         <th>Editar</th><th>Eliminar</th><th>No.</th><th>Descripcion</th><th>unidad</th><th>Precio 1</th><th>Precio 2</th><th>Precio 3</th>
-        <th>Precio 4</th><th>Codigo</th><th>proveedor</th>
+        <th>Precio 4</th><th>Precio 5</th><th>Precio 6</th><th>Precio st</th><th>Codigo</th><th>proveedor</th>
         </tr>';
         //inicializacion de contador de renglon
         while($row2 = mysqli_fetch_row($result2)) {

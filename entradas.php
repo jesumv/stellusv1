@@ -26,7 +26,7 @@ function oprimio($mysqli){
 //1 es almacen central. 1 es tupo movimiento entrada, status 1 es en transito
 	$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad, referencia,
 	observaciones,usu,status)
-    VALUES ('$idproductos','$fecha',1,1,$cantidad,'$referencia','$obser','$usu',0)"
+    VALUES ('$idproductos','$fecha',2000,1,$cantidad,'$referencia','$obser','$usu',0)"
         or die('insercion cancelada '.$table);	
     // Execute the query here now
     $query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
@@ -46,6 +46,7 @@ if(isset($_POST['enviaentra'])){
 	if($resp1 == 0)	{
 		echo '<script type="text/javascript">
              window.alert("Inventario Añadido correctamente!");
+			 window.open("inventarios.php","_self");
     	</script>';
 	}
 	else{
@@ -81,8 +82,8 @@ if(isset($_POST['enviaentra'])){
 	                select: function( event, ui ) {
 							$( "#idproductos" ).val( ui.item.idproductos );
 							$( "#codigo" ).val( ui.item.codigo );
-						}
-						                
+							$('#fecha').focus(); 
+						}	                
 	            });
 	    
 	    $('#fecha').datepicker({
@@ -120,7 +121,7 @@ if(isset($_POST['enviaentra'])){
 	             
 	            <p>Introduzca el nombre del producto</p>
 <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">	            
-	<div class = "ui-widget">
+	<div class = "ui-widget-header">
 			<label for="corto">Producto: </label> 
 			<input type="text" id="corto"  name="corto" class="ui-autocomplete-content"/> 
 			<input type="hidden" id="idproductos"  name="idproductos" />                

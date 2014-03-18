@@ -191,7 +191,8 @@
         		var cliente = $("#idclientes").val();
         		var idproducto =  ui.item.idproductos;
         		var nivel = $("#nivel").val();
-        		if(cliente == 1){
+  //si el cliente es grupo angeles, se le agrega el ALG
+        		if(cliente == 2){
         		$("#des0").append(des0+" ALG-"+alg)	
         		}else{ $("#des0").append(des0)
         				$("#indes0").val(des0);

@@ -84,16 +84,7 @@
             }
         }
 		
-		public function ultcliente($mysqli){
-			/*esta funcion trae el ultimo numero de cliente registrado */
-			$sql= "SELECT MAX(idclientes) FROM clientes";
-			$result = mysqli_query($mysqli,$sql);
-            $result2 = mysqli_fetch_row($result);
-			$dato = $result2[0];
-            if($result2){
-              return $dato;  
-			} 	
-		}
+		
 		
 		
 		public function numinv($mysqli){
@@ -137,6 +128,29 @@
 		}
 		
 	
+	}/*** fin de la clase ***/
+	
+	class otrasdbutils{
+		function __construct() {
+			
+		}
+		
+		public function ultcliente($mysqli){
+			/*esta funcion trae el ultimo numero de cliente registrado */
+			$sql= "SELECT MAX(idclientes) FROM clientes";
+			$result = mysqli_query($mysqli,$sql);
+            $result2 = mysqli_fetch_row($result);
+			$dato = $result2[0];
+            if($result2){
+              return $dato;  
+			}
+			
+			 /* liberar la serie de resultados */
+	   				mysqli_free_result($result); 	
+		}
+		
+		
+		
 	}/*** fin de la clase ***/
 	
 ?>

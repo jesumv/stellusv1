@@ -15,7 +15,7 @@ global $num;
 /*** checa login***/
         $funcbase->checalogin($mysqli);
         
-// query de seleccion de combo clientes
+// query de seleccion de combo proveedores
             $query="SELECT idproveedores,nom_corto FROM proveedores ORDER BY nom_corto";
             $result1 = mysqli_query ($mysqli,$query) or die("error en consulta de combo");
 		
@@ -30,19 +30,22 @@ global $num;
 	    $precio2 =strtoupper($_POST ['precio2']) ;
 		$precio3 =strtoupper($_POST ['precio3']) ;
 	    $precio4=strtoupper($_POST ['precio4']) ;
+		$precio5=strtoupper($_POST ['precio5']) ;
+		$precio6=strtoupper($_POST ['precio6']) ;
+		$preciost=strtoupper($_POST ['preciost']) ;
 		$codigo=strtoupper($_POST ['codigo']) ;
-	    $usu = $_SESSION['username'];
+	    $usu = $_SESSION['login_user'];
         $proveedor = $_POST['combo'];
 
 	 
 	    if (!is_numeric($numid)) {
-	        $sqlCommand= "INSERT INTO $table (descripcion,nom_corto,unidad,precio1,precio2,precio3,precio4,codigo,usu,status,idproveedores)
-	        VALUES ('$desc','$corto','$unidad',$precio1,$precio2,$precio3,$precio4,'$codigo','$usu',0,$proveedor)"
+	        $sqlCommand= "INSERT INTO $table (descripcion,nom_corto,unidad,precio1,precio2,precio3,precio4,precio5,precio6,preciost,codigo,usu,status,idproveedores)
+	        VALUES ('$desc','$corto','$unidad',$precio1,$precio2,$precio3,$precio4,$precio5,$precio6,$preciost,'$codigo','$usu',0,$proveedor)"
 	        or die('insercion cancelada '.$table);
 			
 	    }else {
 	        $sqlCommand = "UPDATE $table SET descripcion ='$desc', nom_corto = '$corto', unidad='$unidad',precio1='$precio1',precio2='$precio2',
-	         precio3= '$precio3', precio4='$precio4', codigo='$codigo',usu = '$usu',status = 1, idproveedores = $proveedor  WHERE idproductos= $numid LIMIT 1"
+	         precio3= $precio3, precio4=$precio4, precio5=$precio5,precio6=$precio6,preciost=$preciost,codigo='$codigo',usu = '$usu',status = 1, idproveedores = $proveedor  WHERE idproductos= $numid LIMIT 1"
 	         or die('actualizacion cancelada '.$table);
     	}
 	    // Execute the query here now
@@ -72,6 +75,9 @@ if(isset($_POST['enviomod'])){
                 $precio3 = "";
                 $precio4= "";
 				$codigo="";
+				$precio5= "";
+				$precio6= "";
+				$preciost= "";
 				$proveedor="";
                 //titulo del boton de la forma
                 $titbot = "Insertar";
@@ -88,7 +94,9 @@ if(isset($_POST['enviomod'])){
 				$precio3=$sqlsresul[6];
 				$precio4 = $sqlsresul[7];
 				$codigo = $sqlsresul[8];
-                
+                $precio5 = $sqlsresul[14];
+				$precio6 = $sqlsresul[15];
+				$preciost = $sqlsresul[16];
                 $titbot = "Actualizar";
                 
             }
@@ -108,12 +116,11 @@ if(isset($_POST['enviomod'])){
 <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
-<link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.css" />
-<link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css" />
-<title>STELLUS MEDEVICES</title>
-
-<script src="js/jquery-1.11.0.js"></script>
+<link rel="stylesheet" href="css/cupertino/jquery-ui-1.10.4.custom.css">
+<script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
+
+<title>STELLUS MEDEVICES</title>
   <script>
    $( document ).ready(function() {
        $('#inic').focus();
@@ -151,6 +158,8 @@ if(isset($_POST['enviomod'])){
 				 /**el combo de cliente**/
                echo "<td><select name= 'combo' >";
         /**printing the list box select command**/
+        
+        
                     while($nt=mysqli_fetch_row($result1)){
                     //Array or records stored in $nt
                     echo "<option value='$nt[0]'>$nt[1]</option>";
@@ -170,9 +179,17 @@ if(isset($_POST['enviomod'])){
 		   echo "<tr>";
 		   		echo "<td> Precio 4</td>";
                 echo "<td ><input name ='precio4' value = '$precio4'/></td>";
-		   		echo "<td>Codigo</td>";
+				echo "<td> Precio 5</td>";
+                echo "<td ><input name ='precio5' value = '$precio5'/></td>";
+				echo "<td> Precio 6</td>";
+                echo "<td ><input name ='precio6' value = '$precio6'/></td>";
+				echo "<td> Precio ST</td>";
+                echo "<td ><input name ='preciost' value = '$preciost'/></td>";
+				echo "</tr>"; 
+				echo "<tr>";
+				echo "<td>Codigo</td>";
                 echo "<td><input name ='codigo' value = '$codigo'/></td>";
-           echo "</tr>"; 
+           		echo "</tr>"; 
             ?>         
      </tr>
    

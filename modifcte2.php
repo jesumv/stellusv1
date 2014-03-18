@@ -1,6 +1,5 @@
 <?php
 global $num;
-
 //Este script administra lo actualización a un cliente.
 //conectar
 /*** Autoload class files ***/ 
@@ -14,6 +13,7 @@ global $num;
     if (is_object($mysqli)) {
 /*** checa login***/
         $funcbase->checalogin($mysqli);
+
 		
 	function oprimio($mysqli,$numid){
 		$table = 'clientes';
@@ -31,22 +31,51 @@ global $num;
 		
 	    $usu = $_SESSION['login_user'];
 
-	 
+	 //si se esta dando de alta un nuevo cliente
 	    if (!is_numeric($numid)) {
+	 //se inserta en la tabla clientes
+	 		$usu = $_SESSION['login_user'];
 	        $sqlCommand= "INSERT INTO $table (razon_social,rfc,nom_corto,calleno,col,del,ciudad,estado,cp,nivel,usu,status)
 	        VALUES ('$nombre','$rfc','$corto','$calleno','$col','$del','$ciudad','$estado','$cp','$nivel','$usu',0)"
 	        or die('insercion cancelada '.$table);
 			
+		// Execute the query here now
+	    	$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+
+		//se inserta la sucursal central en la tabla almacenes
+			//traer el numero de cliente recien insertado
+			/*** conexion a bd ***/
+			    if (is_object($mysqli)) {
+			    	
+					$otrabd = new otrasdbutils;
+					$cliente= $otrabd->ultcliente($mysqli);
+					$almacen = $cliente.'0';
+					$descrip = 'ALMACEN MATRIZ '.$corto;
+		
+				 $sqlCommand= "INSERT INTO almacenes (idclientes,no_almacen,descripcion,tipo_almacen,usu, status)
+	        	VALUES ($cliente,$almacen,'$descrip',2,'$usu',0)";
+			
+				// Execute the query here now
+	    		$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+					
+					
+				}
+	
+			
+			
+					
 	    }else {
 	        $sqlCommand = "UPDATE $table SET razon_social ='$nombre', rfc='$rfc',nom_corto='$corto',
 	         calleno= '$calleno', col='$col',del='$del',ciudad='$ciudad',estado='$estado',cp='$cp',nivel='$nivel',usu = '$usu',status = 1 
 	         WHERE idclientes= $numid LIMIT 1"
 	         or die('actualizacion cancelada '.$table);
-    	}
-	    // Execute the query here now
-	    $query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+			 
+			 // Execute the query here now
+	    	$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
 	    /* liberar la serie de resultados */
-	    mysqli_free_result($query);
+	   		mysqli_free_result($query);
+    	}
+	    
 	    /* cerrar la conexion */
 	    mysqli_close($mysqli);
 		
@@ -114,6 +143,14 @@ if(isset($_POST['enviomod'])){
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
 
 <title>STELLUS MEDEVICES</title>
+	<script>
+			$( document ).ready(function() {
+       		$('#inic').focus();
+		});
+		
+	</script>
+  		
+     
 
   </head>
 
@@ -149,6 +186,8 @@ if(isset($_POST['enviomod'])){
                             <option value='2'>2</option>
                             <option value='3'>3</option>
                             <option value='4'>4</option>
+                            <option value='5'>4</option>
+                            <option value='6'>4</option>
                         </select>
                       </td>";
             echo "</tr>";

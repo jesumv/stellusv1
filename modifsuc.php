@@ -12,7 +12,7 @@ global $num;
     $mysqli = $funcbase->conecta();
     if (is_object($mysqli)) {
 /*** checa login***/
-        $funcbase->checalogin($mysqli);
+    $funcbase->checalogin($mysqli);
 		
         
 function oprimio($mysqli,$numid){
@@ -26,20 +26,35 @@ function oprimio($mysqli,$numid){
 
 	 
     if (!is_numeric($numid)) {
+  //si se da de alta una nueva sucursal
+  	//insercion en la tabla sucursales
         $sqlCommand= "INSERT INTO $table (cliente,no_suc,no_almacen,nom_sucursal,usu,status)
-        VALUES ('$cliente','$num_suc','$almac','$nombre','$usu',0)"
-        or die('insercion cancelada '.$table);
+        VALUES ('$cliente','$num_suc','$almac','$nombre','$usu',0)";
+		$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
 		
+		//insercion en la tabla almacenes
+		
+		//Construción del numero de almacen
+
+			$almacen = '$cliente'.'0';
+			$sqlCommand2= "INSERT INTO almacenes (idclientes,no_almacen,descripcion,tipo_almacen,usu,status)
+	        VALUES ($cliente,'$almac','$nombre',2,'$usu',0)";
+			
+			// Execute the query here now
+	    	$query2 = mysqli_query($mysqli, $sqlCommand2) or die (mysqli_error($mysqli)); 
+	    	/* liberar la serie de resultados */
+	   		mysqli_free_result($query2);
+		
+			
     }else {
         $sqlCommand = "UPDATE $table SET cliente ='$cliente', no_suc='$num_suc',
          no_almacen = '$almac', usu = '$usu',status = 1 WHERE idduccliente= $numid LIMIT 1"
          or die('actualizacion cancelada ');
+		$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+    	/* liberar la serie de resultados */
+    	mysqli_free_result($query);
     }
-    // Execute the query here now
-    $query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
-    /* liberar la seri
-	 * e de resultados */
-    mysqli_free_result($query);
+
     /* cerrar la conexion */
     mysqli_close($mysqli);  
 }
@@ -70,7 +85,8 @@ if(isset($_POST['enviosuc'])){
             	$idsuccliente="";			
 			//traer el numero de cliente recientemente insertado
 			/***lee el numero de remision ***/
-				$cliente= $funcbase->ultcliente($mysqli);
+				$otrabd = new otrasdbutils;
+				$cliente= $otrabd->ultcliente($mysqli);
 				$no_suc = "";
                 $no_almacen ="";
                 $nom_sucursal = "";
