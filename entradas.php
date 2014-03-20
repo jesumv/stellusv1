@@ -69,6 +69,7 @@ if(isset($_POST['enviaentra'])){
 <link rel="stylesheet" href="css/cupertino/jquery-ui-1.10.4.custom.css">
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
+<link rel="shortcut icon" href="img/logomin.gif" />
 <script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
 

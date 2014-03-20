@@ -31,6 +31,7 @@ if(isset($_POST['altasuc'])){
 <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
+<link rel="shortcut icon" href="img/logomin.gif" />
 <script src="js/jquery-1.10.2.js"></script>
 <title>STELLUS MEDEVICES</title>
 

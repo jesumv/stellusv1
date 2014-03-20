@@ -1,67 +1,80 @@
 <?php
-//directiva a la conexion con base de datos
-include_once "php/config.php";
-session_start();
 
-$error = "";
+ /*** Autoload class files ***/
+    function __autoload($class){
+      require('include/' . strtolower($class) . '.class.php');
+    }
+    //directiva a la conexion con base de datos
+    $funcbase = new dbutils;
+    $mysqli = $funcbase->conecta();
+ /*** si se establecio la conexion***/
+    if (is_object($mysqli)) {
+        session_start();
 
-if($_SERVER["REQUEST_METHOD"] == "POST")
-    {
-        // username and password sent from form 
-		$myusername=mysqli_real_escape_string ($mysqli,$_POST['username']);
-        $mypassword=mysqli_real_escape_string($mysqli,$_POST['password']); 
-        $sql=sprintf("SELECT id,nombre,empresa,nivel,username FROM usuarios WHERE username='$myusername' 
-        and passcode=(AES_ENCRYPT('%s','%s'))",$mypassword,$mypassword);
-        $result=mysqli_query($mysqli,$sql);
-        $row=mysqli_fetch_array($result);
-        $active=$row['active'];
-        $nivel =$row[3];
-        $username = $row[1];
-        $empre = $row[2];
-        
-        $count=mysqli_num_rows($result);
-        
-        $result->free();
-		
-        $mysqli->close();
-        
-    // If result matched $myusername and $mypassword, table row must be 1 row
-    if($count==1)
-    {
-        	
-       	$_SESSION['login_user']=$myusername;
-        $_SESSION['username']=$username;
-        $_SESSION['nivel']=$nivel;
-        $_SESSION['empresa']=$empre;
-        
-        //seleccion de hoja según empresa
-        switch ($empre) {
-            case 0:
-                header("location: portal.php");
-                break;
-            case 1:
-                header("location: listaorden.php");
-                break;
-            case 2:
-                header("location: confe/inventconfe.php");
-                break;
-             case 3:
-                 header("location: cxc.php");
-                break;
+        $error = "";
+
+            if($_SERVER["REQUEST_METHOD"] == "POST")
+                {
+                // username and password sent from form 
+                $myusername=mysqli_real_escape_string ($mysqli,$_POST['username']);
+                $mypassword=mysqli_real_escape_string($mysqli,$_POST['password']); 
+                $sql=sprintf("SELECT id,nombre,empresa,nivel FROM usuarios WHERE username='$myusername' 
+                and passcode=(AES_ENCRYPT('%s','%s'))",$mypassword,$mypassword);
+                $result=mysqli_query($mysqli,$sql);
+                $row=mysqli_fetch_array($result);
+                $active=$row['active'];
+                $nivel =$row[3];
+                $username = $row[1];
+                $empre = $row[2];
+                
+                $count=mysqli_num_rows($result);
+                
+                $result->free();
+                
+                $mysqli->close();
+                
+                // If result matched $myusername and $mypassword, table row must be 1 row
+                if($count==1)
+                {
+                    
+                $_SESSION['login_user']=$myusername;
+                $_SESSION['username']=$username;
+                $_SESSION['nivel']=$nivel;
+                $_SESSION['empresa']=$empre;
+                
+                //seleccion de hoja según empresa
+                    switch ($empre) {
+                        case 0:
+                            header("location: portal.php");
+                            break;
+                        case 1:
+                            header("location: listaorden.php");
+                            break;
+                        case 2:
+                            header("location: confe/inventconfe.php");
+                            break;
+                         case 3:
+                             header("location: cxc.php");
+                            break;
+                        
+                        default:
+                             header("location: php/logout.php");
+                            break;
+                    }
+                
             
-            default:
-                 header("location: php/logout.php");
-                break;
+            }
+        //los datos de acceso no son correctos    
+        else 
+            {
+                $error="Su nombre de usuario o contraseña son invalidos";
+            }
         }
         
-        
+    } else {
+        die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
-//los datos de acceso no son correctos    
-else 
-    {
-        $error="Su nombre de usuario o contraseña son invalidos";
-    }
-}
+    
 ?>
 
 
@@ -71,7 +84,7 @@ else
         <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
         <title>Stellus Medevices</title>
          <link rel="stylesheet" type="text/CSS" href="css/plantilla1.css" />
-         
+         <link rel="shortcut icon" href="img/logomin.gif" />
          
     </head>
      <body >

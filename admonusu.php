@@ -72,6 +72,7 @@ $nivel = $_POST['nivel'];
 
 <link rel="stylesheet" type="text/css" href="css/comun.css">
 <link rel="stylesheet" type="text/CSS" href="css/plantilla1.css" />
+<link rel="shortcut icon" href="img/logomin.gif" />
 <!-- links a hojas javascript ---------------------------------------------------->
 <script type="text/javascript" src="js/comunes.js"></script>
 <title>INTRANET ZERBY</title>

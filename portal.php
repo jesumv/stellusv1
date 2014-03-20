@@ -16,7 +16,7 @@ include_once"php/lock.php";
 <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
-
+<link rel="shortcut icon" href="img/logomin.gif" />
 <title>STELLUS MEDEVICES</title>
 </head>
 
