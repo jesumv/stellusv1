@@ -16,23 +16,25 @@
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['idprod'];
 			$fecha =strtoupper($_POST ['fecha']) ;
-			$agente =$_POST ['idrepresentantes'];
 			$sucursal =$_POST ['sucursal'];
 			$cantidad = $_POST ['cant'];
 			$ref= $_POST ['fact'];
 			$usu = $_SESSION['username'];
 			$idclientes = $_POST ['idclientes'];
+			$idsuccliente= $_POST ['idsuccliente'];
 			$oc= $_POST ['oc'];
 			$subtotal= $_POST ['subtot'];
 			$iva= $_POST ['iva'];
 			$total= $_POST ['total'];
+			$rem = $_POST ['rem'];
 			$observaciones = $_POST ['obser'];
 			
-		//Incremento en almacen de destino
+		//disminución en almacen de destino
 		//construccción de numero de almacen
-		
+			$almacen = $idclientes.$idsuccliente;
+			$table="inventarios";
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',$idclientes,1,$cantidad,$ref,'$usu',5)";
+	    	VALUES ($idproductos,'$fecha',$almacen,1,-$cantidad,$ref,'$usu',4)";
 
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
 			
@@ -44,8 +46,10 @@
 			$invact= $result2[0];
 			
 			$table = 'facturas';
-	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,agente,sucursal,observaciones,usu,idinventarios)
-	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,'$agente','$sucursal','$observaciones','$usu',$invact)";
+	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,idsuccliente,
+	   		idclientes,remision,observaciones,usu,idinventarios)
+	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,'$sucursal',$idclientes,$rem,'$observaciones',
+	    	'$usu',$invact)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("facturas ".mysqli_error($mysqli)); 
 
@@ -93,33 +97,28 @@
             select: function( event, ui ) {
 					$( "#idclientes" ).val( ui.item.idclientes );
 					$("#nivel").val(ui.item.nivel);
+					$('#sucursal').focus(); 
 				}
 				                
         });
         $('#sucursal').autocomplete({
 			autoFocus: true,
             source: "get_sucur_list.php",
-            minLength: 2,			                
+            minLength: 2,
+            select: function( event, ui ) {
+					$("#idsuccliente").val(ui.item.idsuccliente);
+            		$('#fecha').focus();
+				}
+            			                
         }); 
         
 		    $('#fecha').datepicker({
 		dateFormat: "yy-mm-dd",
 		onClose: function(dateText, inst) {
-		      $('#agente').focus();
+		      $('#cod').focus();
 		   }	  
 	   });
-	   
-	   $('#agente').autocomplete({
-			autoFocus: true,
-            source: "get_agent_list.php",
-            minLength: 2,
-            select: function( event, ui ) {	
-            	var idrepresentantes =  ui.item.idrepresentantes;	
-            	$("#idrepresentantes").val(idrepresentantes);						
-            	$("#cod").focus();      						
-            }  
-        });
-        
+	          
         $('#cod').autocomplete({
         	autoFocus: true,
         	source: "get_prod_list.php",
@@ -162,6 +161,15 @@
 			$("#total").val(total);
 			$("#fact").focus();
 		});
+		
+		$( "#fact" ).change(function() {
+			$("rem").focus();
+		});
+		
+		$( "#rem" ).change(function() {
+			$("obser").focus();
+		});
+		
     	  
         
 	});
@@ -189,15 +197,13 @@
 			 	<input type="hidden" id="idclientes" name="idclientes"/>
 			 	<input type="hidden" id="nivel" class="ui-autocomplete-content"/>
 			 	<label for="sucursal">Sucursal: </label>
-			 	<input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/> 
+			 	<input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/>
+			 	<input type="hidden" id="idsuccliente" name="idsuccliente"/> 
 			 	<label for="fecha">Fecha: </label>
-			 	<input type="text" id="fecha"  name="fecha"/>   
-			 	<label for="agente">Agente: </label>
-			 	<input type="text" id="agente"  name="agente" class="ui-autocomplete-content"/>
-			 	<input type='hidden' id='idrepresentantes' name ='idrepresentantes' />
-			 	<br />
+			 	<input type="text" id="fecha"  name="fecha"/>
 			 	<label for="cod">Codigo: </label>
-			 	<input type='text' id='cod' name ='cod' />
+			 	<input type='text' id='cod' name ='cod' />   
+			 	<br />
 			 	<label for="des">Descripción: </label>
 			 	<input type='text' id='des' name ='des' size= "75" disabled /><input type='hidden' id='idprod' name ='idprod' />
 			 	<label for="precio">Precio Unitario: </label>
@@ -215,6 +221,9 @@
 				<input type='text' id='fact' name ='fact' />
 				<label for="oc">Orden de compra: </label>
 				<input type='text' id='oc' name ='oc' />
+				<label for="rem">Remisión: </label>
+				<input type='text' id='rem' name ='rem' />
+				<br />
 				<label for="obser">Observaciones: </label>
 				<input type='text' id='obser' name ='obser' size='100'/>
 				

@@ -28,15 +28,15 @@ global $num;
 		$ciudad=strtoupper($_POST ['ciudad']) ;
 		$estado=strtoupper($_POST ['estado']) ;
 		$cp=strtoupper($_POST ['cp']) ;
-		
 	    $usu = $_SESSION['login_user'];
+		$diasc= $_POST ['diasc'];
 
 	 //si se esta dando de alta un nuevo cliente
 	    if (!is_numeric($numid)) {
 	 //se inserta en la tabla clientes
 	 		$usu = $_SESSION['login_user'];
-	        $sqlCommand= "INSERT INTO $table (razon_social,rfc,nom_corto,calleno,col,del,ciudad,estado,cp,nivel,usu,status)
-	        VALUES ('$nombre','$rfc','$corto','$calleno','$col','$del','$ciudad','$estado','$cp','$nivel','$usu',0)"
+	        $sqlCommand= "INSERT INTO $table (razon_social,rfc,nom_corto,calleno,col,del,ciudad,estado,cp,nivel,usu,status,dias_c)
+	        VALUES ('$nombre','$rfc','$corto','$calleno','$col','$del','$ciudad','$estado','$cp','$nivel','$usu',0,'$diasc')"
 	        or die('insercion cancelada '.$table);
 			
 		// Execute the query here now
@@ -66,9 +66,8 @@ global $num;
 					
 	    }else {
 	        $sqlCommand = "UPDATE $table SET razon_social ='$nombre', rfc='$rfc',nom_corto='$corto',
-	         calleno= '$calleno', col='$col',del='$del',ciudad='$ciudad',estado='$estado',cp='$cp',nivel='$nivel',usu = '$usu',status = 1 
-	         WHERE idclientes= $numid LIMIT 1"
-	         or die('actualizacion cancelada '.$table);
+	         calleno= '$calleno', col='$col',del='$del',ciudad='$ciudad',estado='$estado',cp='$cp',nivel='$nivel',usu = '$usu',status = 1,
+	         dias_c = $diasc WHERE idclientes= $numid LIMIT 1";
 			 
 			 // Execute the query here now
 	    	$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
@@ -84,12 +83,19 @@ global $num;
 if(isset($_POST['enviomod'])){
 	$numero = strtoupper($_POST ['num']) ;	
     oprimio($mysqli, $numero);
-    header('Location: include/altasucdialog.xhtml');
+    $pagf= ($_POST ['pag']) ;
+    if ($pagf == -99){
+    	header('Location: include/altasucdialog.xhtml');
+    }
+    
 }
 	
 /***obtiene los datos de acuerdo con el parametro recibido en la pagina***/
         if(isset($_GET['nid'])){
+        	//define si se mostrara el dialogo de sucursales o no
+        	$pag = $_GET['nid'];
             if($_GET['nid']== -99){
+            	//se define el tipo de pagina para saber si se daran de alta sucursales
             	$nivel= "";
                 $num = "";
                 $nombre = "";
@@ -101,6 +107,7 @@ if(isset($_POST['enviomod'])){
 				$ciudad = "";
 				$estado="";
 				$cp="";
+				$diasc="";
 				
                 //titulo del boton de la forma
                 $titbot = "Insertar";
@@ -119,6 +126,7 @@ if(isset($_POST['enviomod'])){
 				$estado = $sqlsresul[8];
 				$cp=$sqlsresul[9];
 				$nivel = $sqlsresul[10];
+				$diasc = $sqlsresul[14];
                 $titbot = "Actualizar";
                 
             }
@@ -165,7 +173,6 @@ if(isset($_POST['enviomod'])){
   
 <p></p> 
   
-
  <!-- la forma. ------>
   <div class="cajacentra">
 
@@ -173,12 +180,11 @@ if(isset($_POST['enviomod'])){
         
        <table  class="db-table">
           
-        
-     <tr>
             <tr>
                 <td >No.</td> 
                 <?php
                 echo "<input type='hidden' id='num' name ='num' value = $num size = '60'/>";
+				echo "<input type='hidden' id='pag' name ='pag' value = $pag/>";
                 echo "<td>$num</td>";
                 echo "<td>NIVEL</td>";
                 echo "<td >
@@ -219,16 +225,16 @@ if(isset($_POST['enviomod'])){
                 echo "<td ><input name ='estado' value = '$estado' size = '60' /></td>";
                 echo "<td>CP</td>";
                 echo "<td ><input name ='cp' value = '$cp' size = '10' /></td>";
+                echo "<td>DIAS DE CREDITO</td>";
+                echo "<td ><input name ='diasc'  id='diasc' value = '$diasc' size = '10' /></td>";
+                
             echo "</tr>";
              
             ?>         
-     </tr>
-   
-     
                       
           </table>  <br />
     <!--------el boton de enviar ------------->
-    <div>
+    <div class="centraelem">
         <?php
            echo  "<input type='submit' name ='enviomod' value=$titbot />"
         ?>

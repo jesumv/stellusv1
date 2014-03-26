@@ -22,11 +22,13 @@ function oprimio($mysqli){
 	$referencia = $_POST ['referencia'] ;
 	$obser = $_POST ['obser'] ;
 	$cantidad = $_POST ['cantidad'] ;
-	$usu = $_SESSION['username'];
+	$usu = $_SESSION['login_user'];
+	$lote = $_POST ['lote'] ;
+	$fechacad= $_POST ['fechacad'] ;
 //1 es almacen central. 1 es tupo movimiento entrada, status 1 es en transito
 	$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad, referencia,
-	observaciones,usu,status)
-    VALUES ('$idproductos','$fecha',2000,1,$cantidad,'$referencia','$obser','$usu',0)"
+	observaciones,usu,status,lote,fecha_cad)
+    VALUES ('$idproductos','$fecha',2000,1,$cantidad,'$referencia','$obser','$usu',0,$lote,'$fechacad')"
         or die('insercion cancelada '.$table);	
     // Execute the query here now
     $query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
@@ -94,15 +96,21 @@ if(isset($_POST['enviaentra'])){
 		   }	  
 	    	  
 	});
-		$( "#dialog" ).dialog({ autoOpen: false });
-	
+		$('#fechacad').datepicker({
+	    	dateFormat: "yy-mm-dd",
+	    	defaultDate: +365,
+	    	onClose: function(dateText, inst) {
+		      $('#cantidad').focus();
+		   }	  
+	    	  
 	});
 	
 	$('#corto').change(function() {
   		$('#fecha').focus;	
-});
-
+	});
 	
+	});
+		
 
   </script>
 </head>
@@ -115,33 +123,41 @@ if(isset($_POST['enviaentra'])){
   ?> 
 
  
-<div>
-
+<div class="centraelem">
 
 	<legend>Entrada de artículos a almacén</legend>
 	             
 	            <p>Introduzca el nombre del producto</p>
-<form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">	            
-	<div class = "ui-widget-header">
-			<label for="corto">Producto: </label> 
-			<input type="text" id="corto"  name="corto" class="ui-autocomplete-content"/> 
-			<input type="hidden" id="idproductos"  name="idproductos" />                
-			<label for="corto">Codigo: </label> 
-			<input type="text" id="codigo"  name="codigo" disabled/>
-			<label for="fecha">Fecha: </label> 
-			<input type="text" id="fecha" name="fecha" />
-			<label for="referencia">Referencia: </label> 
-			<input type="text" id="referencia"  name="referencia"/>
-	</div>
-	<p>
-		<label for="cantidad">Cantidad: </label> 
-		<input type="number" id="cantidad"  name="cantidad"/>			
-		<label for="obser">Observaciones: </label> 	
-		<textarea id ="obser" name="obser" rows="3" cols="20"></textarea>
-	</p>
-	<p><input type='submit' name='enviaentra' value = 'Enviar'/></p>
-	
-</form>
+	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">	            
+		<div class = "ui-widget-header">
+				<label for="corto">Producto: </label> 
+				<input type="text" id="corto"  name="corto" class="ui-autocomplete-content"/> 
+				<input type="hidden" id="idproductos"  name="idproductos" />                
+				<label for="corto">Codigo: </label> 
+				<input type="text" id="codigo"  name="codigo" disabled/>
+				<label for="fecha">Fecha: </label> 
+				<input type="text" id="fecha" name="fecha" />
+				<label for="referencia">Referencia: </label> 
+				<input type="text" id="referencia"  name="referencia"/>
+		<p>
+		<p>
+			<label for="lote">Lote: </label> 
+			<input type="text" id="lote"  name="lote"/>
+			<label for="fechacad">Fecha de Caducidad: </label> 
+			<input type="text" id="fechacad"  name="fechacad"/>
+			<label for="cantidad">Cantidad: </label> 
+			<input type="number" id="cantidad"  name="cantidad"/>
+			
+		</p>
+				
+			<label for="obser">Observaciones: </label> 	
+			<textarea id ="obser" name="obser" rows="3" cols="20"></textarea>
+		</p>
+		<p><input type='submit' name='enviaentra' value = 'Dar Entrada'/></p>
+		</div>
+		
+	</form>
+</div>
 <br/>
 <br />
 <div id="footer">

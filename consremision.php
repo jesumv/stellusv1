@@ -10,13 +10,16 @@
     $mysqli = $funcbase->conecta();
     if (is_object($mysqli)) {
 /*** checa login***/
-        $funcbase->checalogin($mysqli);
+    $funcbase->checalogin($mysqli);
 		
 /***lee el numero de remision ***/
-		$remiact= $funcbase->numremi($mysqli)+1;
+		if(isset($_GET ['r'])){
+			$remiact= $_GET ['r'];	
+		}
+		
 		
 		function oprimio($mysqli,$remiact){
-	//esta funcion hace las consultas de actualizacion
+	//esta funcion hace las consultas de actualizacion cuando se ha oprimido el boton
 		$table = 'remisiones';
 	    $idcliente =strtoupper($_POST ['idclientes']) ;
 		$fecha =strtoupper($_POST ['fecha']) ;
@@ -33,16 +36,18 @@
 		$iva =  $_POST ['iniva'];
 		$total =  $_POST ['intotal'];
 		$intotletra = $_POST ['intotletra'];
+		$remi2 = $_POST ['rem'];
 
 		
-//insercion en la tabla de remisiones		
-	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,sucursal,agente,doctor,procedimiento,
-	    paciente,registro,subtotal,iva,total,con_letra,tiporem)
-	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente','$sucursal','$agente','$doctor','$procedimiento','$paciente','$registro',
-	    $subtotal,$iva,$total,'$intotletra',0)";
+//actualizacion de la tabla de remisiones		
+		
+		$sqlCommand = "UPDATE $table SET fecha='$fecha', idremitido = '$idcliente', usu = '$usu', status = 4,cliente='$cliente',
+		sucursal = '$sucursal',agente = '$agente', doctor = '$doctor',procedimiento = '$procedimiento',paciente = '$paciente', 
+		registro = '$registro', subtotal =$subtotal,iva= $iva, total = $total, con_letra='$intotletra',tiporem= 0, custodio = NULL
+		WHERE idremisiones = '$remi2' LIMIT 1";
 			
 	    // Execute the query here now
-	    $query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    $query=mysqli_query($mysqli, $sqlCommand) or die ("error en la actualizacion".mysqli_error($mysqli)); 
 //insercion en la tabla de artremisiones--------------------------------------------------------
 
 		//obtencion de valores del html 
@@ -53,10 +58,9 @@
 			$importe= $_POST ['inimpor0'];
 			$usu = $_SESSION['login_user'];
 			$sqlCommand= "INSERT INTO $table (codigo,remision,precio_unitario,cantidad,importe)
-	    	VALUES ('$codigo',$remiact,$precio,$cantidad,$importe)"
-	    	or die('insercion cancelada '.$table);
+	    	VALUES ('$codigo',$remi2,$precio,$cantidad,$importe)";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en insercion articulos ".mysqli_error($mysqli)); 
 //insercion en la tabla de inventarios	    	
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['inidprod0'];
@@ -70,15 +74,13 @@
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remiact,'$usu',1)"
-	    	or die('insercion cancelada '.$table);
+	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remi2,'$usu',1)";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN DIS. INV. CENTRAL ".mysqli_error($mysqli)); 
 	   //Incremento en almacen de destino
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$remiact,'$usu',1)"
-	    	or die('insercion cancelada '.$table);
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$remi2,'$usu',1)";
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN AUMENTO INV. CLIENTE ".mysqli_error($mysqli)); 
 	}
 	
 	
@@ -91,7 +93,7 @@
 			
 		    // redirección a la hoja pdf mediante javascript
 		    echo '<script type="text/javascript" language="Javascript">
-		    			window.open("php/rremision.php?r='.$remiact.'");  
+		    			window.open("consblanco.php","_self");  
                   </script>'; 
 		}
 		
@@ -135,7 +137,7 @@
 					$("#rfc").val(ui.item.rfc);
 					$("#domicilio").val(ui.item.domicilio);
 					$("#nivel").val(ui.item.nivel);
-					$('#sucursal').focus();
+					 $('#sucursal').focus();
 				}
 				                
         });
@@ -145,7 +147,7 @@
             minLength: 2,
             select:function(event, ui){
             	$("#idsuccliente").val(ui.item.idsuccliente);
-            	$('#fecha').focus();	
+            	 $('#fecha').focus();	
             }
 		                
         }); 
@@ -162,7 +164,7 @@
             source: "get_agent_list.php",
             minLength: 2,
             select: function( event, ui ) {
- 							$("#idrepresentantes").val( ui.item.idrepresentantes);
+ 							$("#idrepresentantes").val( ui.item.idrepresentantes );
  							$("#agente").val( ui.item.label);
  							var trans1 = $("#razon").val();
  							var trans2 = $("#sucursal").val();
@@ -257,6 +259,7 @@
 	 	<legend>Datos de la Remisión:</legend>
 	 	<label for="cliente">Cliente: </label>
 	 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
+	 	<input type="hidden" id="rem" name = "rem" value = "<?php echo $remiact ?>"/>
 	 	<input type="hidden" id="razon" class="ui-autocomplete-content"/>
 	 	<input type="hidden" id="idclientes" name="idclientes"/>
 	 	<input type="hidden" id="rfc" class="ui-autocomplete-content"/>
@@ -334,7 +337,7 @@
 	
 </div>
 <p></p>
-<div class="centraelem"><input type="submit" name ="enviorem" value="IMPRIMIR REMISION"/></div>
+<div class="centraelem"><input type="submit" name ="enviorem" value="ACTUALIZA REMISION"/></div>
 </form>
 <div id="footer"></div>
 

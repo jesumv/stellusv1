@@ -5,7 +5,8 @@
                 <li class="currentsub"><a class="fly"href="#url">Consultas</a>
                 	<ul class="fly2">
                 		<li class="currentfly"><a href="inventarios.php">Inventarios</a></li>
-                		<li ><a href="#ref">Rem. en blanco</a></li>
+                		<li ><a href="consfactura.php">Facturación</a></li>
+                		<li ><a href="consblanco.php">Rem. en blanco</a></li>
                 	</ul>
                   </li>
                     <li><a href="#url">Almacén</a>

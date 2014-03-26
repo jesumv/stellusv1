@@ -1,0 +1,5 @@
+/*tablas para exportar a excel*/
+
+table.aexcel {border-right:1px solid #000040; border-bottom:1px solid #000040; border-collapse:collapse; margin:auto}
+table.aexcel th	{ background: #eee; padding:5px; border-left:1px solid #000040; border-top:1px solid #000040; }
+table.aexcel td	{ padding:5px; border-left:1px solid #000040; border-top:1px solid #000040; }

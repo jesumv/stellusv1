@@ -93,8 +93,7 @@
             source: "get_agent_list.php",
             minLength: 2,
             select: function( event, ui ) {
- 							$("#asignadoa").val( ui.item.label );
-            						
+ 							$("#asignadoa").val(ui.item.label);					
             }  
         });
 				

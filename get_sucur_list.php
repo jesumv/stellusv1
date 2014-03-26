@@ -14,12 +14,12 @@
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
 	
-    $req = "SELECT idsuccliente,nom_sucursal FROM succliente where nom_sucursal like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
+    $req = "SELECT no_suc,nom_sucursal FROM succliente where nom_sucursal like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
     $query = mysqli_query($mysqli,$req);
     
     while($row = mysqli_fetch_array($query))
     {
-        $results[] = array('label' => $row['nom_sucursal'],'idsuccliente' => $row['idsuccliente']);
+        $results[] = array('label' => $row['nom_sucursal'],'idsuccliente' => $row['no_suc']);
     }
 	
 	 /* liberar la serie de resultados */

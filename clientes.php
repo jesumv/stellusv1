@@ -98,8 +98,9 @@ if(isset($_POST['altacte'])){
   
   ?> 
   
-<div class="cajacentrada"><form action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST"> 
-   <input type="submit" name ="altacte" value="nuevo cliente" /> 
+<div class="centraelem">
+	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST"> 
+   		<input type="submit" name ="altacte" value="nuevo cliente" /> 
    </form>
 </div>
   
