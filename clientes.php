@@ -31,9 +31,10 @@ if(isset($_POST['altacte'])){
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
 <link rel="shortcut icon" href="img/logomin.gif" />
+<script src="js/jquery-1.10.2.js"></script>
+
 <title>STELLUS MEDEVICES</title>
 
- <script src="js/jquery-1.10.2.js"></script>
   <script>
   $( document ).ready(function() {
             $( ".ed" ).click(function(eventObject ) {

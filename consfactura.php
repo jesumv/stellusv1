@@ -24,7 +24,6 @@
 	<link rel="stylesheet" href="css/cupertino/jquery-ui-1.10.4.custom.css">
 	<link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 	<link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
-	<link rel="stylesheet" type="text/CSS" href="css/aexcel.css" />
 	<link rel="shortcut icon" href="img/logomin.gif" />
 	<script src="js/jquery-1.10.2.js"></script>
 	<script src="js/jquery-ui-1.10.4.custom.js"></script>
@@ -94,7 +93,6 @@
 		 WHERE fecha >='$fechainic' AND fecha <='$fechafin' ORDER BY t1.no_factura";
 		}else{
 				//SI NO SE ELIGIERON
-			$fechamin = date(DATE_ATOM);
 			$sqlCommand = "SELECT t1.no_factura,t1.oc,t1.remision,t1.fecha,t2.razon_social,t3.nom_sucursal,t1.subtotal,t1.iva,t1.total,
 		t4.nom_corto, t5.nom_corto,t1.cant,t1.observaciones FROM facturas AS t1 INNER JOIN clientes AS t2 ON t1.idclientes=t2.idclientes LEFT JOIN succliente as t3 on 
 		t1.idsuccliente=t3.no_almacen LEFT JOIN representantes as t4 ON t1.agente = t4.idrepresentantes
@@ -106,7 +104,7 @@
 		 $query1=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN CONSULTA DE INVENTARIOS CLIENTES. ".mysqli_error($mysqli));
 		 //construccion de la casilla remision/oc
 		 
-		 echo "	<table border=1 id='tablaaxl' class='aexcel'>";
+		 echo "	<table border=1 id='tablaaxl' >";
 		 echo "<tr><th>FACTURA</th><th>REM/OC</th><th>FECHA</th><th>CLIENTE</th><th>SUCURSAL</th></th><th>AGENTE</th><th>SUBTOTAL</th>
 		 <th>IVA</th><th>TOTAL</th><th>PRODUCTO</th><th>PIEZAS</th><th>OBS.</th></tr>";
 		 
