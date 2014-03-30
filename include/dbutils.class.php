@@ -47,9 +47,8 @@
     
             if(!isset($login_session))
             {
-               if($empre = 0){
-                  header("Location: ../index.php"); 
-               }
+                  header("Location: index.php"); 
+               
             }
         }
         

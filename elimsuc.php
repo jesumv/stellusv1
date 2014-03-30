@@ -1,9 +1,18 @@
 <?php
-    //directiva de la conexion a la base de datos
-include_once "php/config.php";
-
-//directiva a la revision de conexion
-include_once"php/lock.php";
+    /*** Autoload class files ***/ 
+    function __autoload($class){
+      require('include/' . strtolower($class) . '.class.php');
+    }
+    
+    $funcbase = new dbutils;
+/*** conexion a bd ***/
+    $mysqli = $funcbase->conecta();
+    if (is_object($mysqli)) {
+/*** checa login***/
+        $funcbase->checalogin($mysqli);
+    } else {
+        die ("<h1>'No se establecio la conexion a bd'</h1>");
+    }
 
 //consulta a la base de datos
    $usu = $_SESSION['login_user'];

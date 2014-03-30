@@ -7,6 +7,7 @@
     //directiva a la conexion con base de datos
     $funcbase = new dbutils;
     $mysqli = $funcbase->conecta();
+	
  /*** si se establecio la conexion***/
     if (is_object($mysqli)) {
         session_start();
@@ -22,7 +23,6 @@
                 and passcode=(AES_ENCRYPT('%s','%s'))",$mypassword,$mypassword);
                 $result=mysqli_query($mysqli,$sql);
                 $row=mysqli_fetch_array($result);
-                $active=$row['active'];
                 $nivel =$row[3];
                 $username = $row[1];
                 $empre = $row[2];
@@ -46,15 +46,6 @@
                     switch ($empre) {
                         case 0:
                             header("location: portal.php");
-                            break;
-                        case 1:
-                            header("location: listaorden.php");
-                            break;
-                        case 2:
-                            header("location: confe/inventconfe.php");
-                            break;
-                         case 3:
-                             header("location: cxc.php");
                             break;
                         
                         default:

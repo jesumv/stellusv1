@@ -110,7 +110,7 @@
 				 $query1=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN CONSULTA DE INVENTARIOS VENDEDORES. ".mysqli_error($mysqli));
 				 
 				 echo "	<table class= 'db-table'>";
-				 echo "<tr><th>ALMACEN</th><th>PRODUCTO</th><th>total</th></tr>";
+				 echo "<tr><th>REPRESENTANTE</th><th>PRODUCTO</th><th>total</th></tr>";
 				 
 						 while($row2=mysqli_fetch_row($query1)){
 						 	echo "<tr><td>$row2[1]</td><td>$row2[2]</td><td>$row2[3]</td></tr>";

@@ -196,7 +196,7 @@
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
 
     <?php 
-  $titulo = "REMISIONES VENDEDORES";
+  $titulo = "REMISIONES AGENTES";
   include_once "include/barrasup.php";
   ?> 
  
@@ -205,7 +205,7 @@
  <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
 	 <div class = "ui-widget-header">
 	 	<legend>Datos de la Remisión:</legend>
-	 	<label for="cliente">Cliente: </label>
+	 	<label for="cliente">Agente: </label>
 	 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
 	 	<input type="hidden" id="razon" class="ui-autocomplete-content"/>
 	 	<input type="hidden" id="idclientes" name="idclientes"/>

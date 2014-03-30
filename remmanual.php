@@ -229,7 +229,7 @@
 				<td><input type="text"  id="fecha" name = "fecha" size="15"/></td> 	
 				<td id="agentprint"><b>AGENTE:</b></td>
 				<td colspan="3"><input type="text"  id="agente" name = "agente" size="30"/></td> 
-				<input type "hidden"  id="idrepresentantes" name="idrepresentantes"/>	
+				<input type="hidden"  id="idrepresentantes" name="idrepresentantes"/>	
 			</tr>
 			<tr><td  id="domiprint"><b>DOMICILIO:</b></td>
 				<td colspan="6"><input type="text"  id="domicilio" name = "domicilio" size="180"/></td> 

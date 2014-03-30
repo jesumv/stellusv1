@@ -21,7 +21,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
 	
-	<link rel="stylesheet" href="css/cupertino/jquery-ui-1.10.4.custom.css">
+	<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.10.4.custom.css">
 	<link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 	<link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
 	<link rel="shortcut icon" href="img/logomin.gif" />
@@ -65,7 +65,7 @@
  	
  <!--FORMA PARA LA SELECCION DE FECHAS DE LA CONSULTA----------------------------------------------------------------->  	
 <div class="centraelem">
-	<div class = "ui-widget-header">
+	<div class = "ui-widget-header" >
 		<form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
 			<legend>Fechas de Consulta:</legend>
 		 	<label for="fechai">Fecha Inicial: </label>

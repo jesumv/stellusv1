@@ -12,16 +12,16 @@ global $num;
 /*** conexion a bd ***/
     $mysqli = $funcbase->conecta();
     if (is_object($mysqli)) {
-/*** checa login***/
+	/*** checa login***/
         $funcbase->checalogin($mysqli);
         
-// query de seleccion de combo proveedores
+		// query de seleccion de combo proveedores
             $query="SELECT idproveedores,nom_corto FROM proveedores ORDER BY nom_corto";
             $result1 = mysqli_query ($mysqli,$query) or die("error en consulta de combo");
 		
 	function oprimio($mysqli,$numid){
 		
-//esta funcion hace las consultas de actualizacion
+	//esta funcion hace las consultas de actualizacion
 		$table = 'productos';
 	    $desc =strtoupper($_POST ['desc']) ;
 		$corto =strtoupper($_POST ['corto']) ;
@@ -79,6 +79,7 @@ if(isset($_POST['enviomod'])){
 				$precio6= "";
 				$preciost= "";
 				$proveedor="";
+				$titulo= "ALTA DE PRODUCTOS";
                 //titulo del boton de la forma
                 $titbot = "Insertar";
                 
@@ -98,6 +99,7 @@ if(isset($_POST['enviomod'])){
 				$precio6 = $sqlsresul[15];
 				$preciost = $sqlsresul[16];
                 $titbot = "Actualizar";
+				$titulo= "ACTUALIZACION PRODUCTOS";
                 
             }
     
@@ -133,8 +135,8 @@ if(isset($_POST['enviomod'])){
 <body
 
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
-    <?php 
-  $titulo = "ACTUALIZACION PRODUCTOS";
+    <?php
+ 
   include_once "include/barrasup.php";
   ?> 
 
@@ -156,7 +158,7 @@ if(isset($_POST['enviomod'])){
 				echo "<td>Nombre Corto</td>";
 				echo "<td><input name ='corto' value = '$corto'  size = '30'/> </td>";
 				echo "<td>Proveedor</td>";
-				 /**el combo de cliente**/
+				 /**el combo de proveedor**/
                echo "<td><select name= 'combo' >";
         /**printing the list box select command**/
         
