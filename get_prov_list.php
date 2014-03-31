@@ -1,4 +1,5 @@
 <?php
+	/*** Selecciona el no. de proveedor y la razon social ***/ 
 	/*** Autoload class files ***/ 
     function __autoload($class){
       require('include/' . strtolower($class) . '.class.php');
@@ -15,13 +16,13 @@
     }
 	
     
-	$req = "SELECT idproveedores,razon_social FROM proveedores where razon_social like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
+	$req = "SELECT idproveedores, nom_corto FROM proveedores WHERE nom_corto like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
 
-    $query = mysqli_query($mysqli,$req);
+    $query = mysqli_query($mysqli,$req)or die ("error en ajax proveedores ".mysqli_error($mysqli));
     
     while($row = mysqli_fetch_array($query))
     {
-        $results[] = array('label' => $row['razon_social']);
+        $results[] = array('label' => $row['nom_corto'], 'idprov' => $row['idproveedores']);
     }
     
     echo json_encode($results);

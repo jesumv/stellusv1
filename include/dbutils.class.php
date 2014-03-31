@@ -96,7 +96,28 @@
               return $dato;  
             }
             else {
-                 die('no hay resultados para el numero de movimiento inventario');
+                 die('no hay resultados para la consulta de movimiento de inventario');
+            }
+			
+		}
+		
+		public function leeprov($mysqli,$idprov){
+			//lee el nombre corto del proveedor cuyo id se pasa como parametro
+			
+			$sql= "SELECT nom_corto FROM proveedores WHERE idproveedores = $idprov LIMIT 1";
+			$result = mysqli_query($mysqli,$sql);
+            $result2 = mysqli_fetch_row($result);
+			$dato = $result2[0];
+			
+            if($result2){
+            	/* liberar la serie de resultados */
+                  mysqli_free_result($result);
+                  /* cerrar la conexion */
+                  mysqli_close($mysqli);
+              	return $dato;  
+            }
+            else {
+                 die('no hay resultados para consulta de nombre proveedor');
             }
 			
 		}

@@ -15,7 +15,9 @@
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
 	
-    $req = "SELECT idclientes,nom_corto,razon_social,rfc,calleno,col,del,ciudad,estado,cp,nivel FROM clientes where nom_corto like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
+    $req = "SELECT idclientes,nom_corto,razon_social,rfc,calleno,col,del,ciudad,estado,cp,nivel FROM clientes WHERE nom_corto like '" 
+    . mysql_real_escape_string($_GET['term']) . "%'"; 
+	
     $query = mysqli_query($mysqli,$req);
     
     while($row = mysqli_fetch_array($query))

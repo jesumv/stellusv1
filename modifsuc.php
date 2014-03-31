@@ -1,6 +1,6 @@
 <?php
 global $num;
-//este script administra la actualizacion de un proveedor
+//este script administra la actualizacion de una sucursal
 //conectar
 /*** Autoload class files ***/ 
     function __autoload($class){

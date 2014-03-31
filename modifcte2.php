@@ -45,8 +45,7 @@ global $num;
 		//se inserta la sucursal central en la tabla almacenes
 			//traer el numero de cliente recien insertado
 			/*** conexion a bd ***/
-			    if (is_object($mysqli)) {
-			    	
+				    	
 					$otrabd = new otrasdbutils;
 					$cliente= $otrabd->ultcliente($mysqli);
 					$almacen = $cliente.'0';
@@ -58,8 +57,7 @@ global $num;
 				// Execute the query here now
 	    		$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
 					
-					
-				}
+
 	
 			
 			
@@ -71,8 +69,7 @@ global $num;
 			 
 			 // Execute the query here now
 	    	$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
-	    /* liberar la serie de resultados */
-	   		mysqli_free_result($query);
+
     	}
 	    
 	    /* cerrar la conexion */
@@ -86,7 +83,9 @@ if(isset($_POST['enviomod'])){
     $pagf= ($_POST ['pag']) ;
     if ($pagf == -99){
     	header('Location: include/altasucdialog.xhtml');
-    }
+    }else{
+    	header('Location: clientes.php');
+    	}
     
 }
 	
@@ -193,8 +192,8 @@ if(isset($_POST['enviomod'])){
                             <option value='2'>2</option>
                             <option value='3'>3</option>
                             <option value='4'>4</option>
-                            <option value='5'>4</option>
-                            <option value='6'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
                         </select>
                       </td>";
             echo "</tr>";

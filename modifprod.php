@@ -35,17 +35,21 @@ global $num;
 		$preciost=strtoupper($_POST ['preciost']) ;
 		$codigo=strtoupper($_POST ['codigo']) ;
 	    $usu = $_SESSION['login_user'];
-        $proveedor = $_POST['combo'];
+        $noprov = $_POST['noprov'];
+		$alg= $_POST['alg'];
 
 	 
 	    if (!is_numeric($numid)) {
-	        $sqlCommand= "INSERT INTO $table (descripcion,nom_corto,unidad,precio1,precio2,precio3,precio4,precio5,precio6,preciost,codigo,usu,status,idproveedores)
-	        VALUES ('$desc','$corto','$unidad',$precio1,$precio2,$precio3,$precio4,$precio5,$precio6,$preciost,'$codigo','$usu',0,$proveedor)"
+	        $sqlCommand= "INSERT INTO $table (descripcion,nom_corto,unidad,precio1,precio2,precio3,precio4,precio5,precio6,preciost,
+	        codigo,usu,status,idproveedores,alg)
+	        VALUES ('$desc','$corto','$unidad',$precio1,$precio2,$precio3,$precio4,$precio5,$precio6,$preciost,
+	        '$codigo','$usu',0,$noprov,'$alg')"
 	        or die('insercion cancelada '.$table);
 			
 	    }else {
-	        $sqlCommand = "UPDATE $table SET descripcion ='$desc', nom_corto = '$corto', unidad='$unidad',precio1='$precio1',precio2='$precio2',
-	         precio3= $precio3, precio4=$precio4, precio5=$precio5,precio6=$precio6,preciost=$preciost,codigo='$codigo',usu = '$usu',status = 1, idproveedores = $proveedor  WHERE idproductos= $numid LIMIT 1"
+	        $sqlCommand = "UPDATE $table SET descripcion ='$desc', nom_corto = '$corto', unidad='$unidad',precio1='$precio1',
+	        precio2='$precio2',precio3= $precio3, precio4=$precio4, precio5=$precio5,precio6=$precio6,preciost=$preciost,
+	        codigo='$codigo',usu = '$usu',status = 1, idproveedores = $noprov, alg = '$alg' WHERE idproductos= $numid LIMIT 1"
 	         or die('actualizacion cancelada '.$table);
     	}
 	    // Execute the query here now
@@ -79,6 +83,8 @@ if(isset($_POST['enviomod'])){
 				$precio6= "";
 				$preciost= "";
 				$proveedor="";
+				$noprov="";
+				$alg="";
 				$titulo= "ALTA DE PRODUCTOS";
                 //titulo del boton de la forma
                 $titbot = "Insertar";
@@ -86,7 +92,6 @@ if(isset($_POST['enviomod'])){
             }else{
                 $num=$_GET['nid'];
                 $sqlsresul= $funcbase->leetodos($mysqli,'productos','idproductos= '."$num.");
-                $num = $sqlsresul[0];
 				$desc = $sqlsresul[1];
 				$corto = $sqlsresul[2];
 				$unidad = $sqlsresul[3];
@@ -98,6 +103,12 @@ if(isset($_POST['enviomod'])){
                 $precio5 = $sqlsresul[14];
 				$precio6 = $sqlsresul[15];
 				$preciost = $sqlsresul[16];
+				$noprov = $sqlsresul[12];
+				$alg = $sqlsresul[13];
+				$mysqli = $funcbase->conecta();
+				if (is_object($mysqli)) {
+					$proveedor = $funcbase->leeprov($mysqli,$noprov);
+				}else{die ("<h1>'No se establecio la conexion a la tabla proveedores'</h1>");}
                 $titbot = "Actualizar";
 				$titulo= "ACTUALIZACION PRODUCTOS";
                 
@@ -116,6 +127,7 @@ if(isset($_POST['enviomod'])){
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
+<link rel="stylesheet" href="css/cupertino/jquery-ui-1.10.4.custom.css">
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
 <link rel="stylesheet" href="css/cupertino/jquery-ui-1.10.4.custom.css">
@@ -127,6 +139,17 @@ if(isset($_POST['enviomod'])){
   <script>
    $( document ).ready(function() {
        $('#inic').focus();
+       $('#prov').autocomplete({
+			autoFocus: true,
+            source: "get_prov_list.php",
+            minLength: 1,
+            select:function(event, ui){
+            	$("#prov").val( ui.item.label);
+            	$("#noprov").val(ui.item.idprov);
+            	$('#codigo').focus();	
+            }
+		                
+        }); 
 });
 
   </script>
@@ -157,27 +180,22 @@ if(isset($_POST['enviomod'])){
 				echo "<td><input id='inic' name ='desc' value = '$desc'  size = '60'/> </td>";
 				echo "<td>Nombre Corto</td>";
 				echo "<td><input name ='corto' value = '$corto'  size = '30'/> </td>";
+           echo "<tr>";
 				echo "<td>Proveedor</td>";
-				 /**el combo de proveedor**/
-               echo "<td><select name= 'combo' >";
-        /**printing the list box select command**/
-        
-        
-                    while($nt=mysqli_fetch_row($result1)){
-                    //Array or records stored in $nt
-                    echo "<option value='$nt[0]'>$nt[1]</option>";
-                    }   
-                echo "</select></td>";
-     echo "</tr>";
-            echo "<tr>";
+               	echo "<td><input name ='prov' id= 'prov' value = '$proveedor' size = '30' class='ui-autocomplete-content'/> </td>";
+				echo "<input  type= 'hidden' name ='noprov' id= 'noprov' value = '$noprov'/>";
+				echo "<td>Codigo</td>";
+                echo "<td><input name ='codigo' id='codigo' value = '$codigo'/></td>";
 				echo "<td >Unidad:</td> ";
                 echo "<td><input  name ='unidad' value = '$unidad'  size = '30'/> </td>";
+				echo "</tr>";
+				echo "<tr>";
                 echo "<td >Precio 1</td> ";
                 echo "<td ><input name ='precio1' value = '$precio1' /></td>";
 				echo "<td >Precio 2</td> ";
                 echo "<td ><input name ='precio2' value = '$precio2' /></td>";
                 echo " <td>Precio 3</td>";
-                echo "<td ><input name ='precio3' value = '$precio3' /></td>";
+                echo "<td ><input name ='precio3' value = '$precio3' /></td>"; 
            echo "</tr>";
 		   echo "<tr>";
 		   		echo "<td> Precio 4</td>";
@@ -186,13 +204,13 @@ if(isset($_POST['enviomod'])){
                 echo "<td ><input name ='precio5' value = '$precio5'/></td>";
 				echo "<td> Precio 6</td>";
                 echo "<td ><input name ='precio6' value = '$precio6'/></td>";
+        	echo "</tr>";
+		   	echo "<tr>";        
 				echo "<td> Precio ST</td>";
                 echo "<td ><input name ='preciost' value = '$preciost'/></td>";
-				echo "</tr>"; 
-				echo "<tr>";
-				echo "<td>Codigo</td>";
-                echo "<td><input name ='codigo' value = '$codigo'/></td>";
-           		echo "</tr>"; 
+				echo "<td> ALG</td>";
+                echo "<td ><input name ='alg' value = '$alg'/></td>";
+			echo "</tr>"; 
             ?>         
      </tr>
    
@@ -200,7 +218,7 @@ if(isset($_POST['enviomod'])){
                       
           </table>  <br />
     <!--------el boton de enviar ------------->
-    <div>
+    <div class="centraelem">
         <?php
            echo  "<input type='submit' name ='enviomod' value=$titbot />"
         ?>

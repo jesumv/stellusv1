@@ -95,7 +95,7 @@ if(isset($_POST['altarep'])){
   
   ?> 
   
-<div class="cajacentrada"><form action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST"> 
+<div class="centraelem"><form action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST"> 
    <input type="submit" name ="altarep" value="nuevo representante" /> 
    </form>
 </div>
