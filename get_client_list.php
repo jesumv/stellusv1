@@ -1,22 +1,20 @@
 <?php
 	/*** Autoload class files ***/ 
-    function __autoload($class){
-      require('include/' . strtolower($class) . '.class.php');
-    }
-    
+    $mysql_hostname = "localhost";
+		$mysql_user = "test";
+		$mysql_password = "test";
+		$mysql_database = "stellus1";
+
+
+		$mysqli = new mysqli($mysql_hostname, $mysql_user, $mysql_password, $mysql_database);
+
+		if($mysqli->connect_errno > 0){
+		    die('No se establecio conexion a la base de datos [' . $mysqli->connect_error . ']');
+			};
 	
-    $funcbase = new dbutils;
-/*** conexion a bd ***/
-    $mysqli = $funcbase->conecta();
-    if (is_object($mysqli)) {
-/*** checa login***/
-        $funcbase->checalogin($mysqli);
-    } else {
-        die ("<h1>'No se establecio la conexion a bd'</h1>");
-    }
 	
     $req = "SELECT idclientes,nom_corto,razon_social,rfc,calleno,col,del,ciudad,estado,cp,nivel FROM clientes WHERE nom_corto like '" 
-    . mysql_real_escape_string($_GET['term']) . "%'"; 
+    . mysqli_real_escape_string($mysqli,$_GET['term']) . "%'"; 
 	
     $query = mysqli_query($mysqli,$req);
     

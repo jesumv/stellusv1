@@ -16,7 +16,7 @@
     }
 	
     $req = "SELECT idrepresentantes,nom_corto,paterno, materno, nombre FROM representantes
-     where nom_corto like '" . mysql_real_escape_string($_GET['term']) . "%'"; 
+     where nom_corto like '" . mysqli_real_escape_string($mysqli,$_GET['term']) . "%'"; 
     $query = mysqli_query($mysqli,$req);
     
     while($row = mysqli_fetch_array($query))
