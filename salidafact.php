@@ -37,7 +37,7 @@
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
 	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$ref,'$usu',5)";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en alta de inventarios".mysqli_error($mysqli)); 
 		//Incremento en almacen de destino
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
 	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$ref,'$usu',5)";
@@ -56,7 +56,7 @@
 	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,$agente,$almacen,$idclientes,'$observaciones',
 	    	'$usu',$invact,'$otros')";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("facturas ".mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla facturas ".mysqli_error($mysqli)); 
 
 		}
 		
