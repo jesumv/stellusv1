@@ -36,6 +36,9 @@ global $num;
 		$codigo=strtoupper($_POST ['codigo']) ;
 	    $usu = $_SESSION['login_user'];
         $noprov = $_POST['noprov'];
+		
+		// validaciones
+		
 		if (empty($_POST['alg'])){
 					$alg= "";
 		}else{$alg= $_POST['alg'];};
@@ -137,6 +140,7 @@ if(isset($_POST['enviomod'])){
 <link rel="shortcut icon" href="img/logomin.gif" />
 <script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
+<script src="js/validaciones.js"></script>
 
 <title>STELLUS MEDEVICES</title>
   <script>
@@ -153,6 +157,7 @@ if(isset($_POST['enviomod'])){
             }
 		                
         }); 
+      
 });
 
   </script>
@@ -165,22 +170,26 @@ if(isset($_POST['enviomod'])){
  
   include_once "include/barrasup.php";
   ?> 
+  <div class = "centraelem">
+  	<h4>Los campos marcados con * son requeridos</h4>
+  </div>
+  
 
  <!-- la forma. ------>
   <div class="cajacentra">
 
-    <form id="modifprod" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST">
+    <form id="modifprod" action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
         
        <table  class="db-table">
              
-     <tr>
             <tr>
                 <td >No.</td> 
                 <?php
                 echo "<input type='hidden' id='num' name ='num' value = $num />";
                 echo "<td>$num</td>";
                 echo "<td>Descripcion</td>";
-				echo "<td><input id='inic' name ='desc' value = '$desc'  size = '60'/> </td>";
+				echo "<td><input id='inic' name ='desc' value = '$desc'  size = '60'/> 
+				<span id='infodesc' class='req'>*</span></td>";
 				echo "<td>Nombre Corto</td>";
 				echo "<td><input name ='corto' value = '$corto'  size = '30'/> </td>";
            echo "<tr>";
