@@ -14,7 +14,7 @@
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
 	
-    $req = "SELECT MAX(no_suc) FROM succliente where cliente= " . mysql_real_escape_string($_GET['cliente']) ; 
+    $req = "SELECT MAX(no_suc) FROM succliente where cliente= " . mysqli_real_escape_string($mysqli,$_GET['cliente']) ; 
     $query = mysqli_query($mysqli,$req);
     
 		while($row = mysqli_fetch_array($query))

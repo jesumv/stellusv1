@@ -73,7 +73,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1"/>
-        <title>Stellus Medevices</title>
+        <title>STELLUS MEDEVICES</title>
          <link rel="stylesheet" type="text/CSS" href="css/plantilla1.css" />
          <link rel="shortcut icon" href="img/logomin.gif" />
          

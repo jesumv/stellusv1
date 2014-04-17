@@ -36,7 +36,10 @@ global $num;
 		$codigo=strtoupper($_POST ['codigo']) ;
 	    $usu = $_SESSION['login_user'];
         $noprov = $_POST['noprov'];
-		$alg= $_POST['alg'];
+		if (empty($_POST['alg'])){
+					$alg= "";
+		}else{$alg= $_POST['alg'];};
+
 
 	 
 	    if (!is_numeric($numid)) {

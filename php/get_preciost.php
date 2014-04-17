@@ -14,7 +14,7 @@
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
 	
-    $req = "SELECT preciost FROM productos where idproductos = " . mysql_real_escape_string($_GET['idproductos']) ; 
+    $req = "SELECT preciost FROM productos where idproductos = " . mysqli_real_escape_string($mysqli,$_GET['idproductos']) ; 
     $query = mysqli_query($mysqli,$req);
     
     while($row = mysqli_fetch_array($query))
