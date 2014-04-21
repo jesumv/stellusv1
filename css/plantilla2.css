@@ -84,10 +84,42 @@ table.db-table th	{ background:#eee; padding:5px; border-left:1px solid #ccc; bo
 table.db-table td	{ padding:5px; border-left:1px solid #ccc; border-top:1px solid #ccc; }
 
 /*estilos para las formas */
-.req{color:red;}
+
+.req{
+	color:red;
+	}
+
+div.error{
+	color:red;
+	margin:auto;
+	width: 30%;
+}
 
 
 
+tr.requer td.label {
+	font-weight: bold;
+	background: url(/images/forms/backRequiredGray.gif) no-repeat right
+		center;
+}
+
+td.field input.error, td.field select.error, tr.errorRow td.field input,tr.errorRow td.field select {
+	border: 2px solid red;
+	background-color: #FFFFD5;
+	margin: 0px;
+	color: red;
+}
+
+label.error {
+	display: block;
+	color: red;
+	font-style: italic;
+	font-weight: normal;
+}
+
+input.error {
+	border: 2px solid red;
+}
 
 
 

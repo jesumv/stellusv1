@@ -57,6 +57,7 @@ if(isset($_POST['enviomod'])){
                 $nombre = "";
                 $corto = "";
                 $dir= "";
+                $titulo = "ALTA DE PROVEEDORES";
                 //titulo del boton de la forma
                 $titbot = "Insertar";
                 
@@ -67,6 +68,7 @@ if(isset($_POST['enviomod'])){
                 $nombre = $sqlsresul[1];
                 $corto = $sqlsresul[2];
                 $dir= $sqlsresul[3];
+                $titulo = "ACTUALIZACION PROVEEDORES";
                 $titbot = "Actualizar";
                 
             }
@@ -91,11 +93,15 @@ if(isset($_POST['enviomod'])){
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
 <link rel="shortcut icon" href="img/logomin.gif" />
 <script src="js/jquery-1.10.2.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>    
 <title>STELLUS MEDEVICES</title>
 
   <script>
   $( document ).ready(function() {
-       $('#inic').focus();  
+       $('#inic').focus();
+       validaforma();  
 });
   </script>
 </head>
@@ -104,42 +110,52 @@ if(isset($_POST['enviomod'])){
 
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
     <?php 
-  $titulo = "ACTUALIZACION PROVEEDORES";
-  include_once "include/barrasup.php";
-  
+        include_once "include/barrasup.php";
   ?> 
+  <div class = "centraelem">
+        <h4>Los campos marcados con <span class="req">*</span>  son requeridos</h4>
+  </div>
   
   <div class="cajacentra">
 
     <form id="modifprov" action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
         
+        <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+        </div>
+
+
        <table  class="db-table">
           
         <!-- la forma. ------>
         
-     <tr>
-            <td >No.</td> 
-            <?php 
-            echo "<td><input type='hidden' id='num' name ='num' value = $num size = '60'/> </td>";
-            echo "<td>$num</td>";
-            echo "<td >NOMBRE O RAZON SOCIAL:</td> ";
-            echo "<td><input id='inic' name ='nom' value = '$nombre'  size = '60'/> </td>";
-            echo " <td> NOMBRE CORTO</td>";
-            echo "<td ><input name ='corto' value = '$corto' /></td>";
-            echo "<td> DIRECCION</td>";
-            echo "<td ><input name ='dir' value = '$dir' size = '60' /></td>";
-            ?>         
-     </tr>
+             <tr>
+                    <td >No.</td> 
+                    <?php 
+                    echo "<td><input type='hidden' id='num' name ='num' value = $num size = '60'/> </td>";
+                    echo "<td>$num</td>";
+                    echo "<td ><label for 'inic'>NOMBRE O RAZON SOCIAL:</label></td> ";
+                    echo "<td class='field'><input id='inic' name ='nom' value = '$nombre'  size = '60'  class = 'requer'/>
+                    <span class='req'>*</span></td>";
+                    echo " <td><label for 'corto'> NOMBRE CORTO </label></td>";
+                    echo "<td class='field'><input name ='corto' id='corto'value = '$corto' class = 'requer' />
+                    <span class='req'>*</span></td>";
+                    echo "<td> <label for 'corto'>DIRECCION</label></td>";
+                    echo "<td class='field'><input name ='dir' id='dir'value = '$dir' size = '60' class = 'requer' />
+                    <span class='req'>*</span></td>";
+                    ?>         
+             </tr>
    
      
                       
           </table>  <br />
     <!--------el boton de enviar ------------->
-    <div>
-        <?php
-           echo  "<input type='submit' name ='enviomod' value=$titbot />"
-        ?>
-    </div>        
+            <div class="centraelem">
+                <?php
+                   echo  "<input type='submit' name ='enviomod' value=$titbot />"
+                ?>
+            </div>        
         </form>
     
 

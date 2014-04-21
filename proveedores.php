@@ -97,10 +97,13 @@ if(isset($_POST['altaprov'])){
   
   ?> 
   
-<div class="cajacentrada"><form action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST"> 
-   <input type="submit" name ="altaprov" value="nuevo proveedor" /> 
-   </form>
-</div>
+         <div class="centraelem">
+                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST"> 
+                    <input type="submit" name ="altaprov" value="nuevo proveedor" /> 
+                </form>
+        
+        </div>
+ 
   
 <div id="footer"></div>
 

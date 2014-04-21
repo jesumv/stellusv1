@@ -16,7 +16,7 @@
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['idprod'];
 			$fecha =strtoupper($_POST ['fecha']) ;
-			$agente =$_POST ['idrepresentantes'];
+            $agente =$_POST ['idrepresentantes'];  			
 			$sucursal =$_POST ['sucursal'];
 			$cantidad = $_POST ['cant'];
 			$ref= $_POST ['fact'];
@@ -29,6 +29,7 @@
 			$total= $_POST ['total'];
 			$observaciones = $_POST ['obser'];
 			$otros = $_POST ['razon'];
+                 
 			
 		//construccion del numero de almacen
 			$almacen = $idclientes.$idsuccliente;
@@ -63,10 +64,10 @@
 		if(isset($_POST['enviodato'])){
 			
 		    oprimio($mysqli);
-			
+			header('Location: consfactura.php');
 			/* cerrar la conexion */
 	    	mysqli_close($mysqli);  
-			
+
 		}
 		
 	} else {
@@ -91,9 +92,12 @@
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
 <script type="text/javascript" src="js/funaux.js">	</script>
 <script type="text/javascript" src="js/jquery.number.js">	</script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
 
 <script>
-	$(function(){
+	$(document).ready (function(){
 		
 		var razonot = $( "#razonot" ),
 		allFields = $( [] ).add(razonot);
@@ -212,7 +216,7 @@
 			$("#fact").focus();
 		});
     	  
-        
+        validaforma(); 
 	});
 	
 </script>
@@ -226,6 +230,10 @@
   $titulo = "SALIDA POR FACTURACION";
   include_once "include/barrasup.php";
   ?> 
+  
+  <div class = "centraelem">
+    <h4>Los campos marcados con <span class="req">*</span>  son requeridos</h4>
+  </div>
  
 <!-- forma para captura de datos ------------------------------>
 <div id="dialog-form" title="Otros Clientes" class="dialogo">
@@ -238,47 +246,70 @@
 </div>
 
 <br />
- <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
+ <form id="salidafact" action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
+     
+      <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+      </div>
+        
 	 <div class = "ui-widget-header" id="contenido">
-	 	<legend>Datos de la Factura:</legend>
-			 	<label for="cliente">Cliente: </label>
-			 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
-			 	<input type="hidden" id="razon" name= "razon" class="ui-autocomplete-content"/>
-			 	<input type="hidden" id="idclientes" name="idclientes"/>
-			 	<input type="hidden" id="nivel" class="ui-autocomplete-content"/>
-			 	<label for="sucursal">Sucursal: </label>
-			 	<input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/> 
-			 	<input type="hidden" id="idsuccliente" name="idsuccliente"/>
-			 	<label for="fecha">Fecha: </label>
-			 	<input type="text" id="fecha"  name="fecha"/>   
-			 	<label for="agente">Agente: </label>
-			 	<input type="text" id="agente"  name="agente" class="ui-autocomplete-content"/>
-			 	<input type='hidden' id='idrepresentantes' name ='idrepresentantes' />
-			 	<label for="cod">Codigo: </label>
-			 	<input type='text' id='cod' name ='cod' />
-			 	<br />
+	         <table
+            <tr>
+               <th><legend>Datos de la Factura:</legend></th>  
+            </tr>
+            <tr>
+                <td><label for="cliente">Cliente: </label></td>
+                <td class="field"><input type="text" id="cliente"  name="cliente" class="requer"/><span class='req'>*</span></td>
+                <input type="hidden" id="razon" name= "razon" class="ui-autocomplete-content"/>
+                <input type="hidden" id="idclientes" name="idclientes"/>
+                <input type="hidden" id="nivel" class="ui-autocomplete-content"/>
+                <td><label for="sucursal">Sucursal:</label></td>
+                <td class="field"><input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/></td>
+                <input type="hidden" id="idsuccliente" name="idsuccliente"/>
+                <td><label for="fecha">Fecha: </label></td>
+                <td class="field"><input type="text" id="fecha"  name="fecha" class="requer"/><span class='req'>*</span></td>
+                             
+            </tr>
+                <tr>
+                   <td><label for="agente">Agente: </label></td>
+                   <td class="field"><input type="text" id="agente"  name="agente" class="requer"/><span class='req'>*</span></td>
+                    <input type='hidden' id='idrepresentantes' name ='idrepresentantes' />
+                    <td><label for="cod">Codigo: </label></td>
+                    <td class="field"><input type='text' id='cod' name ='cod' class="requer" /><span class='req'>*</span></td> 
+                </tr>
+            
+            <tr>
+                <td><label for="des">Descripcion: </label></td>
+                <td colspan="3"><input type='text' id='des' name ='des' size= "75" disabled /></td>
+                <input type='hidden' id='idprod' name ='idprod' />           
+                
+            </tr>
+            <tr>
+                <td><label for="precio">Precio Unitario: </label></td>
+                <td><input type='text' id='precio' name ='precio' disabled/></td>
+                <input type='hidden' id='inprecio' name ='inprecio' />
+                <td><label for="cant">Cantidad: </label></td>
+                <td class = "field"><input type='number' id='cant' name='cant' class="requer"/><span class='req'>*</span></td>
+                <td><label for="impor">Importe: </label></td>
+                <td><input type='text' id='impor' name ='impor' disabled/></td>
+            </tr>
+            <tr>
 
-			 	<label for="des">Descripción: </label>
-			 	<input type='text' id='des' name ='des' size= "75" disabled /><input type='hidden' id='idprod' name ='idprod' />
-			 	<label for="precio">Precio Unitario: </label>
-			 	<input type='text' id='precio' name ='precio' disabled/>
-			 	<input type='hidden' id='inprecio' name ='inprecio' />
-			 	<label for="cant">Cantidad: </label>
-				<input type='number' id='cant' name='cant'/>
-				<br />
-				<label for="impor">Importe: </label>
-				<input type='text' id='impor' name ='impor' disabled/>
-				<input type='hidden' id='subtot' name ='subtot' />
-				<input type='hidden' id='iva' name ='iva' />
-				<input type='hidden' id='total' name ='total' />
-				<label for="fact">Factura: </label>
-				<input type='text' id='fact' name ='fact' />
-				<label for="oc">Orden de compra: </label>
-				<input type='text' id='oc' name ='oc' />
-				<label for="obser">Observaciones: </label>
-				<input type='text' id='obser' name ='obser' size='100'/>
-				
-					  
+                <input type='hidden' id='subtot' name ='subtot' />
+                <input type='hidden' id='iva' name ='iva' />
+                <input type='hidden' id='total' name ='total' />
+                <td><label for="fact">Factura: </label></td>
+                <td class="field"><input type='text' id='fact' name ='fact' class="requer"/><span class='req'>*</span></td>
+                <td> <label for="oc">Orden de compra: </label></td>
+                <td class="field"><input type='text' id='oc' name ='oc' class="requer" /><span class='req'>*</span></td>
+                
+            </tr> 
+            <tr>
+                <td><label for="obser">Observaciones: </label></td>
+                <td class="field"colspan="4"><input type='text' id='obser' name ='obser' size='100'/></td>
+            </tr>      
+        </table>					  
 	 </div>
 
 <p></p>

@@ -60,8 +60,6 @@ global $num;
     	}
 	    // Execute the query here now
 	    $query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
-	    /* liberar la serie de resultados */
-	    mysqli_free_result($query);
 	    /* cerrar la conexion */
 	    mysqli_close($mysqli);
 		
@@ -140,7 +138,9 @@ if(isset($_POST['enviomod'])){
 <link rel="shortcut icon" href="img/logomin.gif" />
 <script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
+<script src="js/jquery.validate.js"></script>
 <script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
 
 <title>STELLUS MEDEVICES</title>
   <script>
@@ -157,8 +157,10 @@ if(isset($_POST['enviomod'])){
             }
 		                
         }); 
-      
-});
+                   validaforma(); 
+
+
+        });
 
   </script>
 </head>
@@ -171,7 +173,7 @@ if(isset($_POST['enviomod'])){
   include_once "include/barrasup.php";
   ?> 
   <div class = "centraelem">
-  	<h4>Los campos marcados con * son requeridos</h4>
+  	<h4>Los campos marcados con <span class="req">*</span>  son requeridos</h4>
   </div>
   
 
@@ -179,6 +181,10 @@ if(isset($_POST['enviomod'])){
   <div class="cajacentra">
 
     <form id="modifprod" action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
+        <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+        </div>
         
        <table  class="db-table">
              
@@ -187,41 +193,52 @@ if(isset($_POST['enviomod'])){
                 <?php
                 echo "<input type='hidden' id='num' name ='num' value = $num />";
                 echo "<td>$num</td>";
-                echo "<td>Descripcion</td>";
-				echo "<td><input id='inic' name ='desc' value = '$desc'  size = '60'/> 
-				<span id='infodesc' class='req'>*</span></td>";
-				echo "<td>Nombre Corto</td>";
-				echo "<td><input name ='corto' value = '$corto'  size = '30'/> </td>";
-           echo "<tr>";
-				echo "<td>Proveedor</td>";
-               	echo "<td><input name ='prov' id= 'prov' value = '$proveedor' size = '30' class='ui-autocomplete-content'/> </td>";
+                echo "<td><label for 'inic'>Descripcion</label></td>";
+				echo "<td class='field'><input id='inic' name ='desc' value = '$desc'  size = '60'class = 'requer'/> 
+				<span class='req'>*</span></td>";
+				echo "<td><label for 'corto'>Nombre Corto</label></td>";
+				echo "<td class='field'><input name ='corto' value = '$corto'  size = '30' class = 'requer'/> 
+                <span class='req'>*</span></td>";
+                echo "<tr>";
+				echo "<td><label for 'prov'>Proveedor</label></td>";
+               	echo "<td class='field'><input name ='prov' id= 'prov' value = '$proveedor' size = '30' class='ui-autocomplete-content' class='requer'/> 
+               	<span class='req'>*</span></td>";
 				echo "<input  type= 'hidden' name ='noprov' id= 'noprov' value = '$noprov'/>";
-				echo "<td>Codigo</td>";
-                echo "<td><input name ='codigo' id='codigo' value = '$codigo'/></td>";
+				echo "<td><label for 'codigo'>Codigo</label></td>";
+                echo "<td class='field'><input name ='codigo' id='codigo' value = '$codigo' class='requer'/>
+                <span class='req'>*</span></td>";
 				echo "<td >Unidad:</td> ";
-                echo "<td><input  name ='unidad' value = '$unidad'  size = '30'/> </td>";
+                echo "<td class='field'><input  name ='unidad' value = '$unidad'  size = '30'class='requer'/> 
+                <span class='req'>*</span></td>";
 				echo "</tr>";
 				echo "<tr>";
-                echo "<td >Precio 1</td> ";
-                echo "<td ><input name ='precio1' value = '$precio1' /></td>";
+                echo "<td ><label for 'precio1>Precio 1</label></td> ";
+                echo "<td class='field' ><input name ='precio1' value = '$precio1' class='reqnum' />
+                <span class='req'>*</span></td>";
 				echo "<td >Precio 2</td> ";
-                echo "<td ><input name ='precio2' value = '$precio2' /></td>";
+                echo "<td class='field'><input name ='precio2' value = '$precio2' class='reqnum'/>
+                <span class='req'>*</span></td>";
                 echo " <td>Precio 3</td>";
-                echo "<td ><input name ='precio3' value = '$precio3' /></td>"; 
+                echo "<td class='field'><input name ='precio3' value = '$precio3'class='reqnum' />
+                <span class='req'>*</span></td>"; 
            echo "</tr>";
 		   echo "<tr>";
 		   		echo "<td> Precio 4</td>";
-                echo "<td ><input name ='precio4' value = '$precio4'/></td>";
+                echo "<td class='field'><input name ='precio4' value = '$precio4' class='reqnum'/>
+                <span class='req'>*</span></td>";
 				echo "<td> Precio 5</td>";
-                echo "<td ><input name ='precio5' value = '$precio5'/></td>";
+                echo "<td class='field'><input name ='precio5' value = '$precio5' class='reqnum'/>
+                <span class='req'>*</span></td>";
 				echo "<td> Precio 6</td>";
-                echo "<td ><input name ='precio6' value = '$precio6'/></td>";
+                echo "<td class='field'><input name ='precio6' value = '$precio6' class='reqnum'/>
+                <span class='req'>*</span></td>";
         	echo "</tr>";
 		   	echo "<tr>";        
 				echo "<td> Precio ST</td>";
-                echo "<td ><input name ='preciost' value = '$preciost'/></td>";
+                echo "<td class='field'><input name ='preciost' value = '$preciost' class='reqnum'/>
+                <span class='req'>*</span></td>";
 				echo "<td> ALG</td>";
-                echo "<td ><input name ='alg' value = '$alg'/></td>";
+                echo "<td class='field'><input name ='alg' value = '$alg' class='numer'/></td>";
 			echo "</tr>"; 
             ?>         
      </tr>
