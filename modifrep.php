@@ -39,8 +39,6 @@ global $num;
     	}
 	    // Execute the query here now
 	    $query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
-	    /* liberar la serie de resultados */
-	    mysqli_free_result($query);
 	    /* cerrar la conexion */
 	    mysqli_close($mysqli);
 		
@@ -145,7 +143,7 @@ if(isset($_POST['enviomod'])){
                       
           </table>  <br />
     <!--------el boton de enviar ------------->
-    <div>
+    <div class="centraelem">
         <?php
            echo  "<input type='submit' name ='enviomod' value=$titbot />"
         ?>
