@@ -77,7 +77,9 @@ if(isset($_POST['enviosuc'])){
                 $no_suc = "";
                 $no_almacen ="";
                 $nom_sucursal = "";
+                $titulo = "ALTA DE SUCURSALES";
                 //titulo del boton de la forma
+                
                 $titbot = "Insertar";
                 
             }elseif($_GET['nid']== -999){
@@ -90,6 +92,7 @@ if(isset($_POST['enviosuc'])){
 				$no_suc = "";
                 $no_almacen ="";
                 $nom_sucursal = "";
+                $titulo = "ALTA DE SUCURSALES";
                 //titulo del boton de la forma
                 $titbot = "Insertar";
 				
@@ -102,6 +105,7 @@ if(isset($_POST['enviosuc'])){
                 $no_suc = $sqlsresul[2];
                 $no_almacen = $sqlsresul[3];
                 $nom_sucursal= $sqlsresul[4];
+                $titulo = "ACTUALIZACION SUCURSALES";
                 $titbot = "Actualizar";
                 
             }
@@ -128,6 +132,10 @@ if(isset($_POST['enviosuc'])){
 <link rel="shortcut icon" href="img/logomin.gif" />
 <script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
+
 
 <title>STELLUS MEDEVICES</title>
 
@@ -175,7 +183,8 @@ if(isset($_POST['enviosuc'])){
 	       		 
 	       	}
        
-       	?>  
+       	?> 
+       	validaforma(); 
 });
   </script>
 </head>
@@ -184,14 +193,21 @@ if(isset($_POST['enviosuc'])){
 
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
     <?php 
-  $titulo = "ACTUALIZACION SUCURSALES";
-  include_once "include/barrasup.php";
-  
+        include_once "include/barrasup.php";
   ?> 
+  <div class = "centraelem">
+    <h4>Los campos marcados con <span class="req">*</span>  son requeridos</h4>
+  </div>
   
   <div class="cajacentra">
 
     <form id="modifsuc" action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
+        
+        <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+        </div>
+        
         
        <table  class="db-table">
           
@@ -203,14 +219,16 @@ if(isset($_POST['enviosuc'])){
             echo "<input type='hidden' id='num' name ='num' value = $idsuccliente size = '60'/>";
             echo "<td>$idsuccliente</td>";
 			echo "<input type='hidden' id='num_suc' name ='num_suc' size = '60'/>";
-            echo "<td >NOMBRE SUCURSAL:</td> ";
-            echo "<td><input id='inic' name ='nom' value = '$nom_sucursal'  size = '60'/> </td>";
-            echo " <td> CLIENTE</td>";
-            echo "<td ><input name ='cliente' id= 'cliente' value = '$cliente' /></td>";
+            echo "<td ><label for 'inic'>NOMBRE SUCURSAL:</label></td> ";
+            echo "<td class='field'><input id='inic' name ='nom' value = '$nom_sucursal'  size = '60' class = 'requer'/> 
+            <span class='req'>*</span></td>";
+            echo " <td> <label for 'cliente'>CLIENTE</label></td>";
+            echo "<td class='field'><input name ='cliente' id= 'cliente' value = '$cliente' class = 'requer' />
+            <span class='req'>*</span></td>";
 			echo "<input type='hidden' id='numcte' name ='numcte' value = '$cliente' size = '60'/>";
-            echo "<td> NO. ALMACEN</td>";
-            echo "<td ><input name ='almac' id='almac' value = '$no_almacen' size = '60' disabled/></td>";
-			echo "<td ><input type = 'hidden' name ='inalmac' id='inalmac' value = '$no_almacen' size = '60' /></td>";
+            echo "<td><label for 'almac'>NO. ALMACEN</label></td>";
+            echo "<td><input name ='almac' id='almac' value = '$no_almacen' size = '60' disabled/></td>";
+			echo "<td class='field'><input type = 'hidden' name ='inalmac' id='inalmac' value = '$no_almacen' size = '60' /></td>";
             ?>         
      </tr>
    

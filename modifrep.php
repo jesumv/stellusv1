@@ -1,7 +1,7 @@
 <?php
 global $num;
 
-//Este script administra lo actualización a un cliente.
+//Este script administra lo actualizaci—n a un cliente.
 //conectar
 /*** Autoload class files ***/ 
     function __autoload($class){
@@ -59,6 +59,7 @@ if(isset($_POST['enviomod'])){
                 $nombre = "";
                 $corto="";
                 $porccomision="";
+                $titulo = "ALTA DE REPRESENTANTES";
                 //titulo del boton de la forma
                 $titbot = "Insertar";
                 
@@ -71,7 +72,7 @@ if(isset($_POST['enviomod'])){
 				$nombre= $sqlsresul[3];
 				$corto= $sqlsresul[4];
 				$porccomision = $sqlsresul[5];
-				
+				$titulo = "ACTUALIZACION REPRESENTANTES";
                 $titbot = "Actualizar";
                 
             }
@@ -92,12 +93,16 @@ if(isset($_POST['enviomod'])){
 <link rel="stylesheet" type="text/CSS" href="css/plantilla2.css" />
 <link rel="stylesheet" type="text/CSS" href="css/dropdown_two.css" />
 <link rel="shortcut icon" href="img/logomin.gif" />
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
 <title>STELLUS MEDEVICES</title>
 
-<script src="js/jquery-1.10.2.js"></script>
   <script>
   $( document ).ready(function() {
-       $('#inic').focus();  
+       $('#inic').focus();
+       validaforma();  
 });
   </script>
 </head>
@@ -105,15 +110,22 @@ if(isset($_POST['enviomod'])){
 <body
 
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
-    <?php 
-  $titulo = "ACTUALIZACION REPRESENTANTES";
-  include_once "include/barrasup.php";
-  ?> 
+    <?php include_once "include/barrasup.php"; ?> 
+    
+    <div class = "centraelem">
+        <h4>Los campos marcados con <span class="req">*</span>  son requeridos</h4>
+    </div>
 
  <!-- la forma. ------>
   <div class="cajacentra">
 
     <form id="modifprod" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST">
+        
+        <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+        </div>
+        
         
        <table  class="db-table">
              
@@ -123,18 +135,23 @@ if(isset($_POST['enviomod'])){
                 <?php
                 echo "<input type='hidden' id='num' name ='num' value = $num />";
                 echo "<td>$num</td>";
-                echo "<td>Apellido Paterno</td>";
-				echo "<td><input id='inic' name ='paterno' value = '$paterno'  size = '60'/> </td>";
-				echo "<td>Apellido Materno</td>";
-				echo "<td><input name ='materno' value = '$materno'  size = '60'/> </td>";
+                echo "<td><label for 'inic'>Apellido Paterno</label></td>";
+				echo "<td class='field'><input id='inic' name ='paterno' value = '$paterno'  size = '55' class = 'requer'/> 
+				<span class='req'>*</span> </td>";
+				echo "<td><label for 'materno'>Apellido Materno</label></td>";
+				echo "<td class='field'><input name ='materno' value = '$materno'  size = '55' class = 'requer'/> 
+				<span class='req'>*</span></td>";
      echo "</tr>";
             echo "<tr>";
-				echo "<td >Nombre</td> ";
-                echo "<td><input  name ='nombre' value = '$nombre'  size = '60'/> </td>";
-                echo "<td >Nombre Corto</td> ";
-                echo "<td ><input name ='corto' value = '$corto' /></td>";
-				echo "<td >Porcentaje de Comision</td> ";
-                echo "<td ><input name ='porccomision' value = '$porccomision' /></td>";
+				echo "<td ><label for 'nombre'>Nombre</label></td> ";
+                echo "<td class='field'><input  name ='nombre' value = '$nombre'  size = '55' class = 'requer'/> 
+                <span class='req'>*</span></td>";
+                echo "<td ><label for 'corto'>Nombre Corto</label></td> ";
+                echo "<td  class='field'><input name ='corto' value = '$corto'  class = 'requer'/>
+                <span class='req'>*</span></td>";
+				echo "<td ><label for 'porccomision'>Porcentaje de Comisi&oacuten</label></td> ";
+                echo "<td class='field' ><input name ='porccomision' value = '$porccomision'  class = 'reqnum'/>
+                <span class='req'>*</span></td>";
            echo "</tr>";
             ?>         
      </tr>
@@ -143,7 +160,11 @@ if(isset($_POST['enviomod'])){
                       
           </table>  <br />
     <!--------el boton de enviar ------------->
+<<<<<<< HEAD
     <div class="centraelem">
+=======
+    <div class= "centraelem">
+>>>>>>> refs/remotes/origin/master
         <?php
            echo  "<input type='submit' name ='enviomod' value=$titbot />"
         ?>

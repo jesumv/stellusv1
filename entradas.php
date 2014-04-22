@@ -74,6 +74,10 @@ if(isset($_POST['enviaentra'])){
 <link rel="shortcut icon" href="img/logomin.gif" />
 <script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
+
 
 <script>
    $(function() {
@@ -109,6 +113,8 @@ if(isset($_POST['enviaentra'])){
   		$('#fecha').focus;	
 	});
 	
+	       validaforma(); 
+	
 	});
 		
 
@@ -118,41 +124,57 @@ if(isset($_POST['enviaentra'])){
 <body>
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
     <?php 
-  $titulo = "ALMACEN";
+  $titulo = "ENTRADAS A ALMACEN";
   include_once "include/barrasup.php";
   ?> 
-
+<div class = "centraelem">
+    <h4>Los campos marcados con <span class="req">*</span>  son requeridos</h4>
+</div>
  
 <div class="centraelem">
 
-	<legend>Entrada de artículos a almacén</legend>
-	             
-	            <p>Introduzca el nombre del producto</p>
-	<form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">	            
-		<div class = "ui-widget-header">
-				<label for="corto">Producto: </label> 
-				<input type="text" id="corto"  name="corto" class="ui-autocomplete-content"/> 
-				<input type="hidden" id="idproductos"  name="idproductos" />                
-				<label for="corto">Codigo: </label> 
-				<input type="text" id="codigo"  name="codigo" disabled/>
-				<label for="fecha">Fecha: </label> 
-				<input type="text" id="fecha" name="fecha" />
-				<label for="referencia">Referencia: </label> 
-				<input type="text" id="referencia"  name="referencia"/>
-		<p>
-		<p>
-			<label for="lote">Lote: </label> 
-			<input type="text" id="lote"  name="lote"/>
-			<label for="fechacad">Fecha de Caducidad: </label> 
-			<input type="text" id="fechacad"  name="fechacad"/>
-			<label for="cantidad">Cantidad: </label> 
-			<input type="number" id="cantidad"  name="cantidad"/>
-			
-		</p>
-				
-			<label for="obser">Observaciones: </label> 	
-			<textarea id ="obser" name="obser" rows="3" cols="20"></textarea>
-		</p>
+	<form id="entra" action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
+	    
+	    <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+        </div>
+        <b></b>
+       <table class="db-table">
+           <div class = "ui-widget-header">
+               <tr>
+                   <td><label for="corto">Producto: </label> </td>
+                   <td class="field">
+                    <input type="text" id="corto"  name="corto" class = 'requer'/><span class='req'>*</span>
+                   </td>
+                   <input type="hidden" id="idproductos"  name="idproductos" /> 
+                   <td><label for="codigo">Codigo: </label> </td>
+                   <td class="field"> <input type="text" id="codigo"  name="codigo" disabled/></td>
+                   <td><label for="fecha">Fecha: </label> </td>
+                   <td class="field"><input type="text" id="fecha" name="fecha"  class = 'requer'/>
+                    <span class='req'>*</span></td>
+                   <td><label for="referencia">Referencia: </label> </td>
+                   <td class="field"><input type="text" id="referencia"  name="referencia"/></td>
+               </tr>
+                <tr>
+                    <td><label for="lote">Lote: </label> </td>
+                    <td class="field" colspan="2"><input type="text" id="lote"  name="lote" class = 'requer'/>
+                    <span class='req'>*</span></td>
+                    <td><label for="fechacad">Fecha de Caducidad: </label> </td>
+                    <td class="field"><input type="text" id="fechacad"  name="fechacad" class = 'requer'/>
+                    <span class='req'>*</span></td>
+                    <td><label for="cantidad">Cantidad: </label></td>
+                    <td class="field" colspan="2"><input type="number" id="cantidad"  name="cantidad" class = 'reqnum'/>
+                    <span class='req'>*</span></td>                            
+                </tr>
+            
+                <tr>
+                    <td colspan="4"><label for="obser">Observaciones: </label></td>
+                    <td class="field" colspan="2"><textarea id ="obser" name="obser" rows="3" cols="20"></textarea> </td>    
+                </tr>
+        
+       </table>             
+		
 		<p><input type='submit' name='enviaentra' value = 'Dar Entrada'/></p>
 		</div>
 		

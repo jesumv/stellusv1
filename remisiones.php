@@ -121,9 +121,12 @@
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
 <script type="text/javascript" src="js/funaux.js">	</script>
 <script type="text/javascript" src="js/jquery.number.js">	</script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
 
 <script>
-	$(function(){
+	$(document).ready(function(){
 		$('#cliente').focus(); 
 	    $('#cliente').autocomplete({
 			autoFocus: true,
@@ -236,7 +239,7 @@
 			$("#totletra").append(totletra);
 		});
     	  
-        
+        validaforma();
 	});
 	
 </script>
@@ -253,25 +256,37 @@
  
 
 <br />
- <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
+ <form id="remitir" action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
+     
+     <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+     </div>
+        
 	 <div class = "ui-widget-header">
-	 	<legend>Datos de la Remisión:</legend>
-	 	<label for="cliente">Cliente: </label>
-	 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
-	 	<input type="hidden" id="razon" class="ui-autocomplete-content"/>
-	 	<input type="hidden" id="idclientes" name="idclientes"/>
-	 	<input type="hidden" id="rfc" class="ui-autocomplete-content"/>
-	 	<input type="hidden" id="domicilio" class="ui-autocomplete-content" length= "200"/>
-	 	<input type="hidden" id="nivel" class="ui-autocomplete-content"/>
-	 	<label for="sucursal">Sucursal: </label>
-	 	<td><input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/></td> 
-	 	<input type="hidden" id="idsuccliente" name="idsuccliente"/>
-	 	<label for="fecha">Fecha: </label>
-	 	<td><input type="text" id="fecha"  name="fecha"/></td>   
-	 	<label for="agente">Agente: </label>
-	 	<td><input type="text" id="agente"  name="agente" class="ui-autocomplete-content"/></td>
-	 	<input type="hidden" id="idrepresentantes" name="idrepresentantes"/>  
-	 </div>
+	    <table>
+	        <legend>Datos de la Remisión:</legend>
+	        <tr>
+	            <td><label for="cliente">Cliente: </label></td>
+	            <td class="field"><input type="text" id="cliente"  name="cliente" class="requer"/></td>
+                <input type="hidden" id="razon" class="ui-autocomplete-content"/>
+                <input type="hidden" id="idclientes" name="idclientes"/>
+                <input type="hidden" id="rfc" class="ui-autocomplete-content"/>
+                <input type="hidden" id="domicilio" class="ui-autocomplete-content" length= "200"/>
+                <input type="hidden" id="nivel" class="ui-autocomplete-content"/>
+	            <td><label for="sucursal">Sucursal: </label></td>
+                <td class="field"><td><input type="text" id="sucursal"  name="sucursal" class="requer"/></td></td>
+                <input type="hidden" id="idsuccliente" name="idsuccliente"/>
+                <td><label for="fecha">Fecha: </label></td>
+                <td class="field"><td><input type="text" id="fecha"  name="fecha" class="requer"/></td> </td>
+                <td><label for="agente">Agente: </label></td>
+                <td class="field"><td><input type="text" id="agente"  name="agente" class="requer"/></td></td>
+	            <input type="hidden" id="idrepresentantes" name="idrepresentantes"/>  
+	        </tr>   
+        </table>
+     </div>
+
+	 	
 <p></p>       
 
 	<table id= "remision" class="tablap">
@@ -317,7 +332,7 @@
 		<?php
 		for($i=0;$i<13;$i++){
 			echo"<tr>
-				<td class='ui-autocomplete-content' class='art'><input type='text' id='cod$i' name ='cod$i' /></td>
+				<td class='ui-autocomplete-content' class='art'><input type='text' id='cod$i' name ='cod$i'/></td>
 				<td id='des$i'></td><input type='hidden' id='indes$i' name ='indes$i' /><input type='hidden' id='inidprod$i' name ='inidprod$i' />
 				<td id= 'precio$i'></td><input type='hidden' id='inprecio$i' name ='inprecio$i' />
 				<td class='ui-autocomplete-content' class='art'><input type='number' id='cant$i' name='cant$i'/></td>

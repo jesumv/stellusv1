@@ -107,7 +107,7 @@ if(isset($_POST['enviomod'])){
 				$estado="";
 				$cp="";
 				$diasc="";
-				
+				$titulo = "ALTA DE CLIENTES";
                 //titulo del boton de la forma
                 $titbot = "Insertar";
                 
@@ -126,6 +126,7 @@ if(isset($_POST['enviomod'])){
 				$cp=$sqlsresul[9];
 				$nivel = $sqlsresul[10];
 				$diasc = $sqlsresul[14];
+                $titulo = "ACTUALIZACION CLIENTES";
                 $titbot = "Actualizar";
                 
             }
@@ -149,11 +150,16 @@ if(isset($_POST['enviomod'])){
 <link rel="shortcut icon" href="img/logomin.gif" />
 <script src="js/jquery-1.10.2.js"></script>
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
+
 
 <title>STELLUS MEDEVICES</title>
 	<script>
 			$( document ).ready(function() {
        		$('#inic').focus();
+       		validaforma();
 		});
 		
 	</script>
@@ -166,16 +172,22 @@ if(isset($_POST['enviomod'])){
 
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
     <?php 
-	  $titulo = "ACTUALIZACION CLIENTES";
 	  include_once "include/barrasup.php";
   ?> 
   
 <p></p> 
-  
+   <div class = "centraelem">
+        <h4>Los campos marcados con <span class="req">*</span>  son requeridos</h4>
+  </div>
  <!-- la forma. ------>
   <div class="cajacentra">
 
     <form id="modifcte" action="<?php echo $_SERVER['PHP_SELF']; ?>" method = "POST">
+        
+        <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+        </div>
         
        <table  class="db-table">
           
@@ -198,34 +210,34 @@ if(isset($_POST['enviomod'])){
                       </td>";
             echo "</tr>";
             echo "<tr>";
-                echo "<td >NOMBRE O RAZON SOCIAL:</td> ";
-                echo "<td colspan = '4'><input id='inic' name ='nom' value = '$nombre'  size = '150'/> </td>";
+                echo "<td><label for 'inic'>NOMBRE O RAZON SOCIAL:</label></td> ";
+                echo "<td colspan = '4' class='field'><input id='inic' name ='nom' value = '$nombre'  size = '150' class = 'requer'/> </td>";
 			echo "</tr>";
 			echo "<tr>";
-				echo "<td >RFC</td> ";
-                echo "<td ><input name ='rfc' value = '$rfc' /></td>";
-                echo " <td>NOMBRE CORTO</td>";
-                echo "<td ><input name ='corto' value = '$corto' /></td>";
+				echo "<td ><label for 'rfc'>RFC:</label></td> ";
+                echo "<td class='field' ><input name ='rfc' value = '$rfc' class = 'requer'/></td>";
+                echo " <td><label for 'corto'>NOMBRE CORTO:</label></td>";
+                echo "<td class='field'><input name ='corto' value = '$corto' class = 'requer'/></td>";
             echo "</tr>";
             echo "<tr>";
-                echo "<td> CALLE Y NO.</td>";
-                echo "<td ><input name ='calleno' value = '$calleno' size = '60' /></td>";
-                echo "<td>COLONIA</td>";
-                echo "<td ><input name ='col' value = '$col' size = '60' /></td>";
+                echo "<td> <label for 'calleno'>CALLE Y NO.:</label></td>";
+                echo "<td class='field' ><input name ='calleno' value = '$calleno' size = '60' class = 'requer'/></td>";
+                echo "<td><label for 'col'>COLONIA:</label></td>";
+                echo "<td class='field'><input name ='col' value = '$col' size = '60' class = 'requer'/></td>";
             echo "</tr>";
 			echo "<tr>";
-                echo "<td>DELEGACION</td>";
-                echo "<td ><input name ='del' value = '$del' size = '60' /></td>";
-                echo "<td>CIUDAD</td>";
-                echo "<td ><input name ='ciudad' value = '$ciudad' size = '60' /></td>";
+                echo "<td><label for 'del'>DELEGACION:</label></td>";
+                echo "<td class='field'><input name ='del' value = '$del' size = '60' class = 'requer' /></td>";
+                echo "<td><label for 'ciudad'>CIUDAD:</label></td>";
+                echo "<td class='field' ><input name ='ciudad' value = '$ciudad' size = '60' class = 'requer'/></td>";
             echo "</tr>";
             echo "<tr>";
-                echo "<td>ESTADO</td>";
-                echo "<td ><input name ='estado' value = '$estado' size = '60' /></td>";
-                echo "<td>CP</td>";
-                echo "<td ><input name ='cp' value = '$cp' size = '10' /></td>";
-                echo "<td>DIAS DE CREDITO</td>";
-                echo "<td ><input name ='diasc'  id='diasc' value = '$diasc' size = '10' /></td>";
+                echo "<td><label for 'estado'>ESTADO:</label></td>";
+                echo "<td class='field'><input name ='estado' value = '$estado' size = '60' class = 'requer'/></td>";
+                echo "<td><label for 'cp'>CP:</label></td>";
+                echo "<td class='field' ><input name ='cp' value = '$cp' size = '10' class = 'reqnum'/></td>";
+                echo "<td><label for 'diasc'>DIAS DE CREDITO:</label></td>";
+                echo "<td class='field'><input name ='diasc'  id='diasc' value = '$diasc' size = '10' class = 'reqnum'/></td>";
                 
             echo "</tr>";
              
