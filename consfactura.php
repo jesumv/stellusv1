@@ -78,7 +78,6 @@
 </div> 
 <p></p>
 	 
-		<div class="centraelem"> 
 		<?php
 			//CONSULTA DE FACTURAS
 				//SI SE ELIGIERON FECHAS
@@ -103,7 +102,7 @@
 		  // Execute the query here now
 		 $query1=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN CONSULTA DE INVENTARIOS CLIENTES. ".mysqli_error($mysqli));
 		 //construccion de la casilla remision/oc
-		 
+		 echo "<div class='centraelem'> ";
 		 echo "	<table border=1 id='tablaaxl' >";
 		 echo "<tr><th>FACTURA</th><th>REM/OC</th><th>FECHA</th><th>CLIENTE</th><th>SUCURSAL</th></th><th>AGENTE</th><th>SUBTOTAL</th>
 		 <th>IVA</th><th>TOTAL</th><th>PRODUCTO</th><th>PIEZAS</th><th>OBS.</th></tr>";
@@ -129,7 +128,7 @@
 
 				 
 		 
-		 echo "	</table>";
+		 echo "</table>";
 		 
 		/* liberar la serie de resultados */
 		  mysqli_free_result($query1);
@@ -144,13 +143,13 @@
   mysqli_close($mysqli);
 ?>
 
-<div class= "centraelem">
-	<form action="ficheroExcel.php" method="post" target="_blank" id="FormularioExportacion">
-	<p>Exportar a Excel  <img src="img/export_to_excel.gif" class="botonExcel" /></p>
-	<input type="hidden" id="datos_a_enviar" name="datos_a_enviar" />
-</form>
+	<div class= "centraelem">
+		<form action="ficheroExcel.php" method="post" target="_blank" id="FormularioExportacion">
+			<p>Exportar a Excel  <img src="img/export_to_excel.gif" class="botonExcel" /></p>
+			<input type="hidden" id="datos_a_enviar" name="datos_a_enviar" />
+		</form>
 	
-</div>
+	</div>
 
 		 
 	<div id="footer"></div>

@@ -16,7 +16,8 @@
     }
 	
     
-	$req = "SELECT idproveedores, nom_corto FROM proveedores WHERE nom_corto like '" . mysqli_real_escape_string($mysqli,$_GET['term']) . "%'"; 
+	$req = "SELECT idproveedores, nom_corto FROM proveedores WHERE nom_corto like '"
+	. mysqli_real_escape_string($mysqli,$_GET['term']) . "%' && status <>2"; 
 
     $query = mysqli_query($mysqli,$req)or die ("error en ajax proveedores ".mysqli_error($mysqli));
     

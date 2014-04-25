@@ -129,12 +129,10 @@ define('xmini',7);
         $pdf->SetLeftMargin(20);
         $pdf->AliasNbPages();
         $pdf->SetMargins(2,2);
-        
-        
-        $pdf->AddPage();
-            
+   
 while ($fila = mysqli_fetch_row($datosrem)) {
 			$remcorr = $fila[0];
+			$pdf->AddPage();
 			$pdf->SetFont('Arial','',10);
 			$pdf->Ln(29);
 			$pdf->Image('../img/logoremis.jpg',15,null,85);
@@ -216,16 +214,10 @@ while ($fila = mysqli_fetch_row($datosrem)) {
 			$pdf->Cell(109,enc,$letra,1,0,'L',FALSE);
 			$pdf->Cell(20,enc,'TOTAL',1,0,'L',TRUE);
 			$pdf->Cell(23,enc,$tot,1,1,'L',FALSE);
- //fin del ciclo de cita      
-	       
+ //fin del ciclo de remision     
     }
-        
-        
-        
-//CONSTRUCCION DE PAGINA--------------------------------------------------------------------------------------       
-          
-            
-        
+  
+//CONSTRUCCION DE PAGINA--------------------------------------------------------------------------------------               
         $pdf->Output();  
 //FIN DE PAGINA -----------------------------------------------------------------------------------
 

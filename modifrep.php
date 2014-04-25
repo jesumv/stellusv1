@@ -160,21 +160,19 @@ if(isset($_POST['enviomod'])){
                       
           </table>  <br />
     <!--------el boton de enviar ------------->
-<<<<<<< HEAD
-    <div class="centraelem">
-=======
-    <div class= "centraelem">
->>>>>>> refs/remotes/origin/master
-        <?php
-           echo  "<input type='submit' name ='enviomod' value=$titbot />"
-        ?>
-    </div>        
+
+		    <div class= "centraelem">
+		
+		        <?php
+		           echo  "<input type='submit' name ='enviomod' value=$titbot />"
+		        ?>
+		    </div>        
         </form>
     
 
-</div>
-
-<div id="footer"></div>
+	</div>
+	
+	<div id="footer"></div>
 
 
 </body>

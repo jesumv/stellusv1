@@ -14,7 +14,8 @@
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
 	
-    $req = "SELECT no_suc,nom_sucursal FROM succliente where nom_sucursal like '" . mysqli_real_escape_string($mysqli,$_GET['term']) . "%'"; 
+    $req = "SELECT no_suc,nom_sucursal FROM succliente where nom_sucursal like '" . 
+    mysqli_real_escape_string($mysqli,$_GET['term']) . "%' && status <>2"; 
     $query = mysqli_query($mysqli,$req);
     
     while($row = mysqli_fetch_array($query))

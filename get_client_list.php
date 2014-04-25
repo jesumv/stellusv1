@@ -16,7 +16,7 @@
 	
 	
     $req = "SELECT idclientes,nom_corto,razon_social,rfc,calleno,col,del,ciudad,estado,cp,nivel FROM clientes WHERE nom_corto like '" 
-    . mysqli_real_escape_string($mysqli,$_GET['term']) . "%'"; 
+    . mysqli_real_escape_string($mysqli,$_GET['term']) . "%' && status <> 2"; 
 	
     $query = mysqli_query($mysqli,$req);
     
