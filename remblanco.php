@@ -51,41 +51,41 @@
 		allFields = $( [] ).add( numero ).add( asignadoa );
 		
 		 $( "#dialog-form" ).dialog({
-		autoOpen: true,
-		height: 250,
-		width: 250,
-		modal: true,
-		zIndex:10000,
-		position: { my: "center", at: "center", of: "#remision" },
-		buttons: {
-			"ok": function() {
-			allFields.removeClass( "ui-state-error" );
-			var remiact = parseInt($("#remiact").val());
-			var numremi = parseInt($("#numero").val());
-			if(numremi==""){$("#numero").val(1);}
-			var custodio = $("#asignadoa").val();
-			var nuevonum = parseInt(remiact)+parseInt(numremi);
-			$.ajax({
-				type: 'POST',
-				url: "php/send_remblanco.php",
-				data: $('#datos').serialize(),
-				success: function(response) {
-					//esta funcion no esta funcionando
-				//$("#numremi").replaceWith("<td class='contenido' colspan = 2 id='numremi' 'name='numremi'>N."+nuevonum+"</td>");
-				alert(response);
+				autoOpen: true,
+				height: 250,
+				width: 250,
+				modal: true,
+				zIndex:10000,
+				position: { my: "center", at: "center", of: "#remision" },
+				buttons: {
+					"ok": function() {
+						allFields.removeClass( "ui-state-error" );
+						var remiact = parseInt($("#remiact").val());
+						var numremi = parseInt($("#numero").val());
+						if(numremi==""){$("#numero").val(1);}
+						var custodio = $("#asignadoa").val();
+						var nuevonum = parseInt(remiact)+parseInt(numremi);
+						$.ajax({
+							type: 'POST',
+							url: "php/send_remblanco.php",
+							data: $('#datos').serialize(),
+							success: function(response) {
+								//esta funcion no esta funcionando
+							//$("#numremi").replaceWith("<td class='contenido' colspan = 2 id='numremi' 'name='numremi'>N."+nuevonum+"</td>");
+							alert(response);
+							},
+							dataType: 'json',
+						});
+							window.open("php/rremblanco.php?r="+remiact+"&c="+nuevonum);  
+						$( this ).dialog( "close" );
+					},
+					Cancelar: function() {
+						$( this ).dialog( "close" );
+					}
 				},
-				dataType: 'json',
-			});
-				window.open("php/rremblanco.php?r="+remiact+"&c="+nuevonum);  
-			$( this ).dialog( "close" );
-			},
-			Cancelar: function() {
-			$( this ).dialog( "close" );
-			}
-		},
-			close: function() {
-				allFields.val( "" ).removeClass( "ui-state-error" );
-			}
+					close: function() {
+						allFields.val( "" ).removeClass( "ui-state-error" );
+					}
 			});
 			
 			$('#asignadoa').autocomplete({

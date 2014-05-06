@@ -1,3 +1,4 @@
+
 <?php
 
 /*** Autoload class files ***/ 
@@ -18,7 +19,9 @@
 		
 //directiva a la clase fpdf
 
-require_once ('fpdf.php');
+
+require_once('rotation.php');
+
 //VARIABLES GLOBALES----------------------------------------------------------------------------------------------------------
 
 //recepcion de variables desde la pagina de llamada. el numero de remision.
@@ -52,32 +55,33 @@ $agen= $filarep[0];
 if($tiporem==0){
 	//datos de la remision
 
-$query= "SELECT  t2.razon_social,t2.rfc,t2.calleno,t2.col,t2.del,t2.ciudad,t2.estado,t2.cp,t2.nivel,t1.fecha,t1.sucursal,
-t1.agente,t1.doctor,t1.procedimiento,t1.paciente,t1.registro,t1.subtotal,t1.iva,t1.total,t1.con_letra
-FROM remisiones AS t1 LEFT JOIN clientes AS t2 ON t1.idremitido = t2.idclientes
-WHERE t1.idremisiones=".$remision ;
-$datosrem= mysqli_query($mysqli,$query)or die ("Error en la consulta de datos de la remision.".mysqli_error($mysqli));
-
-$fila = mysqli_fetch_row($datosrem);
-$razon = $fila[0];
-$rfc  = $fila[1];
-$calle = $fila[2];
-$col = $fila[3];
-$del = $fila[4];
-$ciudad = $fila[5];
-$estado = $fila[6];
-$cp = $fila[7];
-$nivel = $fila[8];
-$fecha = $fila[9];
-$suc = $fila[10];
-$doc = $fila[12];
-$proc = $fila[13];
-$pac = $fila[14];
-$reg = $fila[15];
-$subt = $fila[16];
-$iva = $fila[17];
-$tot = $fila[18];
-$letra = $fila[19];
+	$query= "SELECT  t2.razon_social,t2.rfc,t2.calleno,t2.col,t2.del,t2.ciudad,t2.estado,t2.cp,t2.nivel,t1.fecha,t1.sucursal,
+	t1.agente,t1.doctor,t1.procedimiento,t1.paciente,t1.registro,t1.subtotal,t1.iva,t1.total,t1.con_letra,t1.idremitido
+	FROM remisiones AS t1 LEFT JOIN clientes AS t2 ON t1.idremitido = t2.idclientes
+	WHERE t1.idremisiones=".$remision ;
+	$datosrem= mysqli_query($mysqli,$query)or die ("Error en la consulta de datos de la remision.".mysqli_error($mysqli));
+	
+	$fila = mysqli_fetch_row($datosrem);
+	$razon = $fila[0];
+	$rfc  = $fila[1];
+	$calle = $fila[2];
+	$col = $fila[3];
+	$del = $fila[4];
+	$ciudad = $fila[5];
+	$estado = $fila[6];
+	$cp = $fila[7];
+	$nivel = $fila[8];
+	$fecha = $fila[9];
+	$suc = $fila[10];
+	$doc = $fila[12];
+	$proc = $fila[13];
+	$pac = $fila[14];
+	$reg = $fila[15];
+	$subt = $fila[16];
+	$iva = $fila[17];
+	$tot = $fila[18];
+	$letra = $fila[19];
+	$remitido = $fila[20];
 
 $domicilio = $calle." ".$col." ".$del." C.P.".$cp." ".$ciudad.", ".$estado;
 $preciorev= "t2.precio".$nivel;
@@ -85,31 +89,32 @@ $preciorev= "t2.precio".$nivel;
 }else{//si es remision vendedor
 	//datos de la remision
 
-$query= "SELECT  t2.paterno,t2.materno,t2.nombre,t1.fecha,t1.subtotal,t1.iva,t1.total,t1.con_letra
-FROM remisiones AS t1 LEFT JOIN representantes AS t2 ON t1.idremitido = t2.idrepresentantes
-WHERE t1.idremisiones=".$remision ;
-$datosrem= mysqli_query($mysqli,$query)or die ("Error en la consulta de datos de la remision.".mysqli_error($mysqli));
-
-$fila = mysqli_fetch_row($datosrem);
-
-$paterno = $fila[0];
-$materno  = $fila[1];
-$nombre = $fila[2];
-$razon = $nombre." ".$paterno." ".$materno;
-$rfc  = "";
-$fecha = $fila[3];
-$suc = "";
-$agen = "";
-$doc = "";
-$proc = "";
-$pac = "";
-$reg = "";
-$subt = $fila[4];;
-$iva = $fila[5];
-$tot = $fila[6];;
-$letra = $fila[7];;
-$domicilio = "";
-$preciorev= "t2.preciost";
+		$query= "SELECT  t2.paterno,t2.materno,t2.nombre,t1.fecha,t1.subtotal,t1.iva,t1.total,t1.con_letra,t1.idremitido
+		FROM remisiones AS t1 LEFT JOIN representantes AS t2 ON t1.idremitido = t2.idrepresentantes
+		WHERE t1.idremisiones=".$remision ;
+		$datosrem= mysqli_query($mysqli,$query)or die ("Error en la consulta de datos de la remision.".mysqli_error($mysqli));
+		
+		$fila = mysqli_fetch_row($datosrem);
+		
+		$paterno = $fila[0];
+		$materno  = $fila[1];
+		$nombre = $fila[2];
+		$razon = $nombre." ".$paterno." ".$materno;
+		$rfc  = "";
+		$fecha = $fila[3];
+		$suc = "";
+		$agen = "";
+		$doc = "";
+		$proc = "";
+		$pac = "";
+		$reg = "";
+		$subt = $fila[4];;
+		$iva = $fila[5];
+		$tot = $fila[6];;
+		$letra = $fila[7];
+		$remitido = $fila[8];
+		$domicilio = "";
+		$preciorev= "t2.preciost";
 	}
 
 
@@ -117,13 +122,19 @@ $preciorev= "t2.preciost";
 
 //datos de los articulos
 
-$query= "SELECT  t1.codigo,t2.descripcion,".$preciorev.", t1.cantidad,t1.importe FROM artremision as t1 left join productos as t2 on t1.codigo=t2.codigo
+$query= "SELECT  t1.codigo,t2.descripcion,".$preciorev.", t1.cantidad,t1.importe,t2.alg FROM artremision as t1 
+left join productos as t2 on t1.codigo=t2.codigo
 WHERE  remision=".$remision ;
 $datoart= mysqli_query($mysqli,$query)or die ("Error en la consulta de articulos de la remision.".mysqli_error($mysqli));
 $indice = 0;
 while ($fila = mysqli_fetch_row($datoart)) {
        $arts[$indice][0]= $fila[0];
-       $arts[$indice][1] = $fila[1];
+	if ($remitido==2 && $tiporem==0){
+		$arts[$indice][1] = $fila[1]." ALG:".$fila[5];
+	}else{
+		$arts[$indice][1] = $fila[1];
+	}
+      
        $arts[$indice][2]= $fila[2];
 	   $arts[$indice][3] = $fila[3];
 	   $arts[$indice][4] = $fila[4];
@@ -153,6 +164,11 @@ define('hcel', 10);
 define('htit', 5);
 //el numero de renglones de una página
 define('rengt', 16);
+//el letrero de material en custodia
+define('custodia','material en custodia');
+
+define('tiporem',$tiporem);
+define('norem',$remision);
 
  
  
@@ -169,13 +185,31 @@ define('mini',8);
 define('xmini',7);
 
 //CLASE PDF--------------------------------------------------------------------------------------------------------------------
- class PDF extends FPDF
+
+ class PDF extends PDF_Rotate
  
     {
         function Header(){
-        
+        	//mostrar marca de agua si el tipo de remision es vendedor
+        	if(tiporem == 1)
+			{
+				$this->SetFont('Arial', 'B', 30);
+    			$this->SetTextColor(135, 132, 132);
+    			$this->RotatedText(50, 235, 'MATERIAL EN CUSTODIA', 45);
+			}
+    		
                     
         }
+		
+		function RotatedText($x, $y, $txt, $angle)
+			{
+			    //Text rotated around its origin
+			    $this->Rotate($angle, $x, $y);
+			    $this->Text($x, $y, $txt);
+			    $this->Rotate(0);
+			}
+		
+		
 		
 		function Footer(){
             
@@ -219,7 +253,7 @@ define('xmini',7);
             $pdf->Cell(65,15,'REMISION',1,2,'C',true);
 			$pdf->SetFont('Times');
 			$pdf->SetTextColor(44,4,105);
-			$pdf->Cell(65,15,'N.'.$remision,1,2,'C',false);
+			$pdf->Cell(65,15,'N.'.norem,1,2,'C',false);
 			$pdf->SetTextColor('BLACK');
 			$pdf->SetFont('Arial');
 			$pdf->SetFontSize(peq);
@@ -227,10 +261,10 @@ define('xmini',7);
 			$pdf->SetX(15);
 			$pdf->SetFontSize(mini);
 			$pdf->Cell(121,hcel,'CLIENTE: '.$razon,1,0,'L',false);
-			$pdf->Cell(35,hcel,'SUCURSAL: '.$suc,1,0,'L',false);
+			$pdf->Cell(35,hcel,'FECHA: '.$fecha,1,0,'L',false);
 			$pdf->Cell(30,hcel,'RFC: '.$rfc,1,1,'C',false);
 			$pdf->SetX(15);
-			$pdf->Cell(121,hcel,'FECHA: '.$fecha,1,0,'L',false);
+			$pdf->Cell(121,hcel,'SUCURSAL: '.$suc,1,0,'L',false);
 			$pdf->Cell(65,hcel,'AGENTE: '.$agen,1,1,'L',false);
 			$pdf->SetX(15);
 			$pdf->SetFontSize(xmini);
@@ -262,7 +296,9 @@ define('xmini',7);
  		if($i<$indice){
  			$pdf->SetX(15);
  			$pdf->Cell(30,enc,$arts[$i][0],'LTB',0,'L',FALSE);
+			$pdf->SetFontSize(xmini);		
 			$pdf->Cell(90,enc,$arts[$i][1],'TB',0,'L',FALSE);
+			$pdf->SetFontSize(mini);
 			$pdf->Cell(30,enc,number_format($arts[$i][2],2),'TB',0,'L',FALSE);
 			$pdf->Cell(19,enc,$arts[$i][3],'TB',0,'L',FALSE);
 			$pdf->Cell(17,enc,number_format($arts[$i][4],2),'TBR',1,'L',FALSE);
@@ -291,11 +327,9 @@ define('xmini',7);
 			$pdf->Cell(20,enc,'TOTAL',1,0,'L',TRUE);
 			$pdf->Cell(23,enc,number_format($tot,2),1,1,'L',FALSE);
  //fin del ciclo de cita      
-        
-        $pdf->Output();  
+ 
+		$pdf->Output();  
 //FIN DE PAGINA -----------------------------------------------------------------------------------
 
-
-   
- 
 ?>
+

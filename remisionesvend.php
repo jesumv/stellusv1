@@ -27,14 +27,12 @@
 		$total =  $_POST ['intotal'];
 		$intotletra = $_POST ['intotletra'];
 
-		
 //insercion en la tabla de remisiones		
 	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,subtotal,iva,total,con_letra,tiporem)
-	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente',$subtotal,$iva,$total,'$intotletra',1)"
-	    or die('insercion cancelada '.$table);
+	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente',$subtotal,$iva,$total,'$intotletra',1)";
 			
 	    // Execute the query here now
-	    $query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    $query=mysqli_query($mysqli, $sqlCommand) or die ("error en insercion remision: ".mysqli_error($mysqli)); 
 //insercion en la tabla de artremisiones--------------------------------------------------------
 
 		//obtencion de valores del html 

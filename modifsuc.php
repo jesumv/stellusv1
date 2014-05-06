@@ -42,8 +42,6 @@ function oprimio($mysqli,$numid){
 			
 			// Execute the query here now
 	    	$query2 = mysqli_query($mysqli, $sqlCommand2) or die (mysqli_error($mysqli)); 
-	    	/* liberar la serie de resultados */
-	   		mysqli_free_result($query2);
 		
 			
     }else {
@@ -51,8 +49,7 @@ function oprimio($mysqli,$numid){
          no_almacen = '$almac', usu = '$usu',status = 1 WHERE idduccliente= $numid LIMIT 1"
          or die('actualizacion cancelada ');
 		$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
-    	/* liberar la serie de resultados */
-    	mysqli_free_result($query);
+
     }
 
     /* cerrar la conexion */

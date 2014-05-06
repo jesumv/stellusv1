@@ -151,10 +151,10 @@ while ($fila = mysqli_fetch_row($datosrem)) {
 			$pdf->SetX(15);
 			$pdf->SetFontSize(mini);
 			$pdf->Cell(121,hcel,'CLIENTE: '.$razon,1,0,'L',false);
-			$pdf->Cell(35,hcel,'SUCURSAL: '.$suc,1,0,'L',false);
+			$pdf->Cell(35,hcel,'FECHA: '.$fecha,1,0,'L',false);
 			$pdf->Cell(30,hcel,'RFC: '.$rfc,1,1,'C',false);
 			$pdf->SetX(15);
-			$pdf->Cell(121,hcel,'FECHA: '.$fecha,1,0,'L',false);
+			$pdf->Cell(121,hcel,'SUCURSAL: '.$suc,1,0,'L',false);
 			$pdf->Cell(65,hcel,'AGENTE: '.$agen,1,1,'L',false);
 			$pdf->SetX(15);
 			$pdf->SetFontSize(xmini);
