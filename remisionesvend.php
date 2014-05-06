@@ -43,10 +43,9 @@
 			$importe= $_POST ['inimpor0'];
 			$usu = $_SESSION['login_user'];
 			$sqlCommand= "INSERT INTO $table (codigo,remision,precio_unitario,cantidad,importe)
-	    	VALUES ('$codigo',$remiact,$precio,$cantidad,$importe)"
-	    	or die('insercion cancelada '.$table);
+	    	VALUES ('$codigo',$remiact,$precio,$cantidad,$importe)";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en insercion articulos: ".mysqli_error($mysqli)); 
 //insercion en la tabla de inventarios	    	
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['inidprod0'];
@@ -56,15 +55,13 @@
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remiact,'$usu',1)"
-	    	or die('insercion cancelada '.$table);
+	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remiact,'$usu',1)";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en disminucion almacen central: ".mysqli_error($mysqli)); 
 	   //Incremento en almacen de destino
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$remiact,'$usu',1)"
-	    	or die('insercion cancelada '.$table);
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$remiact,'$usu',1)";
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en incremento almacen cliente: ".mysqli_error($mysqli)); 
 	}
 	
 	
