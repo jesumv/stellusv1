@@ -39,18 +39,22 @@
 	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$ref,'$usu',5)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en alta de inventarios".mysqli_error($mysqli)); 
-		//Incremento en almacen de destino
+
+//decremento en almacen de inventario. mientras no se tengan pasos separados en logistica
+			$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
+	    	VALUES ($idproductos,'$fecha',$almacen,2,-$cantidad,$ref,'$usu',4)";
+			$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+			
+//Incremento en almacen de destino
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
 	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$ref,'$usu',5)";
-
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
-		//insercion en la tabla de facturas
+			
+						
 			//obtencion del numero de movimiento del inventario
 			$sql= "SELECT MAX(idinventarios) FROM inventarios";
             $result = mysqli_query($mysqli,$sql);
             $result2 = mysqli_fetch_row($result);
 			$invact= $result2[0];
-			
 			$table = 'facturas';
 	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,agente,idsuccliente,
 	   		idclientes,observaciones,usu,idinventarios,otros_clientes)
