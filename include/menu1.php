@@ -7,6 +7,7 @@
                 		<li ><a href="inventarios.php">Inventarios</a></li>
                 		<li ><a href="consfactura.php">Facturación</a></li>
                 		<li ><a href="consblanco.php">Rem. en blanco</a></li>
+                		<li ><a href="constodas.php">Remisiones</a></li>
                 	</ul>
                   </li>
                   <li><a>Almacén</a>

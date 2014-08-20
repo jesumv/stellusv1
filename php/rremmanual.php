@@ -48,7 +48,7 @@ WHERE t1.idremisiones=".$remision ;
 $datosrem= mysqli_query($mysqli,$query)or die ("Error en la consulta de datos de la remision.".mysqli_error($mysqli));
 
 
-//definicion del nombre del agente
+//definicion del nombre datos para la remision
 
 $fila = mysqli_fetch_row($datosrem);
 $razon = $fila[0];
@@ -196,7 +196,7 @@ define('xmini',7);
 			$pdf->SetFont('Arial','B');
 			$pdf->Cell(10,hcel,'FECHA: ','TBL',0,'L',false);
 			$pdf->SetFont('Arial');
-			$pdf->Cell(25,hcel,$suc,'TBR',0,'L',false);
+			$pdf->Cell(25,hcel,$fecha,'TBR',0,'R',false);
 			$pdf->SetFont('Arial','B');
 			$pdf->Cell(7,hcel,'RFC: ','TBL',0,'C',false);
 			$pdf->SetFont('Arial');
@@ -205,7 +205,7 @@ define('xmini',7);
 			$pdf->SetFont('Arial','B');
 			$pdf->Cell(15,hcel,'SUCURSAL: ','TBL',0,'L',false);
 			$pdf->SetFont('Arial');
-			$pdf->Cell(106,hcel,$fecha,'TBR',0,'L',false);
+			$pdf->Cell(106,hcel,$suc,'TBR',0,'L',false);
 			$pdf->SetFont('Arial','B');
 			$pdf->Cell(20,hcel,'AGENTE: ','TBL',0,'L',false);
 			$pdf->SetFont('Arial');

@@ -64,3 +64,13 @@ label.cajita{
 input.cajita.text { margin-bottom:12px; width:95%; padding: .4em; }
 
 fieldset.cajita { padding:0; border:0; margin-top:25px; }
+
+.substituye{
+	margin:auto;
+	text-align:center;
+	font: "CENTURY SCHOOLBOOK";
+	color: #800000;
+	
+}
+
+

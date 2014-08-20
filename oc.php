@@ -29,9 +29,9 @@
 			$rem = $_POST ['rem'];
 			$observaciones = $_POST ['obser'];
 			
-		//disminución en almacen de destino
 		//construccción de numero de almacen
 			$almacen = $idclientes.$idsuccliente;
+		//disminución en almacen de destino
 			$table="inventarios";
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
 	    	VALUES ($idproductos,'$fecha',$almacen,1,-$cantidad,$ref,'$usu',4)";
@@ -48,7 +48,7 @@
 			$table = 'facturas';
 	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,idsuccliente,
 	   		idclientes,remision,observaciones,usu,idinventarios)
-	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,'$sucursal',$idclientes,$rem,'$observaciones',
+	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,'$almacen',$idclientes,'$rem','$observaciones',
 	    	'$usu',$invact)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("facturas ".mysqli_error($mysqli)); 

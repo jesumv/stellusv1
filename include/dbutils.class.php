@@ -131,8 +131,8 @@
 		}
         	
 		public function llenaarts($mysqli,$remision,$codigo,$descripcion,$precio,$cantidad,$importe){
-			$table = 'artremision';
 			/*llena la tabla artremision con los articulos de cada remision*/
+			$table = 'artremision';
 			$sqlCommand= "INSERT INTO $table (codigo,remision,descripcion,precio_unitario,cantidad,importe)
 	    	VALUES ($codigo,$remision,'$descripcion',$precio,$cantidad,$importe)"
 	    or die('insercion cancelada '.$table);
@@ -169,6 +169,59 @@
 	   				mysqli_free_result($result); 	
 		}
 		
+		public function estadorem($tipo, $estado){
+			/* esta funcion determina el estado de una remision en funcion de los parametros */
+			if ($tipo == 2) {
+				$resul = "EN BLANCO";
+			}elseif($estado == 5) {
+					$resul = "CANCELADA";
+			}else{
+				$resul = "VIGENTE";
+			}
+			
+			return $resul;
+		}
+		
+		public function cancelarem($mysqli,$cancelada,$nueva){
+			/* esta funcion recibe un numero de remision, y cambia su estado a 5 cancelada x substitucion */
+			$rollo = "ESTA REMISION SE SUBSTITUYE X LA NO. ".$nueva;
+			$sqlCommand = "UPDATE remisiones SET status =5, obser= '$rollo' WHERE idremisiones= $cancelada LIMIT 1";
+			 // Execute the query here now
+	    	$query = mysqli_query($mysqli, $sqlCommand) or die ("error en actualizacion estado ".mysqli_error($mysqli)); 
+			if(mysqli_errno($mysqli)){
+				return mysqli_errno($mysqli);
+			}else{return 0;}		
+		}
+		
+		public function consultaremi($mysqli,$remi,$nivel,$remitido){
+			/*esta funcion consulta los articulos de una remision*/
+			/*recibe como parametros el numero de remision y el nivel del cliente*/
+			//CONSTANTES---------------------------------------------------------------------------------------------------------
+    		//arreglo para la lista de articulos
+        	$arts= array();
+			//determinacion del precio del producto
+			$preciorev= "t2.precio".$nivel;
+			$query= "SELECT  t1.codigo,t2.descripcion,".$preciorev.",t1.cantidad,t1.importe,t2.alg FROM artremision as t1 
+			left join productos as t2 on t1.codigo=t2.codigo WHERE  remision=".$remi;
+			$datoart= mysqli_query($mysqli,$query)or die ("Error en la consulta de articulos de la remision.".mysqli_error($mysqli));
+			$indice = 0;
+			while ($fila = mysqli_fetch_row($datoart)) {
+			       $arts[$indice][0]= $fila[0];
+				if ($remitido==2){
+					$arts[$indice][1] = $fila[1]." ALG:".$fila[5];
+				}else{
+					$arts[$indice][1] = $fila[1];
+				}
+			      
+			       $arts[$indice][2]= $fila[2];
+				   $arts[$indice][3] = $fila[3];
+				   $arts[$indice][4] = $fila[4];
+				   $arts[$indice][5] = $fila[5];
+			       $indice++;
+			    }
+					return $arts;	
+						
+			}
 		
 		
 	}/*** fin de la clase ***/

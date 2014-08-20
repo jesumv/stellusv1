@@ -1,4 +1,3 @@
-
 <?php
 
 /*** Autoload class files ***/ 
@@ -175,7 +174,7 @@ define('norem',$remision);
 
 //FUENTES------------------------------------------------------------------------------------------------------------
 //la ruta a las fuentes
-define('FPDF_FONTPATH','/font/');
+define('FPDF_FONTPATH','c:/xampp/htdocs/stellus1/php/font');
 
 //FUENTE normal
 define('grande',18);
