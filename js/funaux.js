@@ -12,16 +12,20 @@ function calciva(cant){
 /**
  * @author jmv
  * este script covierte un numero a su correspondiente string en letras
+ * se modifica por jmv para aceptar cero. se modifica la funcion mod porque
+ * no manejaba correctamente la conversion desde los miles.
  */
+
 
 //Función modulo, regresa el residuo de una división 
 function mod(dividendo , divisor) 
 { 
-  resDiv = dividendo / divisor ;  
+	
+  resDiv =dividendo/ divisor;
   parteEnt = Math.floor(resDiv);            // Obtiene la parte Entera de resDiv 
   parteFrac = resDiv - parteEnt ;      // Obtiene la parte Fraccionaria de la división
-  modulo = Math.round(parteFrac * divisor);  // Regresa la parte fraccionaria * la división (modulo) 
-  return modulo; 
+  modulo = ((parteFrac * divisor));  // Regresa la parte fraccionaria * la división (modulo) 
+  return Math.round(modulo*100)/100; 
 } // Fin de función mod
 
 // Función ObtenerParteEntDiv, regresa la parte entera de una división
@@ -58,7 +62,7 @@ function string_literal_conversion(number)
    number = mod(number, 10); 
 
    unidades = ObtenerParteEntDiv(number, 1); 
-   number = mod(number, 1);  
+   number = mod(number,1);  
    string_hundreds="";
    string_tens="";
    string_units="";
@@ -278,8 +282,9 @@ function covertirNumLetras(number)
 
    if (number == 0 || number == "") 
    { // if amount = 0, then forget all about conversions, 
-      centenas_final_string=" cero "; // amount is zero (cero). handle it externally, to 
+      cero_final_string=" CERO PESOS 00/100 M.N. "; // amount is zero (cero). handle it externally, to 
       // function breakdown 
+      return cero_final_string
   } 
    else 
    { 
@@ -361,7 +366,7 @@ function covertirNumLetras(number)
 
 
    /* Asigna el tipo de moneda, para 1 = PESO, para distinto de 1 = PESOS*/
-   if (number == 1)
+   if (number <2 && number > 0)
    {
       moneda = " PESO ";  
    }

@@ -19,11 +19,10 @@
 	//esta funcion hace las consultas de actualizacion
 		$table = 'remisiones';
 	// LAS REMISIONES EN BLANCO VAN AL CLIENTE 2 OTROS
-	    $idcliente = 2 ;
+	    $idcliente = 1;
 		$fecha =strtoupper($_POST ['fecha']) ;
 	    $usu = $_SESSION['login_user'];
 		$cliente = $_POST ['cliente'];
-		$sucursal = $_POST ['sucursal'];
 		$agente = $_POST ['idrepresentantes'];
 		$doctor= $_POST ['doctor'];
 		$procedimiento = $_POST ['procedimiento'];
@@ -36,15 +35,15 @@
 		$domicilio = strtoupper($_POST ['domicilio']);
 		$rfc = strtoupper($_POST ['rfc']);
 		
+
 //insercion en la tabla de remisiones		
 	    $sqlCommand= "INSERT INTO $table (idremisiones,fecha,idremitido,usu,status,cliente,sucursal,agente,doctor,procedimiento,
 	    paciente,registro,subtotal,iva,total,con_letra,tiporem,domicilio,rfc)
-	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente','$sucursal',$agente,'$doctor','$procedimiento','$paciente','$registro',
-	    $subtotal,$iva,$total,'$intotletra',0,'$domicilio','$rfc')"
-	    or die('insercion cancelada '.$table);
+	    VALUES ($remiact,'$fecha','$idcliente','$usu',0,'$cliente',0,'$agente','$doctor','$procedimiento','$paciente','$registro',
+	    $subtotal,$iva,$total,'$intotletra',0,'$domicilio','$rfc')";
 			
-	    // Execute the query here now
-	    $query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    // Execute the query here now 
+		$query=mysqli_query($mysqli, $sqlCommand) or die ("error en insercion remisiones: ".mysqli_error($mysqli)); 
 //insercion en la tabla de artremisiones--------------------------------------------------------
 
 		//obtencion de valores del html 
@@ -55,28 +54,26 @@
 			$importe= $_POST ['inimpor0'];
 			$usu = $_SESSION['login_user'];
 			$sqlCommand= "INSERT INTO $table (codigo,remision,precio_unitario,cantidad,importe)
-	    	VALUES ('$codigo',$remiact,$precio,$cantidad,$importe)"
-	    	or die('insercion cancelada '.$table);
+	    	VALUES ('$codigo',$remiact,$precio,$cantidad,$importe)";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ('error en la insercion de articulos'.($mysqli)); 
 //insercion en la tabla de inventarios	    	
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['inidprod0'];
 			//construccion del numero de almacen. en remisiones manuales siempre es 0
-				$almacen = $idcliente.'0';	
-		
+			$almacen = $idcliente.'0';		
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
 	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remiact,'$usu',1)"
 	    	or die('insercion cancelada '.$table);
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en almacen central".($mysqli)); 
 	   //Incremento en almacen de destino
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
 	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$remiact,'$usu',1)"
 	    	or die('insercion cancelada '.$table);
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en almacen destino".($mysqli)); 
 	}
 	
 	
@@ -119,9 +116,13 @@
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
 <script type="text/javascript" src="js/funaux.js">	</script>
 <script type="text/javascript" src="js/jquery.number.js">	</script>
+<!--scripts para validacion de queryui -->
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
 
 <script>
-	$(function(){
+$(document).ready(function(){
 		$('#cliente').focus();  
 		$('#cliente').change(function(){
 			$('#sucursal').focus();
@@ -182,10 +183,10 @@
 			var totletra = covertirNumLetras(total);
 			$("#intotletra").val(totletra);
 			$("#totletra").append(totletra);
-		});
-    	  
-        
-	});
+		});	
+		        validaforma();
+});
+	
 	
 </script>
 
@@ -202,6 +203,11 @@
 
 <br />
  <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
+ 	
+ 	<div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+    </div>
 
 	<table id= "remision" class="tablap">
 			<tr>
@@ -218,7 +224,7 @@
 
 			<tr>
 				<td id="clientprint"><b>CLIENTE:</b>:</td>
-				<td><input type="text"  id="cliente" name = "cliente" size="60"/></td>
+				<td><input type="text"  id="cliente" name = "cliente" size="60" class="requer"/></td>
 				<td id="sucurprint"><b>SUCURSAL:</b></td>  
 				<td><input type="text"  id="sucursal" name = "sucursal" size="30"/></td>            
 				<td id="rfcprint"><b>RFC:</b></td>
@@ -226,7 +232,7 @@
 			</tr>
 			<tr>	
 				<td id="fechaprint"><b>FECHA:</b></td>
-				<td><input type="text"  id="fecha" name = "fecha" size="15"/></td> 	
+				<td><input type="text"  id="fecha" name = "fecha" size="15" class="requer"/></td> 	
 				<td id="agentprint"><b>AGENTE:</b></td>
 				<td colspan="3"><input type="text"  id="agente" name = "agente" size="30"/></td> 
 				<input type="hidden"  id="idrepresentantes" name="idrepresentantes"/>	
