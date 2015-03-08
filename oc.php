@@ -44,7 +44,6 @@
             $result = mysqli_query($mysqli,$sql);
             $result2 = mysqli_fetch_row($result);
 			$invact= $result2[0];
-			
 			$table = 'facturas';
 	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,idsuccliente,
 	   		idclientes,remision,observaciones,usu,idinventarios)

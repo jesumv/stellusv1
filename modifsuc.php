@@ -83,7 +83,7 @@ if(isset($_POST['enviosuc'])){
             	//viene de la hoja de alta de cliente
             	$idsuccliente="";			
 			//traer el numero de cliente recientemente insertado
-			/***lee el numero de remision ***/
+			/***lee el numero mas alto de cliente ***/
 				$otrabd = new otrasdbutils;
 				$cliente= $otrabd->ultcliente($mysqli);
 				$no_suc = "";

@@ -18,8 +18,8 @@
 	    /***esta funcion establece la conexion a sql***/
 		/***variables de conexion ***/
 		$mysql_hostname = "localhost";
-		$mysql_user = "test";
-		$mysql_password = "test";
+		$mysql_user = "root";
+		$mysql_password = "";
 		$mysql_database = "stellus1";
 
 
