@@ -18,7 +18,7 @@
 		function oprimio($mysqli,$remiact){
 	//esta funcion hace las consultas de actualizacion
 		$table = 'remisiones';
-	// LAS REMISIONES EN BLANCO VAN AL CLIENTE 2 OTROS
+	// LAS REMISIONES EN BLANCO VAN AL CLIENTE 1 OTROS
 	    $idcliente = 1;
 		$fecha =strtoupper($_POST ['fecha']) ;
 	    $usu = $_SESSION['login_user'];
@@ -60,12 +60,12 @@
 //insercion en la tabla de inventarios	    	
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['inidprod0'];
-			//construccion del numero de almacen. en remisiones manuales siempre es 0
-			$almacen = $idcliente.'0';		
+			//construccion del numero de almacen. en remisiones manuales siempre va a otros
+			$almacen = 1;		
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remiact,'$usu',1)"
+	    	VALUES ($idproductos,'$fecha',99999,2,-$cantidad,$remiact,'$usu',1)"
 	    	or die('insercion cancelada '.$table);
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en almacen central".($mysqli)); 

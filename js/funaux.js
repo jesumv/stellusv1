@@ -17,24 +17,24 @@ function calciva(cant){
  */
 
 
-//Funci�n modulo, regresa el residuo de una divisi�n 
+//FunciOn modulo, regresa el residuo de una divisiOn 
 function mod(dividendo , divisor) 
 { 
 	
   resDiv =dividendo/ divisor;
   parteEnt = Math.floor(resDiv);            // Obtiene la parte Entera de resDiv 
-  parteFrac = resDiv - parteEnt ;      // Obtiene la parte Fraccionaria de la divisi�n
-  modulo = ((parteFrac * divisor));  // Regresa la parte fraccionaria * la divisi�n (modulo) 
+  parteFrac = resDiv - parteEnt ;      // Obtiene la parte Fraccionaria de la divisiÃƒÆ’Ã‚Â³n
+  modulo = ((parteFrac * divisor));  // Regresa la parte fraccionaria * la divisiÃƒÆ’Ã‚Â³n (modulo) 
   return Math.round(modulo*100)/100; 
-} // Fin de funci�n mod
+} // Fin de funciOn mod
 
-// Funci�n ObtenerParteEntDiv, regresa la parte entera de una divisi�n
+// FunciÃƒÆ’Ã‚Â³n ObtenerParteEntDiv, regresa la parte entera de una divisiÃƒÆ’Ã‚Â³n
 function ObtenerParteEntDiv(dividendo , divisor) 
 { 
   resDiv = dividendo / divisor ;  
   parteEntDiv = Math.floor(resDiv); 
   return parteEntDiv; 
-} // Fin de funci�n ObtenerParteEntDiv
+} // Fin de funciÃƒÆ’Ã‚Â³n ObtenerParteEntDiv
 
 // function fraction_part, regresa la parte Fraccionaria de una cantidad
 function fraction_part(dividendo , divisor) 
@@ -42,7 +42,7 @@ function fraction_part(dividendo , divisor)
   resDiv = dividendo / divisor ;  
   f_part = Math.floor(resDiv); 
   return f_part; 
-} // Fin de funci�n fraction_part
+} // Fin de funciÃƒÆ’Ã‚Â³n fraction_part
 
 
 // function string_literal conversion is the core of this program 
@@ -345,7 +345,7 @@ function covertirNumLetras(number)
    /* Concatena los millones, miles y cientos*/
    cad = millions_final_string+thousands_final_string+centenas_final_string; 
    
-   /* Convierte la cadena a May�sculas*/
+   /* Convierte la cadena a MayÃƒÆ’Ã‚Âºsculas*/
    cad = cad.toUpperCase();       
 
    if (centavos.length>2)
@@ -374,7 +374,7 @@ function covertirNumLetras(number)
    {
       moneda = " PESOS ";  
    }
-   /* Regresa el n�mero en cadena entre par�ntesis y con tipo de moneda y la fase M.N.*/
+   /* Regresa el nÃƒÆ’Ã‚Âºmero en cadena entre parÃƒÆ’Ã‚Â©ntesis y con tipo de moneda y la fase M.N.*/
    var final ="("+cad+moneda+centavos+" M.N. )";
    return final;
 }
@@ -390,4 +390,26 @@ function abrehoja(hoja){
 	
 	window.open(hoja);
 	
+}
+
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+function nalmac2(cliente,almacen){
+/*esta funcion es la contraparte de nalmac en php*/
+/*y construye el numero de almacen*/
+	var longi= almacen.toString().length;
+	if(longi==1){
+		num = cliente + '0' + almacen;
+	}else {
+		num = cliente + almacen; 
+	}
+	return num;
+
 }

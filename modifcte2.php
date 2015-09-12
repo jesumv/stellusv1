@@ -48,7 +48,7 @@ global $num;
 				    	
 					$otrabd = new otrasdbutils;
 					$cliente= $otrabd->ultcliente($mysqli);
-					$almacen = $cliente.'0';
+					$almacen = $cliente.'00';
 					$descrip = 'ALMACEN MATRIZ '.$corto;
 		
 				 $sqlCommand= "INSERT INTO almacenes (idclientes,no_almacen,descripcion,tipo_almacen,usu, status)
@@ -56,11 +56,7 @@ global $num;
 			
 				// Execute the query here now
 	    		$query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
-					
-
-	
-			
-			
+					 			
 					
 	    }else {
 	        $sqlCommand = "UPDATE $table SET razon_social ='$nombre', rfc='$rfc',nom_corto='$corto',
@@ -78,12 +74,14 @@ global $num;
 	}
 /***si se oprimio el boton de accion***/
 if(isset($_POST['enviomod'])){
-	$numero = strtoupper($_POST ['num']) ;	
+	$numero = strtoupper($_POST ['num']) ;
+/***se insertan los datos del nuevo cliente***/	
     oprimio($mysqli, $numero);
     $pagf= ($_POST ['pag']) ;
     if ($pagf == -99){
     	header('Location: include/altasucdialog.xhtml');
     }else{
+/***si solo se esta modificando un cliente, se regresa a la pagina de clientes***/
     	header('Location: clientes.php');
     	}
     

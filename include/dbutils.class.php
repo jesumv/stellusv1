@@ -68,6 +68,25 @@
                  die('no hay resultados para '.$table);
             }
         }
+		
+		public function leeuno($mysqli,$table,$filtro){
+          //***lee un registro de una tabla, un registro o todos los registros, de acuerdo con el argumento $filtro ***/
+            $sql= "SELECT * FROM $table WHERE ".$filtro;
+            $result = mysqli_query($mysqli,$sql);
+            $result2 = mysqli_fetch_row($result);
+            /* liberar la serie de resultados */
+                  mysqli_free_result($result);
+                  /* cerrar la conexion */
+                  mysqli_close($mysqli);
+            if($result2){
+              return $result2;  
+            }
+            else {
+                 die('no hay resultados para '.$table);
+            }
+        }
+		
+		
         
         public function numremi($mysqli){
         	/*lee el ultimo numero de remision emitido*/
@@ -168,6 +187,32 @@
 			 /* liberar la serie de resultados */
 	   				mysqli_free_result($result); 	
 		}
+		
+		public function ultcliente2($mysqli){
+			/*esta funcion trae el ultimo numero de cliente registrado y su nombre corto */
+			$sql= "SELECT MAX(idclientes)FROM clientes";
+			$result = mysqli_query($mysqli,$sql);
+            $result2 = mysqli_fetch_row($result);
+			$cliente = $result2[0];
+			$sql2 = "SELECT idclientes, nom_corto FROM clientes WHERE idclientes =".$cliente;
+			$result3 = mysqli_query($mysqli,$sql2);
+            $result4 = mysqli_fetch_row($result3);
+			 /* liberar la serie de resultados */
+	   		mysqli_free_result($result); 
+			return $result4; 	
+		}
+		
+		public function nomcliente($mysqli,$idclientes){
+			/*esta funcion trae el nombre corto del cliente proporcionado*/
+			$sql= "SELECT nom_corto FROM clientes where idclientes =".$idclientes;
+			$result = mysqli_query($mysqli,$sql);
+            $result2 = mysqli_fetch_row($result);
+			 /* liberar la serie de resultados */
+	   		mysqli_free_result($result); 
+			return $result2; 	
+		}
+		
+		
 		
 		public function estadorem($tipo, $estado){
 			/* esta funcion determina el estado de una remision en funcion de los parametros */

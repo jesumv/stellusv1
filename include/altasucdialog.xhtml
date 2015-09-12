@@ -23,12 +23,12 @@
 			buttons: {
 				"SI": function() {
 					$( this ).dialog( "close" );
-					var cte = $("#asignadoa").val();
 					window.open("../modifsuc.php?nid=-999","_self"); 
 				},
 				NO: function() {
+//si no se desean dar de alta sucursales, se da de alta una central
 				$( this ).dialog( "close" );
-				window.open("../clientes.php","_self"); 
+					window.open("../php/insertsuccent.php","_self"); 
 				}
 			}
 			
@@ -44,7 +44,7 @@
 	
 <!-- forma para captura de datos -->
 <div id="dialog-form" title="Capturar Sucursales" class="dialogo">
-	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;">Desea capturar sucursales para este cliente?</span></p>
+	<p><span style="float:left; margin:0 7px 20px 0;">Desea capturar sucursales para este cliente?</span></p>
 </div>
 
 

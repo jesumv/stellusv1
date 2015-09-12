@@ -58,7 +58,7 @@
 		<?php
 			//inventarios en stellus
 		 $sqlCommand = "SELECT t1.idproductos, t2.nom_corto, SUM(t1.cantidad) AS total FROM inventarios AS t1 INNER JOIN productos AS t2 
-		 ON t1.idproductos = t2.idproductos WHERE t1.almacen = 2000 GROUP BY t2.idproductos";
+		 ON t1.idproductos = t2.idproductos WHERE t1.almacen = 99999 GROUP BY t2.idproductos";
 		  // Execute the query here now
 		 $query1=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN CONSULTA DE INVENTARIOS CLIENTES. ".mysqli_error($mysqli));
 		 
@@ -82,7 +82,7 @@
 	<?php
 					//inventarios en hospitales
 			 $sqlCommand = "SELECT t1.idproductos, t3.descripcion,t2.nom_corto, SUM(t1.cantidad) AS total FROM inventarios AS t1 INNER JOIN productos AS t2 
-			 ON t1.idproductos = t2.idproductos INNER JOIN almacenes AS t3 ON t1.almacen = t3.no_almacen WHERE t1.almacen <1000 GROUP BY t1.almacen,t2.idproductos";
+			 ON t1.idproductos = t2.idproductos INNER JOIN almacenes AS t3 ON t1.almacen = t3.no_almacen WHERE t1.almacen <99999 GROUP BY t1.almacen,t2.idproductos";
 			 
 			  // Execute the query here now
 			 $query1=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN CONSULTA DE INVENTARIOS CLIENTES. ".mysqli_error($mysqli));
@@ -101,10 +101,12 @@
 			<div id="tab-3" class="centraelem"> 
 			<h2>INVENTARIOS EN CUSTODIA DE REPRESENTANTES</h2>
 			<?php
-						//inventarios con vendedores	
+						//inventarios con vendedores
+						//calculo del almacen del vendedor
+						
 				 $sqlCommand = "SELECT t1.idproductos, t3.nom_corto,t2.nom_corto, SUM(t1.cantidad) AS total FROM inventarios 
 				 AS t1 INNER JOIN productos AS t2 ON t1.idproductos = t2.idproductos INNER JOIN representantes AS t3 
-				 ON (t1.almacen-1000) = t3.idrepresentantes WHERE t1.almacen >1000 AND  t1.almacen <2000 GROUP BY t1.almacen,t2.idproductos";
+				 ON (t1.almacen-999990) = t3.idrepresentantes WHERE t1.almacen >99999  GROUP BY t1.almacen,t2.idproductos";
 				 
 				  // Execute the query here now
 				 $query1=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN CONSULTA DE INVENTARIOS VENDEDORES. ".mysqli_error($mysqli));

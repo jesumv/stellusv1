@@ -1,4 +1,5 @@
 <?php
+/*** este script inserta en la bd remisiones las remisiones que se emitieron en blanco***/ 
 /*** Autoload class files ***/ 
     function __autoload($class){
       require('../include/' . strtolower($class) . '.class.php');

@@ -17,10 +17,12 @@
 //consulta a la base de datos
    $usu = $_SESSION['login_user'];
    $num = $_GET['nid'];
+ //cambio de estado de la sucursal
    $table = 'succliente';
    $sql= "UPDATE $table SET status = 2, usu = '$usu' WHERE idsuccliente=-".$num;
    $result2 = mysqli_query($mysqli,$sql) or die('no hay resultados para '.$table);
-   
+ //cambio de estado del almacen falta por desarrollar
+ 
     /* liberar la serie de resultados */
   mysqli_free_result($result2);
   /* cerrar la conexión */

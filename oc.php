@@ -1,4 +1,6 @@
 <?php
+//funciones auxiliares
+require '/include/funciones.php';
    /*** Autoload class files ***/ 
     function __autoload($class){
       require('include/' . strtolower($class) . '.class.php');
@@ -19,9 +21,10 @@
 			$sucursal =$_POST ['sucursal'];
 			$cantidad = $_POST ['cant'];
 			$ref= $_POST ['fact'];
-			$usu = $_SESSION['username'];
+			$usu = $_SESSION['login_user'];
 			$idclientes = $_POST ['idclientes'];
-			$idsuccliente= $_POST ['idsuccliente'];
+			$nosuc = $_POST ['idsuccliente'];
+			$idsuccliente = decidesuc($idclientes, $nosuc);
 			$oc= $_POST ['oc'];
 			$subtotal= $_POST ['subtot'];
 			$iva= $_POST ['iva'];
@@ -29,14 +32,11 @@
 			$rem = $_POST ['rem'];
 			$observaciones = $_POST ['obser'];
 			
-		//construccción de numero de almacen
-			$almacen = $idclientes.$idsuccliente;
 		//disminución en almacen de destino
 			$table="inventarios";
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',$almacen,1,-$cantidad,$ref,'$usu',4)";
-
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
+	    	VALUES ($idproductos,'$fecha','$idsuccliente',2,-$cantidad,$ref,'$usu',4)";
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en cambio inventario: ".mysqli_error($mysqli)); 
 			
 		//insercion en la tabla de facturas
 			//obtencion del numero de movimiento del inventario
@@ -47,10 +47,10 @@
 			$table = 'facturas';
 	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,idsuccliente,
 	   		idclientes,remision,observaciones,usu,idinventarios)
-	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,'$almacen',$idclientes,'$rem','$observaciones',
+	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,'$idsuccliente',$idclientes,'$rem','$observaciones',
 	    	'$usu',$invact)";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("facturas ".mysqli_error($mysqli)); 
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en insercion factura: ".mysqli_error($mysqli)); 
 
 		}
 		
@@ -60,7 +60,7 @@
 			
 			/* cerrar la conexion */
 	    	mysqli_close($mysqli);  
-			
+			header('Location: consfactura.php');
 		}
 		
 	} else {
@@ -85,10 +85,15 @@
 <script src="js/jquery-ui-1.10.4.custom.js"></script>
 <script type="text/javascript" src="js/funaux.js">	</script>
 <script type="text/javascript" src="js/jquery.number.js">	</script>
+<script src="js/jquery.validate.js"></script>
+<script src="js/validaciones.js"></script>
+<script src="js/additional-methods.js"></script>
 
 <script>
-	$(function(){
+	$(document).ready (function(){
+		
 		$('#cliente').focus(); 
+				
 	    $('#cliente').autocomplete({
 			autoFocus: true,
             source: "get_client_list.php",
@@ -102,13 +107,15 @@
         });
         $('#sucursal').autocomplete({
 			autoFocus: true,
-            source: "get_sucur_list.php",
+            source: function(request, response) {
+    		$.getJSON("get_sucur_list2p.php", { term: $('#sucursal').val(), cte: $('#idclientes').val() }, 
+              response);
+  				},
             minLength: 2,
-            select: function( event, ui ) {
-					$("#idsuccliente").val(ui.item.idsuccliente);
-            		$('#fecha').focus();
-				}
-            			                
+            select:function(event, ui){
+            	$("#idsuccliente").val(ui.item.noalmacen);
+            	$('#fecha').focus();
+            }			                
         }); 
         
 		    $('#fecha').datepicker({
@@ -162,6 +169,9 @@
 		});
 		
 		$( "#fact" ).change(function() {
+			$("oc").focus();
+		});
+		$( "#oc" ).change(function() {
 			$("rem").focus();
 		});
 		
@@ -169,7 +179,7 @@
 			$("obser").focus();
 		});
 		
-    	  
+    validaforma(); 	  
         
 	});
 	
@@ -184,52 +194,69 @@
   $titulo = "ORDENES DE COMPRA";
   include_once "include/barrasup.php";
   ?> 
- 
+ <div class = "centraelem">
+    <h4>Los campos marcados con <span class="req">*</span>  son requeridos</h4>
+  </div>
 
 <br />
  <form action="<?php echo $_SERVER['PHP_SELF'];?>" method = "POST">
-	 <div class = "ui-widget-header">
-	 	<legend>Datos de la Orden de Compra:</legend>
-			 	<label for="cliente">Cliente: </label>
-			 	<input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content"/>
-			 	<input type="hidden" id="razon" class="ui-autocomplete-content"/>
-			 	<input type="hidden" id="idclientes" name="idclientes"/>
-			 	<input type="hidden" id="nivel" class="ui-autocomplete-content"/>
-			 	<label for="sucursal">Sucursal: </label>
-			 	<input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/>
-			 	<input type="hidden" id="idsuccliente" name="idsuccliente"/> 
-			 	<label for="fecha">Fecha: </label>
-			 	<input type="text" id="fecha"  name="fecha"/>
-			 	<label for="cod">Codigo: </label>
-			 	<input type='text' id='cod' name ='cod' />   
-			 	<br />
-			 	<label for="des">Descripción: </label>
-			 	<input type='text' id='des' name ='des' size= "75" disabled /><input type='hidden' id='idprod' name ='idprod' />
-			 	<label for="precio">Precio Unitario: </label>
-			 	<input type='text' id='precio' name ='precio' disabled/>
+ 	
+ 	 <div class="error" style="display:none;">
+            <img src="img/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
+            <span ></span><br clear="all" />
+      </div>
+      
+      
+	 <div class = "ui-widget-header" id="contenido">
+	 	<table>
+	 		<tr><th><legend>Datos de la Orden de Compra:</legend></th></tr>		
+			 	<tr>
+				 	<td><label for="cliente">Cliente: </label></td>
+			 		<td class="field"><input type="text" id="cliente"  name="cliente" class="ui-autocomplete-content" class = "requer"/><span class='req'>*</span></td>
+				 	<td><label for="sucursal">Sucursal: </label></td>
+				 	<td class="field"><input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/></td>
+				 	<input type="hidden" id="idsuccliente" name="idsuccliente"/> 
+				 	<td><label for="fecha">Fecha: </label></td>
+				 	<td class="field"><input type="text" id="fecha"  name="fecha" class = "requer"/><span class='req'>*</span></td>
+				 </tr>
+				 <tr></tr>
+				 <tr>
+				 	<td><label for="cod">Codigo: </label></td>
+				 	<td colspan="3" class="field"><input type='text' id='cod' name ='cod' class = "requer"/><span class='req'>*</span></td>
+				 	<td><label for="cant">Cantidad: </label></td>
+					<td class="field"><input type='number' id='cant' name='cant'class = "requer"/><span class='req'>*</span></td>
+			 	</tr>
+			 		<input type="hidden" id="razon"/>
+				 	<input type="hidden" id="idclientes" name="idclientes"/>
+				 	<input type="hidden" id="nivel"/>
+			 	<tr>
+			 	<td><label for="des">Descripción: </label></td>
+			 	<td class="field"><input type='text' id='des' name ='des' disabled /></td>
+			 	<input type='hidden' id='idprod' name ='idprod' />
+			 	<td><label for="precio">Precio Unitario: </label></td>
+			 	<td class="field"><input type='text' id='precio' name ='precio' disabled/></td>
 			 	<input type='hidden' id='inprecio' name ='inprecio' />
-			 	<label for="cant">Cantidad: </label>
-				<input type='number' id='cant' name='cant'/>
-				<br />
-				<label for="impor">Importe: </label>
-				<input type='text' id='impor' name ='impor' disabled/>
+			 	<td><label for="impor">Importe: </label></td>
+				<td class="field"><input type='text' id='impor' name ='impor' disabled/></td>
+			 	</tr>
+			 	<tr>
 				<input type='hidden' id='subtot' name ='subtot' />
 				<input type='hidden' id='iva' name ='iva' />
 				<input type='hidden' id='total' name ='total' />
-				<label for="fact">Factura: </label>
-				<input type='text' id='fact' name ='fact' />
-				<label for="oc">Orden de compra: </label>
-				<input type='text' id='oc' name ='oc' />
-				<label for="rem">Remisión: </label>
-				<input type='text' id='rem' name ='rem' />
-				<br />
-				<label for="obser">Observaciones: </label>
-				<input type='text' id='obser' name ='obser' size='100'/>
-				
+				<td ><label for="fact">Factura: </label></td>
+				<td class="field"><input type='text' id='fact' name ='fact' class = "reqer"/><span class='req'>*</span></td>
+				<td><label for="oc">Orden de compra: </label></td>
+				<td class="field"><input type='text' id='oc' name ='oc' /></td>
+				<td><label for="rem">Remisión: </label></td>
+				<td class="field"><input type='text' id='rem' name ='rem' /></td>
+				</tr>
+				<tr>
+				<td><label for="obser">Observaciones: </label></td>
+				<td  class="field" colspan="5"><input type='text' id='obser' name ='obser' size='100'/></td>
+				</tr>	
+		</table>	
 					  
 	 </div>
-
-<p></p>
 <div class="centraelem"><input type="submit" name ="enviodato" value="ENVIAR DATOS"/></div>
 </form>
 <div id="footer"></div>

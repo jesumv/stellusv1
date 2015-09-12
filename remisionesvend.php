@@ -50,12 +50,12 @@
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['inidprod0'];
 			//construccion del numero de almacen
-			$almacen = '100'.$idcliente;	
+			$almacen = '99999'.$idcliente;	
 			
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remiact,'$usu',1)";
+	    	VALUES ($idproductos,'$fecha',99999,2,-$cantidad,$remiact,'$usu',1)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en disminucion almacen central: ".mysqli_error($mysqli)); 
 	   //Incremento en almacen de destino

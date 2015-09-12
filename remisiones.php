@@ -1,4 +1,6 @@
 <?php
+//funciones auxiliares
+require '/include/funciones.php';
 	global $remiact;
    /*** Autoload class files ***/ 
     function __autoload($class){
@@ -23,7 +25,8 @@
 	    $usu = $_SESSION['login_user'];
 		$cliente = $_POST ['cliente'];
 		$sucursal = $_POST ['sucursal'];
-		$idsuccliente = $_POST ['idsuccliente'];
+		$nosuc = $_POST ['idsuccliente'];
+		$idsuccliente = decidesuc($idcliente, $nosuc);
 		$agente = $_POST ['idrepresentantes'];
 		$doctor= $_POST ['doctor'];
 		$procedimiento = $_POST ['procedimiento'];
@@ -59,26 +62,19 @@
 //insercion en la tabla de inventarios	    	
 	   		//obtencion de valores
 	   		$idproductos= $_POST ['inidprod0'];
-			//construccion del numero de almacen
-			if($sucursal==""){
-				$almacen = $idcliente.'0';	
-			}else{
-				$almacen = $idcliente.$idsuccliente;
-			}
-		
+	   				
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remiact,'$usu',1)";
+	    	VALUES ($idproductos,'$fecha',99999,2,-$cantidad,$remiact,'$usu',1)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en disminucion inventarios centrales: "
 	    	.mysqli_error($mysqli)); 
 	   //Incremento en almacen de destino
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$remiact,'$usu',1)";
+	    	VALUES ($idproductos,'$fecha','$idsuccliente',1,$cantidad,$remiact,'$usu',1)";
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en incremento almacen cliente: ".mysqli_error($mysqli)); 
 	}
-	
 	
 		if(isset($_POST['enviorem'])){
 			
@@ -141,16 +137,19 @@
 				}
 				                
         });
+        
         $('#sucursal').autocomplete({
 			autoFocus: true,
-            source: "get_sucur_list.php",
+            source: function(request, response) {
+    		$.getJSON("get_sucur_list2p.php", { term: $('#sucursal').val(), cte: $('#idclientes').val() }, 
+              response);
+  				},
             minLength: 2,
             select:function(event, ui){
-            	$("#idsuccliente").val(ui.item.idsuccliente);
-            	$('#fecha').focus();	
-            }
-		                
-        }); 
+            	$("#idsuccliente").val(ui.item.noalmacen);
+            	$('#fecha').focus();
+            }			                
+        });
         
 		    $('#fecha').datepicker({
 		dateFormat: "yy-mm-dd",

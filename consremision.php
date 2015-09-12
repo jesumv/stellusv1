@@ -1,5 +1,7 @@
 <?php
 	global $remiact;
+	//funciones auxiliares
+	require '/include/funciones.php';
    /*** Autoload class files ***/ 
     function __autoload($class){
       require('include/' . strtolower($class) . '.class.php');
@@ -68,7 +70,7 @@
 			if($sucursal==""){
 				$almacen = $idcliente.'0';	
 			}else{
-				$almacen = $idcliente.$idsuccliente;
+				$almacen = nalmac($idcliente,$idsuccliente);
 			}
 		
 	   //disminucion de almacen central   		

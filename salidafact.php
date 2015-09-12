@@ -1,4 +1,7 @@
 <?php
+//funciones auxiliares
+require '/include/funciones.php';
+
    /*** Autoload class files ***/ 
     function __autoload($class){
       require('include/' . strtolower($class) . '.class.php');
@@ -14,6 +17,7 @@
 		function oprimio($mysqli){
 		//insercion en la tabla de inventarios	    	
 	   		//obtencion de valores
+	   		//se hace referencia a idsuccliente, pero se trae el no. de almacen.
 	   		$idproductos= $_POST ['idprod'];
 			$fecha =strtoupper($_POST ['fecha']) ;
             $agente =$_POST ['idrepresentantes'];  			
@@ -22,43 +26,42 @@
 			$ref= $_POST ['fact'];
 			$usu = $_SESSION['login_user'];
 			$idclientes = $_POST ['idclientes'];
-			$idsuccliente = $_POST ['idsuccliente'];
+			$nosuc = $_POST ['idsuccliente'];
+			$idsuccliente = decidesuc($idclientes, $nosuc);
 			$oc= $_POST ['oc'];
 			$subtotal= $_POST ['subtot'];
 			$iva= $_POST ['iva'];
 			$total= $_POST ['total'];
 			$observaciones = $_POST ['obser'];
 			$otros = $_POST ['razon'];
-                 
-			
-		//construccion del numero de almacen
-			$almacen = $idclientes.$idsuccliente;
+                 	
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$ref,'$usu',5)";
+	    	VALUES ($idproductos,'$fecha',99999,2,-$cantidad,$ref,'$usu',5)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en alta de inventarios".mysqli_error($mysqli)); 
 
 //decremento en almacen de inventario. mientras no se tengan pasos separados en logistica
+//se supone que nos estamos enterando de los productos consumidos.
 			$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',$almacen,2,-$cantidad,$ref,'$usu',4)";
+	    	VALUES ($idproductos,'$fecha','$idsuccliente',2,-$cantidad,$ref,'$usu',4)";
 			$query=mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
 			
 //Incremento en almacen de destino
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',$almacen,1,$cantidad,$ref,'$usu',5)";
-			
+	    	VALUES ($idproductos,'$fecha','$idsuccliente',1,$cantidad,$ref,'$usu',5)";
 						
 			//obtencion del numero de movimiento del inventario
 			$sql= "SELECT MAX(idinventarios) FROM inventarios";
             $result = mysqli_query($mysqli,$sql);
             $result2 = mysqli_fetch_row($result);
 			$invact= $result2[0];
+//INSERCION EN TABLA FACTURAS
 			$table = 'facturas';
 	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,idproductos,cant,subtotal,iva,total,agente,idsuccliente,
 	   		idclientes,observaciones,usu,idinventarios,otros_clientes)
-	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,$agente,$almacen,$idclientes,'$observaciones',
+	    	VALUES ($ref,'$fecha',$oc,$idproductos,$cantidad,$subtotal,$iva,$total,$agente,'$idsuccliente',$idclientes,'$observaciones',
 	    	'$usu',$invact,'$otros')";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla facturas ".mysqli_error($mysqli)); 
@@ -68,10 +71,9 @@
 		if(isset($_POST['enviodato'])){
 			
 		    oprimio($mysqli);
-			header('Location: consfactura.php');
 			/* cerrar la conexion */
 	    	mysqli_close($mysqli);  
-
+			header('Location: consfactura.php');
 		}
 		
 	} else {
@@ -102,7 +104,6 @@
 
 <script>
 	$(document).ready (function(){
-		
 		var razonot = $( "#razonot" ),
 		allFields = $( [] ).add(razonot);
 		
@@ -130,8 +131,7 @@
 			close: function() {
 				allFields.val( "" ).removeClass( "ui-state-error" );
 			}
-			});
-			
+			});		
 		 
 	    $('#cliente').autocomplete({
 			autoFocus: true,
@@ -140,21 +140,23 @@
             select: function( event, ui ) {
 					$( "#idclientes" ).val( ui.item.idclientes );
 					$("#nivel").val(ui.item.nivel);
+//si se elige el cliente otros clientes, se pregunta el nombre del mismo
 					if($("#idclientes").val() == 1){
 						$( "#dialog-form" ).dialog( "open" );
 					}
 					$('#sucursal').focus();
-				}
-				
-			
+				}						
 				                
         });
         $('#sucursal').autocomplete({
 			autoFocus: true,
-            source: "get_sucur_list.php",
+            source: function(request, response) {
+    		$.getJSON("get_sucur_list2p.php", { term: $('#sucursal').val(), cte: $('#idclientes').val() }, 
+              response);
+  				},
             minLength: 2,
             select:function(event, ui){
-            	$("#idsuccliente").val(ui.item.idsuccliente);
+            	$("#idsuccliente").val(ui.item.noalmacen);
             	$('#fecha').focus();
             }			                
         }); 

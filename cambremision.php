@@ -81,13 +81,13 @@
 			if($sucursal==""){
 				$almacen = $idcliente.'0';	
 			}else{
-				$almacen = $idcliente.$idsuccliente;
+				$almacen = nalmac($idcliente,$idsuccliente);
 			}
 		
 	   //disminucion de almacen de origen 		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',2000,2,-$cantidad,$remiact,'$usu',1)";
+	    	VALUES ($idproductos,'$fecha',9999,2,-$cantidad,$remiact,'$usu',1)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en disminucion inventarios centrales: "
 	    	.mysqli_error($mysqli)); 

@@ -25,10 +25,10 @@ function oprimio($mysqli){
 	$usu = $_SESSION['login_user'];
 	$lote = $_POST ['lote'] ;
 	$fechacad= $_POST ['fechacad'] ;
-//1 es almacen central. 1 es tupo movimiento entrada, status 1 es en transito
+//9999 es almacen central. 1 es tipo movimiento entrada, status 1 es en transito
 	$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad, referencia,
 	observaciones,usu,status,lote,fecha_cad)
-    VALUES ('$idproductos','$fecha',2000,1,$cantidad,'$referencia','$obser','$usu',0,'$lote','$fechacad')"
+    VALUES ('$idproductos','$fecha',99999,1,$cantidad,'$referencia','$obser','$usu',0,'$lote','$fechacad')"
         or die('insercion cancelada '.$table);	
     // Execute the query here now
     $query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 

@@ -1,4 +1,5 @@
 <?php
+/*** OJO ESTE SCRIPT OBTIENE EL NUMERO DE SUCURSAL MAS ALTO PARA UN CLIENTE. DEBE SER EL MISMO QUE ALMACEN***/ 
 	/*** Autoload class files ***/ 
     function __autoload($class){
       require('../include/' . strtolower($class) . '.class.php');
