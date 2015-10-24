@@ -413,3 +413,46 @@ function nalmac2(cliente,almacen){
 	return num;
 
 }
+function fechast(entrada){
+	/*esta funcion toma un string de fecha de cfdi y extrae la parte de la fecha*/
+	var res = entrada.substring(0, 10);
+	return res;
+}
+
+function addCommas(nStr)
+{
+	var x;
+	var x1;
+	var x2;
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1' + ',' + '$2');
+	}
+	return x1 + x2;
+}
+
+function quitadec(nStr){
+	/*esta funcion quita los decimales de un numero y deja solo los enteros*/
+	var ubic = nStr.length - 3
+	var ultima = nStr.substr(0,ubic)
+	return ultima;
+}
+
+function getResponse(url,data) {
+		var idcliente = null;
+		function myCallback(data)
+		{
+			idcliente = data.idcliente[0];
+			return idcliente;
+		}
+		
+	$.getJSON( url,{term:data}) 
+		  .done(myCallback(data));
+		
+		return idcliente;	
+		
+	}

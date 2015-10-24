@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd" version="3.2" folio="2633" fecha="2015-09-14T16:34:22" sello="Uh0Khb2KlrbWhbfkmzOhpAnZC0TLWLPZCjYwZ+Wx+hatb5hMPOqFMGC5u2vrdEeATyFECI/wtLR2/SHKuCo/pYBETpiLjOD3/avN8CZVzOPp/shWb6AjtZUQiapJT4XeFn/FJqVGLyivK+W+FOpxOJb+nuRMZAa97l2dk69Dy4k=" tipoDeComprobante="ingreso" formaDePago="PAGO EN UNA SOLA EXHIBICION" noCertificado="00001000000203240888" certificado="MIIEjzCCA3egAwIBAgIUMDAwMDEwMDAwMDAyMDMyNDA4ODgwDQYJKoZIhvcNAQEFBQAwggGVMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSEwHwYJKoZIhvcNAQkBFhJhc2lzbmV0QHNhdC5nb2IubXgxJjAkBgNVBAkMHUF2LiBIaWRhbGdvIDc3LCBDb2wuIEd1ZXJyZXJvMQ4wDAYDVQQRDAUwNjMwMDELMAkGA1UEBhMCTVgxGTAXBgNVBAgMEERpc3RyaXRvIEZlZGVyYWwxFDASBgNVBAcMC0N1YXVodMOpbW9jMRUwEwYDVQQtEwxTQVQ5NzA3MDFOTjMxPjA8BgkqhkiG9w0BCQIML1Jlc3BvbnNhYmxlOiBDZWNpbGlhIEd1aWxsZXJtaW5hIEdhcmPDrWEgR3VlcnJhMB4XDTEzMDMxMzIyMjI1N1oXDTE3MDMxMzIyMjI1N1owgdAxIzAhBgNVBAMTGlNURUxMVVMgTUVERVZJQ0VTIFNBIERFIENWMSMwIQYDVQQpExpTVEVMTFVTIE1FREVWSUNFUyBTQSBERSBDVjEjMCEGA1UEChMaU1RFTExVUyBNRURFVklDRVMgU0EgREUgQ1YxJTAjBgNVBC0THFNNRTEwMDEyNUdSNCAvIENPU0g3NTA4MTc3QTcxHjAcBgNVBAUTFSAvIENPU0g3NTA4MTdIREZCTEMwNDEYMBYGA1UECxMPQUwgTk9SVEUgREVMIERGMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDyxOHyeFdK67TUvnRoX3EcgRSOr/V/FKwKaDMst4CpR2mM5QH1voGhxLWeHGT9j5Q+Krc57rYDwTZlivpWjrpp+aT6A4qJ4crJQzXq9OW6yo+Tptwq6BchahaAhgNXfoNZovapDb2eM5Ky6fUOGL7VXdtIuG5ZRCYZk9QnpCK2awIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQUFAAOCAQEAVdBAULpmhajRuRs1yxPXNjUIFNkLaH8UP+TSKzVtv7WskO4ekNRTgbieCJLn480uN7HpxC8iSp4CbcGnHmNbNm0lGfMpGfx81OOtmEE9/B7brhICMAHAWhmOLQkHmOXfiq2SZ9Sdybid61nHXz+2hJPazHFSC10bNp96/GgAQUWq2WJ7AD0ZSbgTUJTJapQ+4uMtu3VxqJ0fxlAqO/kYZC8/j8hL6z/A5xSqfCRri4FE4Kz57zkkIzC0Hoo0M6RoukjT1zn5crdVPKA9LF9aDSIK6Xnfs5HtgLJVOk7jSvRNPLS5kCeCoSfSvGd0HcP6LNxUXNHGd8eTS+0LZ0E2TA==" subTotal="60100.00" descuento="0.00" TipoCambio="1.0000" Moneda="Peso" total="69716.00" metodoDePago="TRANSFERENCIAS" LugarExpedicion="MEXICO,Distrito Federal" NumCtaPago="2404">
+  <cfdi:Emisor rfc="SME100125GR4" nombre="STELLUS MEDEVICES S.A. DE C.V.">
+    <cfdi:DomicilioFiscal calle="EXTREMADURA" noExterior="10 PISO 2" noInterior="OFICINA 1" colonia="INSURGENTES MIXCOAC" localidad="MEXICO" municipio="BENITO JUAREZ" estado="Distrito Federal" pais="Mexico" codigoPostal="02930"/>
+    <cfdi:ExpedidoEn calle="MORAS" noExterior="736" noInterior="0" colonia="DEL VALLE" localidad="MEXICO" estado="Distrito Federal" pais="Mexico" codigoPostal="3100"/>
+    <cfdi:RegimenFiscal Regimen="Regimen General de las Personas Morales"/>
+  </cfdi:Emisor>
+  <cfdi:Receptor rfc="OHA051017KE7" nombre="Operadora de Hospitales Angeles S.A. de C.V.">
+    <cfdi:Domicilio calle="Camino a Santa Teresa" noExterior="1055" noInterior="piso 14" colonia="Heroes de Padierna" localidad="México, D.F" municipio="Magdalena Contreras" estado="Distrito Federal" pais="Mexico" codigoPostal="10700"/>
+  </cfdi:Receptor>
+  <cfdi:Conceptos>
+    <cfdi:Concepto cantidad="5.00" unidad="Pieza" noIdentificacion="RP1105" descripcion="Hemostatico Absorbible Responder 5g" valorUnitario="7700.00" importe="38500.00"/>
+    <cfdi:Concepto cantidad="4.00" unidad="Pieza" noIdentificacion="PF644" descripcion="Esponja Hemostatica SEALFOAM" valorUnitario="5400.00" importe="21600.00"/>
+  </cfdi:Conceptos>
+  <cfdi:Impuestos totalImpuestosTrasladados="9616.00">
+    <cfdi:Traslados>
+      <cfdi:Traslado impuesto="IVA" tasa="16.00" importe="9616.00"/>
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" version="1.0" UUID="a2e08802-78ca-41a8-ae43-16f7a2b6e5d6" FechaTimbrado="2015-09-14T16:34:25" selloCFD="Uh0Khb2KlrbWhbfkmzOhpAnZC0TLWLPZCjYwZ+Wx+hatb5hMPOqFMGC5u2vrdEeATyFECI/wtLR2/SHKuCo/pYBETpiLjOD3/avN8CZVzOPp/shWb6AjtZUQiapJT4XeFn/FJqVGLyivK+W+FOpxOJb+nuRMZAa97l2dk69Dy4k=" noCertificadoSAT="00001000000301251152" selloSAT="K78UlPuI3jtMKJplzW1KW36vY9MtmJh0s23pLEH+bX+w9pWbof/NVIWMdv59ajFzusEMECu5Sr1sndICivO6tT0stAMmvlXCJDssC+VyPy0gd8giR9umjpc5CLT7w+QdL1ylfgd4eV5CfZt06fussQxucmRX/VMamfD9ifH4qME=" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd"/>
+  </cfdi:Complemento>
+</cfdi:Comprobante>
