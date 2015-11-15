@@ -4,6 +4,23 @@
  * @author jmv
  */
 
+function validafact(clave){
+//esta funcion regresa el mensaje de validacion adecuado estado de la forma de facturas
+	switch(clave) {
+    case "-1":
+        mensaje = "LA FACTURA YA HA SIDO REGISTRADA PREVIAMENTE. POR FAVOR VERIFIQUE."
+        break;
+    case "-2":
+    	mensaje = "EL CLIENTE NO HA SIDO DADO DE ALTA. PROCEDA A HACERLO ANTES DE SUBIR LA FACTURA."
+        break;
+    default:
+    	mensaje = "ERROR NO DEFINIDO EN REVISION DE FACTURA."
+    	break;
+	} 
+	
+	document.getElementById('footer').innerHTML = mensaje;
+}
+
 function validaforma(){
     $.validator.addMethod("requerido", $.validator.methods.required,"Llenar este campo");
     $.validator.addMethod("numerico", $.validator.methods.number,"el campo deber ser num&eacuterico");           

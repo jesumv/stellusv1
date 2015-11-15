@@ -1,4 +1,134 @@
 <?php
+
+
+//funciones auxiliares
+
+require '../include/funciones.php';
+
+	function __autoload($class){
+      		require('../include/' . strtolower($class) . '.class.php');
+	}		
+//funcion para ver si la factura ya existe
+function hayfactura($factura){
+	$funcbase = new dbutils;
+/*** conexion a bd ***/
+    $mysqli = $funcbase->conecta();
+    if (is_object($mysqli)) {
+		 $req = "SELECT idfacturas FROM facturas2 WHERE no_factura = '" 
+    	.$factura."'"; 
+		$query=mysqli_query($mysqli, $req);
+		/* determinar el n�mero de filas del resultado */	
+		$filas = $query->num_rows;
+ 	
+    } else {
+        die ("<h1>'No se establecio la conexion a bd para revisar facturas'</h1>");
+    }	
+
+ /* liberar la serie de resultados */
+ /* cerrar la conexion */
+	 mysqli_close($mysqli);
+	return $filas;
+}
+
+function haycliente($nomcliente){
+	$funcbase = new dbutils;
+/*** conexion a bd ***/
+    $mysqli = $funcbase->conecta();
+    if (is_object($mysqli)) {
+		 $req = "SELECT idclientes FROM clientes WHERE rfc= '" 
+    	.$nomcliente."'"; 
+		$query=mysqli_query($mysqli, $req);
+		/* determinar el n�mero de filas del resultado */	
+		$filas = $query->num_rows;
+ 	
+    } else {
+        die ("<h1>'No se establecio la conexion a bd para revisar clientes'</h1>");
+    }	
+
+ /* liberar la serie de resultados */
+ /* cerrar la conexion */
+	 mysqli_close($mysqli);
+	return $filas;
+	
+}
+
+function hayproducto($codigo){
+	$funcbase = new dbutils;
+/*** conexion a bd ***/
+    $mysqli = $funcbase->conecta();
+    if (is_object($mysqli)) {
+		 $req = "SELECT rfc FROM productos WHERE  = '" 
+    	.$nomcliente."'"; 
+		$query=mysqli_query($mysqli, $req);
+		/* determinar el n�mero de filas del resultado */	
+		$filas = $query->num_rows;
+ 	
+    } else {
+        die ("<h1>'No se establecio la conexion a bd para revisar clientes'</h1>");
+    }	
+
+ /* liberar la serie de resultados */
+ /* cerrar la conexion */
+	 mysqli_close($mysqli);
+	return $filas;
+	
+}
+
+function validafactura($factura,$cliente){			
+//validaciones previas
+//la factura no existe
+	$validacion= 0;
+	if (hayfactura($factura)!=0) $validacion=-1;
+//el cliente existe
+	if (haycliente($cliente)==0) $validacion=-2;
+	return $validacion;	
+//el producto existe
+	
+}
+
+//funcion para obtener el numero de producto
+function obtenidprod($clave){
+	$funcbase = new dbutils;
+/*** conexion a bd ***/
+    $mysqli = $funcbase->conecta();
+    if (is_object($mysqli)) {
+		 $req = "SELECT idproductos  FROM productos WHERE codigo = '" 
+    	.$clave."'"; 
+   		$idproducto = $mysqli->query($req)->fetch_object()->idproductos;
+    } else {
+        die ("<h1>'No se establecio la conexion a bd'</h1>");
+    }
+	
+	
+ /* liberar la serie de resultados */
+ /* cerrar la conexion */
+	 mysqli_close($mysqli);
+		
+	return $idproducto;
+}
+
+//funcion para obtener el idcliente con los datos de la factura
+function obtenidcliente($rfc){
+	$funcbase = new dbutils;
+/*** conexion a bd ***/
+    $mysqli = $funcbase->conecta();
+    if (is_object($mysqli)) {
+		$req = "SELECT idclientes  FROM clientes WHERE rfc = '" 
+    	.$rfc."'"; 
+    
+   		$idcliente = $mysqli->query($req)->fetch_object()->idclientes;
+    } else {
+        die ("<h1>'No se establecio la conexion a bd'</h1>");
+    }
+		
+ /* liberar la serie de resultados */
+ /* cerrar la conexion */
+	 mysqli_close($mysqli);
+		
+	return $idcliente;
+	
+}
+
 if(isset($_FILES["FileInput"]) && $_FILES["FileInput"]["error"]== UPLOAD_ERR_OK)
 {
 	############ Edit settings ##############
@@ -44,51 +174,68 @@ if(isset($_FILES["FileInput"]) && $_FILES["FileInput"]["error"]== UPLOAD_ERR_OK)
 			$ns = $factura->getNamespaces(true);
 			$factura->registerXPathNamespace('c', $ns['cfdi']);
 			foreach ($factura->xpath('//cfdi:Comprobante//cfdi:Receptor') as $Receptor){
-				$nombre = $Receptor['nombre'];	
+				$nombre = $Receptor['nombre'];
+				$rfc =	$Receptor['rfc'];
 			}
-	//se inicializa el array de resultados
-	
+			
+	//se inicializa el array de resultados	
 		$resul = array('razon' => $nombre); 
+		
+	//los demas datos de la factura
 			foreach ($factura->xpath('//cfdi:Comprobante') as $fact){  
 				$factura = $fact['folio'];
-		$resul['nofact'] = $factura;
-				$fecha = $fact['fecha'];
-		$resul['fecha'] = $fecha;
-				$subtotal = $fact['subTotal'];	
-		$resul['subt'] = $subtotal;	
-			$total = $fact['total'];	
-		$resul['total'] = $total;	
-		 		
+				$resul['nofact'] = $factura;
+						$fecha = $fact['fecha'];
+				$resul['fecha'] = $fecha;
+						$subtotal = $fact['subTotal'];	
+				$resul['subt'] = $subtotal;	
+					$total = $fact['total'];	
+				$resul['total'] = $total;		 		
 			}
-								
+//revision del resultado de validaciones.
+				$resultadofin = validafactura($factura,$rfc);
+				if($resultadofin!=0){($resul['valida']= $resultadofin);}else{
+				$resul['valida']= 0;
+//se obtiene el numero de cliente	
+  				$resul['idcliente'] = obtenidcliente($rfc);			
+//los datos de los articulos								
 			 $numerador = 0; 
 			foreach ($factura->xpath('//cfdi:Comprobante//cfdi:Conceptos//cfdi:Concepto') as $concepto){ 
 				${'cant'. $numerador} =  $concepto['cantidad']; 
-				${'clave'. $numerador} =  $concepto['noIdentificacion'];
+				${'clave'.$numerador} =  $concepto['noIdentificacion'];
+				${'idproducto'.$numerador} =  obtenidprod(${'clave'.$numerador});
 				${'desc'.$numerador} = $concepto['descripcion'];
 				${'punit'. $numerador} = $concepto['valorUnitario'];
 	   			${'impor'. $numerador} = $concepto['importe'];
 				$resul['cant'. $numerador] = ${'cant'.$numerador};
 				$resul['clave'. $numerador] = ${'clave'.$numerador};
+				$resul['idprod'. $numerador] = ${'idproducto'.$numerador};
 				$resul['desc'. $numerador] = ${'desc'.$numerador};
 				$resul['punit'. $numerador] = ${'punit'.$numerador};
 				$resul['impor'. $numerador] = ${'impor'.$numerador};
 				$numerador++;		 	 		
 			} 
 				$resul['arts'] = $numerador;
-			foreach ($factura->xpath('//cfdi:Comprobante//cfdi:Impuestos') as $impuesto){  
-			$imp =  $impuesto['totalImpuestosTrasladados'];
-			$resul['imp'] = $imp;			 	 		
+				foreach ($factura->xpath('//cfdi:Comprobante//cfdi:Impuestos') as $impuesto){  
+				$imp =  $impuesto['totalImpuestosTrasladados'];
+				$resul['imp'] = $imp;			 	 		
+			}
+			 
+
+    
+	/* borrar el archivo trabajado */
+
+			if(!unlink($UploadDirectory.$NewFileName))
+				{$resul['escrit']=-1;}else{
+				$resul['escrit']=0;
+					}
+				
 		}
-		 $results[] = array_map('utf8_encode',$resul);	
-		echo json_encode($results); 
-		
+			$results = $resul;
+			echo json_encode($results);	
+	
 	}else{
 		die('Error al cargar archivo!');
-	}
-	
-}
-else
-{
-	die('Something wrong with upload! Is "upload_max_filesize" set correctly?');
+			}
+				
 }

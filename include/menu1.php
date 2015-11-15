@@ -5,17 +5,17 @@
                 <li class="currentsub"><a class="fly" >Consultas</a>
                 	<ul class="sub1">
                 		<li ><a href="inventarios.php">Inventarios</a></li>
-                		<li ><a href="consfactura.php">Facturación</a></li>
+                		<li ><a href="consfactura.php">FacturaciÃ³n</a></li>
                 		<li ><a href="consblanco.php">Rem. en blanco</a></li>
                 		<li ><a href="constodas.php">Remisiones</a></li>
                 	</ul>
                   </li>
-                  <li><a>Almacén</a>
+                  <li><a>AlmacÃ©n</a>
                     	<ul class="sub1">
 	                        <li><a href="entradas.php">Entradas</a></li>
 	                        <li class="currentsub"><a class="fly">Salidas</a>
 	                            <ul class="fly2">
-	                            	<li><a href="salidafact.php">Facturación</a></li>
+	                            	<li><a href="salidafact.php">FacturaciÃ³n</a></li>
 	                            	<li ><a href="remisionesvend.php">Rem Agentes</a></li>
 	                                <li class="currentfly"><a href="remisiones.php">Rem Clientes</a></li>
 	                                <li><a href="remblanco.php">Rem En Blanco</a></li>
@@ -31,7 +31,7 @@
                 		</ul>
                 	</li>
                     	
-                    <li><a><b>Administración</b></a>
+                    <li><a><b>AdministraciÃ³n</b></a>
                         <ul class="sub1">
                             <li><a href="clientes.php">Clientes</a></li>
                             <li><a href="proveedores.php">Proveedores</a></li>

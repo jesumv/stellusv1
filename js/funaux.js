@@ -442,17 +442,4 @@ function quitadec(nStr){
 	return ultima;
 }
 
-function getResponse(url,data) {
-		var idcliente = null;
-		function myCallback(data)
-		{
-			idcliente = data.idcliente[0];
-			return idcliente;
-		}
-		
-	$.getJSON( url,{term:data}) 
-		  .done(myCallback(data));
-		
-		return idcliente;	
-		
-	}
+
