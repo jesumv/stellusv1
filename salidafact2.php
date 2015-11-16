@@ -154,15 +154,15 @@ function afterSuccess($results)
 			$('#idfecha').val(fecha);
 			$('#fact').val(fact);
 			$('#idfact').val(fact);
-			$('#arts').val(arts);
+			$('#narts').val(arts);
 			
 			//datos adicionales
 				//el numero de cliente	
 			$('#idclientes').val(idcliente);
 				
 			anadetabla(subt,iva, tot);
-			var i= 0;
-			do{
+
+			for(i = 0; i< arts; i++){
 				var cod =  $results['clave'.concat(i)][0];
 				var descrip = $results['desc'.concat(i)][0];
 				var cantid = $results['cant'.concat(i)][0];
@@ -170,8 +170,7 @@ function afterSuccess($results)
 				var impor = $results['impor'.concat(i)][0];
 				var idprod = $results['idprod'.concat(i)][0];
 				anadefila(i,cod,idprod,descrip,cantid,punit,impor)
-				i++;
-			}while(i < arts);
+			}
 			
 			$('#sucursal').focus();
 			
@@ -272,16 +271,16 @@ function bytesToSize(bytes) {
 function anadetabla(subt,iva,tot){
 	//encabezado
 	var tabla = document.getElementById("arts");
-    var tr = tabla.appendChild(document.createElement('tr'));
-    var th = tr.appendChild(document.createElement('th'));
-    th.innerHTML = "CODIGO";
-    var th2 = tr.appendChild(document.createElement('th'));
+    var tr1 = tabla.appendChild(document.createElement('tr'));
+    var th1 = tr1.appendChild(document.createElement('th'));
+    th1.innerHTML = "CODIGO";
+    var th2 = tr1.appendChild(document.createElement('th'));
     th2.innerHTML = "DESCRIPCION";
-     var th3 = tr.appendChild(document.createElement('th'));
+     var th3 = tr1.appendChild(document.createElement('th'));
     th3.innerHTML = "CANTIDAD";
-     var th4 = tr.appendChild(document.createElement('th'));
+     var th4 = tr1.appendChild(document.createElement('th'));
     th4.innerHTML = "PRECIO UNITARIO";
-     var th5= tr.appendChild(document.createElement('th'));
+     var th5= tr1.appendChild(document.createElement('th'));
     th5.innerHTML = "IMPORTE";
     
     //pie de tabla
@@ -434,7 +433,7 @@ function anadefila(num,codigo,idprod,descrip,cantid,punit,impor) {
 			         </tr>
 		            	<td class="field"><input type="text" id="fact" name ="fact" disabled /></td>
 		            	<input type="hidden" id="idfact" name="idfact"/>
-		            	<input type="hidden" id="arts" name="arts"/>
+		            	<input type="hidden" id="narts" name="narts"/>
 		            	<td class="field"><input type="text" id="fecha"  name="fecha" disabled/></td>
 		            	<input type="hidden" id="idfecha" name="idfecha"/>
 		                <td class="field"><input type="text" size="50" id="razon"  name="razon" disabled /></td>
