@@ -156,13 +156,14 @@ function afterSuccess($results)
 			$('#idfact').val(fact);
 			$('#narts').val(arts);
 			
-			//datos adicionales
-				//el numero de cliente	
+		//datos adicionales
+			//el numero de cliente	
 			$('#idclientes').val(idcliente);
-				
+//construccion de encabezados				
 			anadetabla(subt,iva, tot);
-
-			for(i = 0; i< arts; i++){
+//construccion de renglones			
+			i=0;
+			do{
 				var cod =  $results['clave'.concat(i)][0];
 				var descrip = $results['desc'.concat(i)][0];
 				var cantid = $results['cant'.concat(i)][0];
@@ -170,7 +171,9 @@ function afterSuccess($results)
 				var impor = $results['impor'.concat(i)][0];
 				var idprod = $results['idprod'.concat(i)][0];
 				anadefila(i,cod,idprod,descrip,cantid,punit,impor)
-			}
+				i++;
+			}while(i < arts);
+			
 			
 			$('#sucursal').focus();
 			
