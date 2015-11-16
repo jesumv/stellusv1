@@ -7,10 +7,10 @@
 function validafact(clave){
 //esta funcion regresa el mensaje de validacion adecuado estado de la forma de facturas
 	switch(clave) {
-    case "-1":
+    case -1 :
         mensaje = "LA FACTURA YA HA SIDO REGISTRADA PREVIAMENTE. POR FAVOR VERIFIQUE."
         break;
-    case "-2":
+    case -2 :
     	mensaje = "EL CLIENTE NO HA SIDO DADO DE ALTA. PROCEDA A HACERLO ANTES DE SUBIR LA FACTURA."
         break;
     default:

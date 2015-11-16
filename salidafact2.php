@@ -20,7 +20,7 @@ require '/include/funciones.php';
 		//insercion en la tabla de inventarios	    	
 	   		//obtencion de valores
 	   		//datos de la factura
-	   		$arts = $_POST ['arts'];
+	   		$arts = $_POST ['narts'];
 	   		$ref= $_POST ['idfact'];
 			$fecha =strtoupper($_POST ['idfecha']) ;
 			$oc= $_POST ['oc'];
@@ -36,13 +36,14 @@ require '/include/funciones.php';
 			$usu = $_SESSION['login_user'];
 			$otros = $_POST ['idrazon']; 	
 			$sucursal =$_POST ['sucursal'];
+			$invact = 99;
 			
 //INSERCION EN TABLA ARTICULOS
 			//datos de los articulos.ciclo por cada articulo
 			
 			$table = 'artfactura';
 		
-			for ($i = 0; $i <=$arts-1 ; $i++) {
+			for ($i=0; $i<$arts; $i++) {
 	    		$idproductos= $_POST ['tdid'.$i];
 				$punit= $_POST ['tdi4'.$i];
 				$cantidad = $_POST ['tdi3'.$i];
@@ -74,7 +75,7 @@ require '/include/funciones.php';
 		    oprimio($mysqli);
 			/* cerrar la conexion */
 	    	mysqli_close($mysqli);  
-			header('Location: consfactura.php');
+			//header('Location: consfactura.php');
 		}
 		
 	} else {
