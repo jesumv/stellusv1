@@ -140,8 +140,29 @@ function obtenidcliente($rfc){
 	 mysqli_close($mysqli);
 		
 	return $idcliente;
-	
 }
+function haysuc($idcliente){
+//funcion para determinar si hay sucursales
+	$funcbase = new dbutils;
+/*** conexion a bd ***/
+    $mysqli = $funcbase->conecta();
+    if (is_object($mysqli)) {
+		 $req = "SELECT idsuccliente FROM succliente WHERE cliente =" 
+    	.$idcliente; 
+		$query=mysqli_query($mysqli, $req);
+		/* determinar el n�mero de filas del resultado */	
+		$filas = $query->num_rows;
+ 	
+    } else {
+        die ("<h1>'No se establecio la conexion a bd para revisar clientes'</h1>");
+    }	
+
+ /* liberar la serie de resultados */
+ /* cerrar la conexion */
+	 mysqli_close($mysqli);
+	return $filas;
+}
+
 
 if(isset($_FILES["FileInput"]) && $_FILES["FileInput"]["error"]== UPLOAD_ERR_OK)
 {
@@ -223,7 +244,10 @@ if(isset($_FILES["FileInput"]) && $_FILES["FileInput"]["error"]== UPLOAD_ERR_OK)
 				}else{
 				$resul['valida']= 0;
 //se obtiene el numero de cliente	
-  				$resul['idcliente'] = obtenidcliente($rfc);			
+  				$resul['idcliente'] = obtenidcliente($rfc);	
+				$nocliente = $resul['idcliente'] ;
+//se determina si hay sucursales
+				$resul['haysuc'] = haysuc($nocliente);			
 //los datos de los articulos
 				$numerador = 0;								
 			foreach ($factura->xpath('//cfdi:Comprobante//cfdi:Conceptos//cfdi:Concepto') as $concepto){ 

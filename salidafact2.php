@@ -16,8 +16,7 @@ require '/include/funciones.php';
 	/*** checa login***/
 	        $funcbase->checalogin($mysqli);
 /** se oprimio el boton **/
-		function oprimio($mysqli){
-		//insercion en la tabla de inventarios	    	
+		function oprimio($mysqli){	    	
 	   		//obtencion de valores
 	   		//datos de la factura
 	   		$arts = $_POST ['narts'];
@@ -37,12 +36,12 @@ require '/include/funciones.php';
 			$otros = $_POST ['idrazon']; 	
 			$sucursal =$_POST ['sucursal'];
 			$invact = 99;
-			
+//insercion en la tabla de inventarios			
 //INSERCION EN TABLA ARTICULOS
 			//datos de los articulos.ciclo por cada articulo
 			
 			$table = 'artfactura';
-		
+	//ciclo por tantos articulos como haya en la factura		
 			for ($i=0; $i<$arts; $i++) {
 	    		$idproductos= $_POST ['tdid'.$i];
 				$punit= $_POST ['tdi4'.$i];
@@ -54,10 +53,7 @@ require '/include/funciones.php';
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla facturas ".mysqli_error($mysqli));	
 			} 
-			
-	//ciclo por tantos articulos como haya en la factura
-	   		   
-
+				   		   
 	    	//INSERCION EN TABLA FACTURAS
 			$table = 'facturas2';
 	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,remision,subtotal,iva,total,agente,idsuccliente,
@@ -147,7 +143,7 @@ function afterSuccess($results)
 			var tot = $results['total'][0];
 			var arts = $results['arts'];
 			var idcliente= $results['idcliente'][0];
-			
+			var haysuc = $results['haysuc'];
 			//escribir los datos de la factura
 			$('#razon').val(razon);
 			$('#idrazon').val(razon);
@@ -179,6 +175,8 @@ function afterSuccess($results)
 			$('#sucursal').focus();
 			
 		/*seccion de autocomplete jqueryui */
+		if(haysuc >0){
+//si existen sucursales, se habilita el autocomplete
 			$('#sucursal').autocomplete({
 					autoFocus: true,
 		            source: function(request, response) {
@@ -191,6 +189,11 @@ function afterSuccess($results)
 		            	$('#agente').focus();
 		            }			                
 		        });
+		    }else{
+//si no hay sucursales, se deshabilita
+				document.getElementById("sucursal").disabled = true;
+				$("#agente").focus();	    	
+		    }    
 		        
 		 $('#agente').autocomplete({
 					autoFocus: true,
