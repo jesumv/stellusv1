@@ -30,13 +30,13 @@ function hayfactura($factura){
 	return $filas;
 }
 
-function haycliente($nomcliente){
+function haycliente($rfc){
 	$funcbase = new dbutils;
 /*** conexion a bd ***/
     $mysqli = $funcbase->conecta();
     if (is_object($mysqli)) {
 		 $req = "SELECT idclientes FROM clientes WHERE rfc= '" 
-    	.$nomcliente."'"; 
+    	.$rfc."'"; 
 		$query=mysqli_query($mysqli, $req);
 		/* determinar el n�mero de filas del resultado */	
 		$filas = $query->num_rows;
@@ -57,8 +57,8 @@ function hayproducto($codigo){
 /*** conexion a bd ***/
     $mysqli = $funcbase->conecta();
     if (is_object($mysqli)) {
-		 $req = "SELECT rfc FROM productos WHERE  = '" 
-    	.$nomcliente."'"; 
+		 $req = "SELECT codigo FROM productos WHERE codigo = '" 
+    	.$codigo."'"; 
 		$query=mysqli_query($mysqli, $req);
 		/* determinar el n�mero de filas del resultado */	
 		$filas = $query->num_rows;
@@ -74,15 +74,29 @@ function hayproducto($codigo){
 	
 }
 
-function validafactura($factura,$cliente){			
+function validaemisor($emisor){
+//se valida que el emisor sea stellus
+	if($emisor!="SME100125GR4"){return -3;}else{return 0;}
+}
+
+function validafactura($emisor,$factura,$cliente){			
 //validaciones previas
-//la factura no existe
+//el emisor es stellus
 	$validacion= 0;
-	if (hayfactura($factura)!=0) $validacion=-1;
+	if(validaemisor($emisor)!=0){
+		 $validacion=-3;
+		 return $validacion;	
+		 }
+//la factura no existe
+	if (hayfactura($factura)!=0) {
+		 $validacion=-1;
+		 return $validacion;	
+		 }
 //el cliente existe
-	if (haycliente($cliente)==0) $validacion=-2;
-	return $validacion;	
-//el producto existe
+	if (haycliente($cliente)==0){
+		 $validacion=-2;
+		 return $validacion;	
+		 }
 	
 }
 
@@ -178,8 +192,13 @@ if(isset($_FILES["FileInput"]) && $_FILES["FileInput"]["error"]== UPLOAD_ERR_OK)
 				$rfc =	$Receptor['rfc'];
 			}
 			
+			foreach ($factura->xpath('//cfdi:Comprobante//cfdi:Emisor') as $Emisor){
+				$emisor =	$Emisor['rfc'];
+			}
+			
 	//se inicializa el array de resultados	
 		$resul = array('razon' => $nombre); 
+		$resul['emisor'] = $emisor;
 		
 	//los demas datos de la factura
 			foreach ($factura->xpath('//cfdi:Comprobante') as $fact){  
@@ -193,27 +212,38 @@ if(isset($_FILES["FileInput"]) && $_FILES["FileInput"]["error"]== UPLOAD_ERR_OK)
 				$resul['total'] = $total;		 		
 			}
 //revision del resultado de validaciones.
-				$resultadofin = validafactura($factura,$rfc);
-				if($resultadofin!=0){($resul['valida']= $resultadofin);}else{
+				$resultadofin = validafactura($emisor,$factura,$rfc);
+//si la validacion no es exitosa, no se sigue adelante.
+				if($resultadofin!=0){($resul['valida']= $resultadofin);
+					/* borrar el archivo trabajado */
+					if(!unlink($UploadDirectory.$NewFileName))
+						{$resul['escrit']=-1;}else{
+						$resul['escrit']=0;
+					}
+				}else{
 				$resul['valida']= 0;
 //se obtiene el numero de cliente	
   				$resul['idcliente'] = obtenidcliente($rfc);			
-//los datos de los articulos								
-			 $numerador = 0; 
+//los datos de los articulos
+				$numerador = 0;								
 			foreach ($factura->xpath('//cfdi:Comprobante//cfdi:Conceptos//cfdi:Concepto') as $concepto){ 
 				${'cant'. $numerador} =  $concepto['cantidad']; 
 				${'clave'.$numerador} =  $concepto['noIdentificacion'];
-				${'idproducto'.$numerador} =  obtenidprod(${'clave'.$numerador});
-				${'desc'.$numerador} = $concepto['descripcion'];
-				${'punit'. $numerador} = $concepto['valorUnitario'];
-	   			${'impor'. $numerador} = $concepto['importe'];
-				$resul['cant'. $numerador] = ${'cant'.$numerador};
-				$resul['clave'. $numerador] = ${'clave'.$numerador};
-				$resul['idprod'. $numerador] = ${'idproducto'.$numerador};
-				$resul['desc'. $numerador] = ${'desc'.$numerador};
-				$resul['punit'. $numerador] = ${'punit'.$numerador};
-				$resul['impor'. $numerador] = ${'impor'.$numerador};
-				$numerador++;		 	 		
+//se valida la existencia de cada producto
+				$valprod = hayproducto(${'clave'.$numerador});
+				if($valprod==0){$resul['valida']= -4;}else{
+					${'idproducto'.$numerador} =  obtenidprod(${'clave'.$numerador});
+					${'desc'.$numerador} = $concepto['descripcion'];
+					${'punit'. $numerador} = $concepto['valorUnitario'];
+		   			${'impor'. $numerador} = $concepto['importe'];
+					$resul['cant'. $numerador] = ${'cant'.$numerador};
+					$resul['clave'. $numerador] = ${'clave'.$numerador};
+					$resul['idprod'. $numerador] = ${'idproducto'.$numerador};
+					$resul['desc'. $numerador] = ${'desc'.$numerador};
+					$resul['punit'. $numerador] = ${'punit'.$numerador};
+					$resul['impor'. $numerador] = ${'impor'.$numerador};
+					$numerador++;
+				}		 	 		
 			} 
 				$resul['arts'] = $numerador;
 				foreach ($factura->xpath('//cfdi:Comprobante//cfdi:Impuestos') as $impuesto){  
@@ -224,7 +254,6 @@ if(isset($_FILES["FileInput"]) && $_FILES["FileInput"]["error"]== UPLOAD_ERR_OK)
 
     
 	/* borrar el archivo trabajado */
-
 			if(!unlink($UploadDirectory.$NewFileName))
 				{$resul['escrit']=-1;}else{
 				$resul['escrit']=0;

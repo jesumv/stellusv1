@@ -13,6 +13,12 @@ function validafact(clave){
     case -2 :
     	mensaje = "EL CLIENTE NO HA SIDO DADO DE ALTA. PROCEDA A HACERLO ANTES DE SUBIR LA FACTURA."
         break;
+    case -3 :
+    	mensaje = "EL EMISOR DE LA FACTURA NO ES STELLUS. VERIFIQUE."
+        break;
+    case -4 :
+    	mensaje = "UNO DE LOS PRODUCTOS NO ESTA DADO DE ALTA. VERIFIQUE."
+        break;
     default:
     	mensaje = "ERROR NO DEFINIDO EN REVISION DE FACTURA."
     	break;
