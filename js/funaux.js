@@ -28,13 +28,13 @@ function mod(dividendo , divisor)
   return Math.round(modulo*100)/100; 
 } // Fin de funciOn mod
 
-// FunciÃƒÆ’Ã‚Â³n ObtenerParteEntDiv, regresa la parte entera de una divisiÃƒÆ’Ã‚Â³n
+// Funcion ObtenerParteEntDiv, regresa la parte entera de una divisiÃƒÆ’Ã‚Â³n
 function ObtenerParteEntDiv(dividendo , divisor) 
 { 
   resDiv = dividendo / divisor ;  
   parteEntDiv = Math.floor(resDiv); 
   return parteEntDiv; 
-} // Fin de funciÃƒÆ’Ã‚Â³n ObtenerParteEntDiv
+} // Fin de funcion ObtenerParteEntDiv
 
 // function fraction_part, regresa la parte Fraccionaria de una cantidad
 function fraction_part(dividendo , divisor) 
@@ -406,9 +406,9 @@ function nalmac2(cliente,almacen){
 /*y construye el numero de almacen*/
 	var longi= almacen.toString().length;
 	if(longi==1){
-		num = cliente + '0' + almacen;
+		num = cliente + '00' + almacen;
 	}else {
-		num = cliente + almacen; 
+		num = cliente +'0'+ almacen; 
 	}
 	return num;
 

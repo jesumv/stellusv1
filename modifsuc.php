@@ -36,7 +36,7 @@ global $num;
 				
 				//insercion en la tabla almacenes
 				
-				//Construción del numero de almacen
+				//Construciï¿½n del numero de almacen
 		
 					$almacen = nalmac($cliente,$almac);
 					
@@ -166,7 +166,7 @@ global $num;
 	 							$('#cliente').val( ui.item.label );
 	            				$('#numcte').val( ui.item.idclientes);	            				
 								idclientes = ui.item.idclientes;
-//obtener el numero de almacen más alto para ese cliente		        
+//obtener el numero de almacen mas alto para ese cliente		        
 			        $.getJSON('php/get_maxalmac.php', {cliente: idclientes }, function(data){
 	        			var sucmax = parseInt(data[0].no_max)+parseInt(1);
 //si es la primera sucursal, el valor devuelto es NaN, por lo que se modifica con codigo

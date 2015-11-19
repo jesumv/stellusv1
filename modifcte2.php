@@ -1,6 +1,6 @@
 <?php
 global $num;
-//Este script administra lo actualización a un cliente.
+//Este script administra lo actualizaciï¿½n a un cliente.
 //conectar
 /*** Autoload class files ***/ 
     function __autoload($class){
@@ -48,7 +48,7 @@ global $num;
 				    	
 					$otrabd = new otrasdbutils;
 					$cliente= $otrabd->ultcliente($mysqli);
-					$almacen = $cliente.'00';
+					$almacen = $cliente.'000';
 					$descrip = 'ALMACEN MATRIZ '.$corto;
 		
 				 $sqlCommand= "INSERT INTO almacenes (idclientes,no_almacen,descripcion,tipo_almacen,usu, status)

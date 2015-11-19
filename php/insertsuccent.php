@@ -17,8 +17,9 @@
                 $corto = $result[1];
 		//insercion en la tabla de sucursales    	
 			$usu = $_SESSION['login_user'];			
-		//construccción de numero de sucursal
-			$almac = $cliente.'00';
+		//construccciï¿½n de numero de sucursal
+		
+			$almac = $cliente.'000';
 			$suc = 0;
 			$table="succliente";
 	   		$sqlCommand= "INSERT INTO $table (cliente,no_suc, no_almacen,nom_sucursal,usu,status)

@@ -30,11 +30,10 @@ require '/include/funciones.php';
 			$agente =$_POST ['idrepresentantes']; 
 			//construye el numero adecuado de sucursal
 			$idclientes = $_POST ['idclientes'];	
-			$nosuc = decidesuc($idclientes,$_POST ['idsuccliente']);
+			$nosuc = decidesuc($idclientes,$_POST['idsuccliente']);
 			$observaciones = $_POST ['obser'];
 			$usu = $_SESSION['login_user'];
 			$otros = $_POST ['idrazon']; 	
-			$sucursal =$_POST ['sucursal'];
 			$invact = 99;
 //insercion en la tabla de inventarios			
 //INSERCION EN TABLA ARTICULOS

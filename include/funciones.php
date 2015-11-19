@@ -8,7 +8,7 @@
 			$no = $cliente.'00'.$noalmac;
 
 		}else{
-			$no = $cliente.'00'.$noalmac;
+			$no = $cliente.'0'.$noalmac;
 		}
 		return $no;
 	}
