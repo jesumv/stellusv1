@@ -24,14 +24,19 @@
 
 
 		$mysqli = new mysqli($mysql_hostname, $mysql_user, $mysql_password, $mysql_database);
-
 		if($mysqli->connect_errno > 0){
 		    die('No se establecio conexion a la base de datos [' . $mysqli->connect_error . ']');
 			return -1;
-		}else{ return $mysqli;}
+		}else{
+				if(!$mysqli->set_charset("utf8")) {
+    				die("Error cargando el conjunto de caracteres utf8: ". $mysqli->error);
+				}else{
+					return $mysqli;
+				}
 		
-	}
+			}
     
+	   }
         public function checalogin($mysqli){
          //***checa si el cliente esta registrado ***/
             session_start();

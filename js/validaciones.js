@@ -29,7 +29,7 @@ function validafact(clave){
 
 function validaforma(){
     $.validator.addMethod("requerido", $.validator.methods.required,"Llenar este campo");
-    $.validator.addMethod("numerico", $.validator.methods.number,"el campo deber ser num&eacuterico");           
+    $.validator.addMethod("numerico", $.validator.methods.number,"el campo deber ser numérico");           
     $.validator.addClassRules("requer", { requerido: true});
     $.validator.addClassRules("reqnum", { requerido: true, numerico:true});
     $.validator.addClassRules("numer", {numerico:true});
@@ -42,6 +42,32 @@ $("form").validate({
            var message = errors == 1
            ? 'Hay 1 campo err&oacuteneo. Se ha resaltado.'
            : 'Hay ' + errors + ' campos err&oacuteneos. Se han se&ntildealado a continuaci&oacuten:';
+           $("div.error span").html(message);
+           $("div.error").show();
+       } else {
+               $("div.error").hide();
+               }
+   }
+});
+	
+};
+
+function validafact2(){
+//esta funcion valida los campos de la forma de alta de la factura
+    $.validator.addMethod("requerido", $.validator.methods.required,"Llenar este campo");
+    $.validator.addMethod("numerico", $.validator.methods.number,"el campo deber ser numérico");           
+    $.validator.addClassRules("requer", { requerido: true});
+    $.validator.addClassRules("reqnum", { requerido: true, numerico:true});
+    $.validator.addClassRules("numer", {numerico:true});
+    
+$("#salidafact").validate({   
+    invalidHandler: function(event, validator) {
+       // 'this' refers to the form
+       var errors = validator.numberOfInvalids();
+       if (errors) {
+           var message = errors == 1
+           ? 'Hay 1 campo erróneo. Se ha resaltado.'
+           : 'Hay ' + errors + ' campos erróneos. Se han señalado a continuación:';
            $("div.error span").html(message);
            $("div.error").show();
        } else {

@@ -32,10 +32,10 @@ require '/include/funciones.php';
 			$idclientes = $_POST ['idclientes'];	
 			$nosuc = decidesuc($idclientes,$_POST['idsuccliente']);
 			$observaciones = $_POST ['obser'];
-			$usu = $_SESSION['login_user'];
-			$otros = $_POST ['idrazon']; 	
+			$usu = $_SESSION['login_user'];	
 			$invact = 99;
-//insercion en la tabla de inventarios			
+//insercion en la tabla de inventarios
+			
 //INSERCION EN TABLA ARTICULOS
 			//datos de los articulos.ciclo por cada articulo
 			
@@ -50,15 +50,15 @@ require '/include/funciones.php';
 				$sqlCommand= "INSERT INTO $table (idfactura,codigo,precio_unitario,cantidad,importe,idinventario)
 	    	VALUES ($ref,$idproductos,$punit,$cantidad,$impor,$invact)";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla facturas ".mysqli_error($mysqli));	
+	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla artfactura ".mysqli_error($mysqli));	
 			} 
 				   		   
 	    	//INSERCION EN TABLA FACTURAS
 			$table = 'facturas2';
 	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,remision,subtotal,iva,total,agente,idsuccliente,
-	   		idclientes,observaciones,usu,otros_clientes)
-	    	VALUES ($ref,'$fecha',$oc,$remision,$subtotal,$iva,$total,$agente,'$nosuc',$idclientes,'$observaciones',
-	    	'$usu','$otros')";
+	   		idclientes,observaciones,usu)
+	    	VALUES ($ref,'$fecha','$oc','$remision',$subtotal,$iva,$total,'$agente','$nosuc',$idclientes,'$observaciones',
+	    	'$usu')";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla facturas ".mysqli_error($mysqli)); 
 
@@ -122,27 +122,27 @@ require '/include/funciones.php';
 		
 
 //function after succesful file upload (when server response)
-function afterSuccess($results)
+function afterSuccess(results)
 {
 	$('#submit-btn').show(); //hide submit button
 	$('#loading-img').hide(); //hide submit button
 	$('#progressbox').delay( 1000 ).fadeOut(); //hide progress bar
 	document.getElementById("upload-wrapper").style.display = "none";
 //si la factura ya existe, la rutina acaba	
-	var valida = $results['valida']
+	var valida = results['valida']
 	if(valida != 0){validafact(valida)}else{			
 		//mostrar la forma de captura
 			document.getElementById("capauto").style.display = "block";
 		//traer los datos del archivo de la factura	
-			var fact = $results['nofact'][0];
-			var razon = $results['razon'][0];
-			var fecha =fechast($results['fecha'][0]);
-			var subt = $results['subt'][0];
-			var iva = $results['imp'][0];
-			var tot = $results['total'][0];
-			var arts = $results['arts'];
-			var idcliente= $results['idcliente'][0];
-			var haysuc = $results['haysuc'];
+			var fact = results['nofact'][0];
+			var razon = results['razon'][0];
+			var fecha =fechast(results['fecha'][0]);
+			var subt = results['subt'][0];
+			var iva = results['imp'][0];
+			var tot = results['total'][0];
+			var arts = results['arts'];
+			var idcliente= results['idcliente'];
+			var haysuc = results['haysuc'];
 			//escribir los datos de la factura
 			$('#razon').val(razon);
 			$('#idrazon').val(razon);
@@ -160,12 +160,12 @@ function afterSuccess($results)
 //construccion de renglones			
 			i=0;
 			do{
-				var cod =  $results['clave'.concat(i)][0];
-				var descrip = $results['desc'.concat(i)][0];
-				var cantid = $results['cant'.concat(i)][0];
-				var punit = $results['punit'.concat(i)][0];
-				var impor = $results['impor'.concat(i)][0];
-				var idprod = $results['idprod'.concat(i)][0];
+				var cod =  results['clave'.concat(i)][0];
+				var descrip = results['desc'.concat(i)][0];
+				var cantid = results['cant'.concat(i)][0];
+				var punit = results['punit'.concat(i)][0];
+				var impor = results['impor'.concat(i)][0];
+				var idprod = results['idprod'.concat(i)][0];
 				anadefila(i,cod,idprod,descrip,cantid,punit,impor)
 				i++;
 			}while(i < arts);
@@ -188,6 +188,10 @@ function afterSuccess($results)
 		            	$('#agente').focus();
 		            }			                
 		        });
+//se hace el campo obligatorio
+				$("#sucursal").addClass( "requer" );
+// se marca como obligatorio
+		$( "#tdsuc" ).append("<span class='req'>*</span>" );	
 		    }else{
 //si no hay sucursales, se deshabilita
 				document.getElementById("sucursal").disabled = true;
@@ -203,7 +207,12 @@ function afterSuccess($results)
 		            	$("#rem").focus();      						
 		            }  
 		        });
-		
+//funcion para verificar la existencia de remisiones y ordenes de compra
+		$("#oc").change(function(){
+			
+});
+//se valida la forma en validaciones.js
+validafact2();
 	} 		
 };
 
@@ -380,6 +389,11 @@ function anadefila(num,codigo,idprod,descrip,cantid,punit,impor) {
                 $('#tdi5'+ num).val(impor);
 }
 
+//funcion para revisar que no se hayan facturado antes ni la remision ni la orden de compra
+function checanuevas(rem,oc){
+	
+}
+
 });
 		
 
@@ -445,12 +459,12 @@ function anadefila(num,codigo,idprod,descrip,cantid,punit,impor) {
 		                <td class="field"><input type="text" size="50" id="razon"  name="razon" disabled /></td>
 		                <input type="hidden" id="idrazon" name="idrazon"/>
 		                <input type="hidden" id="idclientes" name="idclientes"/>
-		                <td class="field"><input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/></td>
+		                <td class="field" id="tdsuc"><input type="text" id="sucursal"  name="sucursal" class="ui-autocomplete-content"/></td>
 		                <input type="hidden" id="idsuccliente" name="idsuccliente"/>
 		                <td class="field"><input type="text" id="agente"  name="agente"/></td>
 		                <input type= "hidden" id="idrepresentantes" name ="idrepresentantes" />
 		                <td class="field"><input type="text"id="rem" name ="rem"  /></td>
-		                <td class="field"><input type="text"id="oc"name ="oc" class="requer" /></td>                               
+		                <td class="field"><input type="text"id="oc"name ="oc" /></td>                               
 		            </tr>    
 		 
 		            <tr>

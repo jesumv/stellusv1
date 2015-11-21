@@ -7,7 +7,8 @@ require '../include/funciones.php';
 
 	function __autoload($class){
       		require('../include/' . strtolower($class) . '.class.php');
-	}		
+	}
+			
 //funcion para ver si la factura ya existe
 function hayfactura($factura){
 	$funcbase = new dbutils;

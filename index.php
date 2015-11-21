@@ -42,7 +42,7 @@
                 $_SESSION['nivel']=$nivel;
                 $_SESSION['empresa']=$empre;
                 
-                //seleccion de hoja según empresa
+                //seleccion de hoja segï¿½n empresa
                     switch ($empre) {
                         case 0:
                             header("location: portal.php");
@@ -58,7 +58,7 @@
         //los datos de acceso no son correctos    
         else 
             {
-                $error="Su nombre de usuario o contraseña son invalidos";
+                $error="Su nombre de usuario o contraseï¿½a son invalidos";
             }
         }
         
@@ -91,7 +91,7 @@
             
                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                         <label>Usuario  :</label><input type="text" name="username" class="box"/>
-                        <label>Contraseña :</label><input type="password" name="password" class="box" />
+                        <label>ContraseÃ±a :</label><input type="password" name="password" class="box" />
                         <input type="submit" value=" Enviar "/><br />
                     </form>
                     
