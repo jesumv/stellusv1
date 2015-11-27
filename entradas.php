@@ -28,7 +28,7 @@ function oprimio($mysqli){
 //9999 es almacen central. 1 es tipo movimiento entrada, status 1 es en transito
 	$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad, referencia,
 	observaciones,usu,status,lote,fecha_cad)
-    VALUES ('$idproductos','$fecha',99999,1,$cantidad,'$referencia','$obser','$usu',0,'$lote','$fechacad')"
+    VALUES ('$idproductos','$fecha',999999,1,$cantidad,'$referencia','$obser','$usu',0,'$lote','$fechacad')"
         or die('insercion cancelada '.$table);	
     // Execute the query here now
     $query = mysqli_query($mysqli, $sqlCommand) or die (mysqli_error($mysqli)); 
@@ -47,7 +47,7 @@ if(isset($_POST['enviaentra'])){
     $resp1 = oprimio($mysqli);
 	if($resp1 == 0)	{
 		echo '<script type="text/javascript">
-             window.alert("Inventario Añadido correctamente!");
+             window.alert("Inventario AÃ±adido correctamente!");
 			 window.open("inventarios.php","_self");
     	</script>';
 	}
@@ -164,7 +164,7 @@ if(isset($_POST['enviaentra'])){
                     <td class="field"><input type="text" id="fechacad"  name="fechacad" class = 'requer'/>
                     <span class='req'>*</span></td>
                     <td><label for="cantidad">Cantidad: </label></td>
-                    <td class="field" colspan="2"><input type="number" id="cantidad"  name="cantidad" class = 'reqnum'/>
+                    <td class="field" colspan="2"><input type="text" id="cantidad"  name="cantidad" class = 'reqnum'/>
                     <span class='req'>*</span></td>                            
                 </tr>
             

@@ -139,7 +139,7 @@
 		
 		 
 <?php
-/* cerrar la conexión */
+/* cerrar la conexiï¿½n */
   mysqli_close($mysqli);
 ?>
 

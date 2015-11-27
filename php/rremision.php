@@ -16,9 +16,7 @@
         die ("<h1>'No se establecio la conexion a bd'</h1>");
     }
 		
-//directiva a la clase fpdf
-
-
+//directiva a la clase para rotacion de la marca de agua
 require_once('rotation.php');
 
 //VARIABLES GLOBALES----------------------------------------------------------------------------------------------------------
@@ -141,7 +139,6 @@ while ($fila = mysqli_fetch_row($datoart)) {
     }
 
 
-
 //COSNTRUCCION DEL REPORTE----------------------------------------------------------------------------------------------------------
 
 //definicion de constantes de formato--------------------------------------------------------------------------------
@@ -174,7 +171,7 @@ define('norem',$remision);
 
 //FUENTES------------------------------------------------------------------------------------------------------------
 //la ruta a las fuentes
-define('FPDF_FONTPATH','c:/xampp/htdocs/stellus1/php/font');
+define('FPDF_FONTPATH','c:/xampp/htdocs/stellusv1/php/font');
 
 //FUENTE normal
 define('grande',18);
@@ -217,17 +214,7 @@ define('xmini',7);
         
         
 
-}   
-             
-			
-
-			
-
-            
-
-        
-        
-//FIN DE LA CLASE PDF-----------------------------------------------------------------------------------------------------------  
+}//FIN DE LA CLASE PDF-----------------------------------------------------------------------------------------------------------  
 
 // Creación del objeto de la clase heredada
         $pdf = new PDF('P','mm','letter');

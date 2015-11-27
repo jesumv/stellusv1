@@ -66,7 +66,7 @@ require '/include/funciones.php';
 	   //disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
-	    	VALUES ($idproductos,'$fecha',99999,2,-$cantidad,$remiact,'$usu',1)";
+	    	VALUES ($idproductos,'$fecha',999999,2,-$cantidad,$remiact,'$usu',1)";
 			// Execute the query here now
 	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("Error en disminucion inventarios centrales: "
 	    	.mysqli_error($mysqli)); 
@@ -83,7 +83,7 @@ require '/include/funciones.php';
 			/* cerrar la conexion */
 	    	mysqli_close($mysqli);  
 			
-		    // redirección a la hoja pdf mediante javascript
+		    // redirecciï¿½n a la hoja pdf mediante javascript
 		    echo '<script type="text/javascript" language="Javascript">
 		    			window.open("php/rremision.php?r='.$remiact.'");  
                   </script>'; 
@@ -262,7 +262,7 @@ require '/include/funciones.php';
         
 	 <div class = "ui-widget-header">
 	    <table>
-	        <legend>Datos de la Remisión:</legend>
+	        <legend>Datos de la Remisiï¿½n:</legend>
 	        <tr>
 	            <td><label for="cliente">Cliente: </label></td>
 	            <td class="field"><input type="text" id="cliente"  name="cliente" class="requer"/></td>
@@ -325,7 +325,7 @@ require '/include/funciones.php';
 <p></p>
 <div>
 	<table class="tablap">
-		<th>Código</th><th>Descripción</th><th>Precio Unitario</th><th>Cantidad</th><th>Importe</th>
+		<th>Cï¿½digo</th><th>Descripciï¿½n</th><th>Precio Unitario</th><th>Cantidad</th><th>Importe</th>
 		<?php
 		for($i=0;$i<13;$i++){
 			echo"<tr>

@@ -39,7 +39,7 @@ function haycliente($rfc){
 		 $req = "SELECT idclientes FROM clientes WHERE rfc= '" 
     	.$rfc."'"; 
 		$query=mysqli_query($mysqli, $req);
-		/* determinar el n�mero de filas del resultado */	
+		/* determinar el número de filas del resultado */	
 		$filas = $query->num_rows;
  	
     } else {

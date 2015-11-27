@@ -23,7 +23,7 @@ require '/include/funciones.php';
 	   		$ref= $_POST ['idfact'];
 			$fecha =strtoupper($_POST ['idfecha']) ;
 			$oc= $_POST ['oc'];
-			$remision =strtoupper($_POST ['rem']) ;	
+			$remision =$_POST ['rem'] ;	
 			$subtotal= $_POST ['ist'];
 			$iva= $_POST ['idiva'];
 			$total= $_POST ['idtot'];
@@ -34,35 +34,65 @@ require '/include/funciones.php';
 			$observaciones = $_POST ['obser'];
 			$usu = $_SESSION['login_user'];	
 			$invact = 99;
-//insercion en la tabla de inventarios
 			
-//INSERCION EN TABLA ARTICULOS
 			//datos de los articulos.ciclo por cada articulo
-			
 			$table = 'artfactura';
+			$table2 = 'inventarios';
+			$table3 = 'remisiones';
 	//ciclo por tantos articulos como haya en la factura		
 			for ($i=0; $i<$arts; $i++) {
 	    		$idproductos= $_POST ['tdid'.$i];
 				$punit= $_POST ['tdi4'.$i];
 				$cantidad = $_POST ['tdi3'.$i];
-				$impor = $_POST ['tdi5'.$i];
-				$invact = 1;
+				$impor = $_POST ['tdi5'.$i];			
+//cambios  en la tabla de inventarios si no hay numero de remision.
+				if($remision == ''){
+//disminución de almacen central
+			   		$sqlCommand= "INSERT INTO $table2 (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
+			    	VALUES ($idproductos,'$fecha',999999,2,-$cantidad,$ref,'$usu',5)";
+					// Execute the query here now
+			    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en alta de inventarios".mysqli_error($mysqli));
+//decremento en almacen de inventario. mientras no se tengan pasos separados en logistica
+					//se supone que nos estamos enterando de los productos consumidos.
+								$sqlCommand= "INSERT INTO $table2 (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
+						    	VALUES ($idproductos,'$fecha','$nosuc',2,-$cantidad,$ref,'$usu',5)";
+								$query=mysqli_query($mysqli, $sqlCommand) or die ("error en disminucion inv cent ".mysqli_error($mysqli)); 
+//Incremento en almacen de destino
+						   		$sqlCommand= "INSERT INTO $table2 (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
+						    	VALUES ($idproductos,'$fecha','$nosuc',1,$cantidad,$ref,'$usu',5)";
+								$query=mysqli_query($mysqli, $sqlCommand) or die ("error en incremento inv cent ".mysqli_error($mysqli)); 
+//si hay numero de remision, se disminuye el inventario del cliente
+					}else{
+								$sqlCommand= "INSERT INTO $table2 (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
+						    	VALUES ($idproductos,'$fecha','$nosuc',2,-$cantidad,$ref,'$usu',5)";
+								$query=mysqli_query($mysqli, $sqlCommand) or die ("error en disminucion inv cte ".mysqli_error($mysqli));
+			//MARCADO DE REMISION COMO FACTURADA EN TABLA REMISIONES
+								$sqlCommand = "UPDATE $table3 SET factura ='$ref', status =10 WHERE idremisiones= $remision LIMIT 1";
+							 // Execute the query here now
+					    		$query = mysqli_query($mysqli, $sqlCommand) or die ('error en marcado de remision '.mysqli_error($mysqli));  
+					}
+//obtencion del numero de movimiento del inventario
+								$sql= "SELECT MAX(idinventarios) FROM inventarios";
+					            $result = mysqli_query($mysqli,$sql);
+					            $result2 = mysqli_fetch_row($result);
+								$invact= $result2[0];
+					
+//INSERCION EN TABLA ARTICULOS			
 				$sqlCommand= "INSERT INTO $table (idfactura,codigo,precio_unitario,cantidad,importe,idinventario)
-	    	VALUES ($ref,$idproductos,$punit,$cantidad,$impor,$invact)";
-			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla artfactura ".mysqli_error($mysqli));	
+	    		VALUES ($ref,$idproductos,$punit,$cantidad,$impor,$invact)";
+				// Execute the query here now
+		    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla artfactura ".mysqli_error($mysqli));	
 			} 
 				   		   
-	    	//INSERCION EN TABLA FACTURAS
-			$table = 'facturas2';
-	   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,remision,subtotal,iva,total,agente,idsuccliente,
-	   		idclientes,observaciones,usu)
-	    	VALUES ($ref,'$fecha','$oc','$remision',$subtotal,$iva,$total,'$agente','$nosuc',$idclientes,'$observaciones',
-	    	'$usu')";
+//INSERCION EN TABLA FACTURAS
+				$table = 'facturas2';
+		   		$sqlCommand= "INSERT INTO $table (no_factura,fecha,oc,remision,subtotal,iva,total,agente,idsuccliente,
+		   		idclientes,observaciones,usu)
+		    	VALUES ($ref,'$fecha','$oc','$remision',$subtotal,$iva,$total,'$agente','$nosuc',$idclientes,'$observaciones',
+		    	'$usu')";
 			// Execute the query here now
-	    	$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla facturas ".mysqli_error($mysqli)); 
-
-
+	    		$query=mysqli_query($mysqli, $sqlCommand) or die ("error en tabla facturas ".mysqli_error($mysqli)); 
+			
 }
 		
 		if(isset($_POST['enviodato'])){
@@ -70,7 +100,7 @@ require '/include/funciones.php';
 		    oprimio($mysqli);
 			/* cerrar la conexion */
 	    	mysqli_close($mysqli);  
-			//header('Location: consfactura.php');
+			//header('Location: consfactura2.php');
 		}
 		
 	} else {
@@ -130,7 +160,29 @@ function afterSuccess(results)
 	document.getElementById("upload-wrapper").style.display = "none";
 //si la factura ya existe, la rutina acaba	
 	var valida = results['valida']
-	if(valida != 0){validafact(valida)}else{			
+	
+//inicializacion del cuadro de advertencias
+		$("#advert").dialog({
+		autoOpen: false,
+		modal: true,
+		  buttons: {
+	        "Continuar con la operación": function() {
+	          $( this ).dialog( "close" );
+	        var element = document.getElementById('mensajef');
+			element.parentNode.removeChild(element);
+	        },
+	        "Cancelar": function() {
+	        if($('#rem').val()!= ''){$('#rem').val('');}
+	         if($('oc').val()!= ''){$('#oc').val('');}
+
+	          $( this ).dialog( "close" );
+	        var element = document.getElementById('mensajef');
+			element.parentNode.removeChild(element);
+	        }
+		}
+		});
+		
+	if(valida != 0){validafact(valida)}else{
 		//mostrar la forma de captura
 			document.getElementById("capauto").style.display = "block";
 		//traer los datos del archivo de la factura	
@@ -207,12 +259,10 @@ function afterSuccess(results)
 		            	$("#rem").focus();      						
 		            }  
 		        });
-//funcion para verificar la existencia de remisiones y ordenes de compra
-		$("#oc").change(function(){
-			
-});
-//se valida la forma en validaciones.js
-validafact2();
+
+
+//se valida el correcto llenado de la forma en validaciones.js
+		validafact2();
 	} 		
 };
 
@@ -389,9 +439,53 @@ function anadefila(num,codigo,idprod,descrip,cantid,punit,impor) {
                 $('#tdi5'+ num).val(impor);
 }
 
-//funcion para revisar que no se hayan facturado antes ni la remision ni la orden de compra
-function checanuevas(rem,oc){
-	
+//validaciones para verificar la existencia de remisiones y ordenes de compra
+		$("#rem").change(function(){
+			rem= $("#rem").val();
+			checarem(rem)
+		});
+				
+		$("#oc").change(function(){
+				oc= $("#oc").val();
+				checaoc(oc)
+		});
+//funciones para revisar que no se hayan facturado antes ni la remision ni la orden de compra
+function checaoc(oc){
+	$.get("php/checadatoc.php",
+	{
+        oc: oc,
+    },
+    function(data, status){
+           	if(data == -1){
+	    	var mensaje = "LA ORDEN DE COMPRA YA ESTA ASOCIADA A OTRA FACTURA. ";
+	        advert(mensaje);
+	        $('#oc').setfocus;
+       }else{$('#obser').setfocus}
+    }
+		
+	);
+}
+
+function checarem(rem){
+	$.get("php/checadatrem.php",
+	{
+        rem: rem,
+    },
+    function(data, status){
+    	if(data == -1){
+	    	var mensaje = "LA REMISION YA ESTA ASOCIADA A OTRA FACTURA. ";
+	        advert(mensaje);
+	        $('#rem').setfocus;
+       }else{$('#oc').setfocus}
+    }
+		
+	);
+}
+
+//funcion para presentar el cuadro de advertencia
+function advert(mensaj){
+	$( "#advert" ).append("<p id='mensajef'>"+ mensaj +"</p>" );	
+	$("#advert").dialog("open");
 }
 
 });
@@ -403,6 +497,11 @@ function checanuevas(rem,oc){
 </head>
 
 <body>
+<!--CAJA DE ADVERTENCIA----------------------------------------------------------------------------------------> 
+Diálogo:
+<div id="advert" title="Mensaje de Advertencia">
+</div>	
+	
 <!--LISTON DE ENCABEZADO ---------------------------------------------------------------------------------------->  
 
     <?php 
@@ -424,11 +523,6 @@ function checanuevas(rem,oc){
 	<div id="output"></div>
 </div>
 	
-	<div id="eleccion1" align="center">
-		<h2>ó</h2>
-		<br />
-		<h3><input type="radio" name="manual" value="manual">Subir Factura Manual:</h3>
-		</div>
 		
 </div>
 

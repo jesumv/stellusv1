@@ -49,7 +49,7 @@ global $num;
 					$otrabd = new otrasdbutils;
 					$cliente= $otrabd->ultcliente($mysqli);
 					$almacen = $cliente.'000';
-					$descrip = 'ALMACEN MATRIZ '.$corto;
+					$descrip = $corto.' MATRIZ ';
 		
 				 $sqlCommand= "INSERT INTO almacenes (idclientes,no_almacen,descripcion,tipo_almacen,usu, status)
 	        	VALUES ($cliente,$almacen,'$descrip',2,'$usu',0)";

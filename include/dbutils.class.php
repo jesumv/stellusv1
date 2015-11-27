@@ -223,10 +223,19 @@
 			/* esta funcion determina el estado de una remision en funcion de los parametros */
 			if ($tipo == 2) {
 				$resul = "EN BLANCO";
-			}elseif($estado == 5) {
-					$resul = "CANCELADA";
 			}else{
-				$resul = "VIGENTE";
+							switch ($estado) {
+			    case 5:
+			      $resul = "CANCELADA";
+			        break;
+			    case 10:
+			        $resul = "FACTURADA";
+			        break;
+				default:
+			       	$resul = "VIGENTE";
+			        break;
+			}
+				
 			}
 			
 			return $resul;

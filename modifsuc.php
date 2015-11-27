@@ -21,8 +21,10 @@ global $num;
 		//esta funcion hace las consultas de actualizacion
 			$table = 'succliente';
 			$cliente = strtoupper($_POST ['numcte']) ;
+			$nomcte = strtoupper($_POST ['cliente']) ;
 		    $num_suc = strtoupper($_POST ['num_suc']) ;
-		    $nombre = strtoupper($_POST ['nom']) ;
+			$nombre = strtoupper($_POST ['nom']) ;
+		    $nombre2 = $nomcte.' '.strtoupper($_POST ['nom']) ;
 		    $almac= strtoupper($_POST ['inalmac']) ;
 		    $usu = $_SESSION['login_user'];
 		
@@ -41,7 +43,7 @@ global $num;
 					$almacen = nalmac($cliente,$almac);
 					
 					$sqlCommand2= "INSERT INTO almacenes (idclientes,no_almacen,descripcion,tipo_almacen,usu,status)
-			        VALUES ($cliente,'$almac','$nombre',2,'$usu',0)";
+			        VALUES ($cliente,'$almac','$nombre2',2,'$usu',0)";
 					
 					// Execute the query here now
 			    	$query2 = mysqli_query($mysqli, $sqlCommand2) or die (mysqli_error($mysqli)); 

@@ -35,7 +35,7 @@ require '/include/funciones.php';
 			$observaciones = $_POST ['obser'];
 			$otros = $_POST ['razon'];
                  	
-	   //disminucion de almacen central   		
+//disminucion de almacen central   		
 	   		$table = 'inventarios';
 	   		$sqlCommand= "INSERT INTO $table (idproductos,fecha,almacen,tipomov,cantidad,referencia,usu,status)
 	    	VALUES ($idproductos,'$fecha',99999,2,-$cantidad,$ref,'$usu',5)";
@@ -245,7 +245,7 @@ require '/include/funciones.php';
 <div id="dialog-form" title="Otros Clientes" class="dialogo">
 	<form action="#" method="post" name = "datos" id="datos">
 		<fieldset class="cajita">
-		<label for="razonot" class="cajita">Nombre o Razón Social</label>
+		<label for="razonot" class="cajita">Nombre o Razï¿½n Social</label>
 		<input type="text" name="razonot" id="razonot" value="" class="text ui-widget-content ui-corner-all" class="cajita">
 		</fieldset>
 	</form> 

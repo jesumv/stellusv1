@@ -58,7 +58,7 @@
 		<?php
 			//inventarios en stellus
 		 $sqlCommand = "SELECT t1.idproductos, t2.nom_corto, SUM(t1.cantidad) AS total FROM inventarios AS t1 INNER JOIN productos AS t2 
-		 ON t1.idproductos = t2.idproductos WHERE t1.almacen = 99999 GROUP BY t2.idproductos";
+		 ON t1.idproductos = t2.idproductos WHERE t1.almacen = 999999 GROUP BY t2.idproductos";
 		  // Execute the query here now
 		 $query1=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN CONSULTA DE INVENTARIOS CLIENTES. ".mysqli_error($mysqli));
 		 
@@ -82,7 +82,7 @@
 	<?php
 					//inventarios en hospitales
 			 $sqlCommand = "SELECT t1.idproductos, t3.descripcion,t2.nom_corto, SUM(t1.cantidad) AS total FROM inventarios AS t1 INNER JOIN productos AS t2 
-			 ON t1.idproductos = t2.idproductos INNER JOIN almacenes AS t3 ON t1.almacen = t3.no_almacen WHERE t1.almacen <99999 GROUP BY t1.almacen,t2.idproductos";
+			 ON t1.idproductos = t2.idproductos INNER JOIN almacenes AS t3 ON t1.almacen = t3.no_almacen WHERE t1.almacen <999999 GROUP BY t1.almacen,t2.idproductos";
 			 
 			  // Execute the query here now
 			 $query1=mysqli_query($mysqli, $sqlCommand) or die ("ERROR EN CONSULTA DE INVENTARIOS CLIENTES. ".mysqli_error($mysqli));
@@ -125,7 +125,7 @@
 	</div> <!--FIN DE seccion  secciones----------------------------------------------------------------> 
 		 
 <?php
-/* cerrar la conexión */
+/* cerrar la conexiï¿½n */
   mysqli_close($mysqli);
 ?>
 		 

@@ -1,0 +1,105 @@
+body {
+	font-family:Arial, Helvetica, sans-serif;
+    font-size:14px;
+}
+
+
+#bandasup{
+	
+	background-color:#004080;
+	height: 10em;
+	padding-left: 1em;
+	padding-bottom: 1em;
+	color:#ffffff;
+	margin-bottom:3em;
+}
+
+#div1{
+	float:left;
+	
+}
+
+#div2{
+	float:right;
+	margin-top:1em;
+	margin-right:1em;	
+}
+
+#logodiv{
+	clear: left;
+	float:left;
+}
+
+#logoprinc{
+	width:85px;
+	height:85px;
+}
+
+#saludo{
+	margin-top:3em;
+	margin-right:1em;
+	float:right;
+}
+
+.limpia{
+	/* division para limpiar flotaciones */
+	clear:both;
+}
+
+#titpag {
+
+	margin-top:2em;
+	color:#000000;
+}
+
+
+#footer{
+	margin-top:1em;
+	background-color:#7897ba;
+	border-top:solid 10px;
+	height: 3em;
+	padding-left: 1em;
+	padding-bottom: 1em;
+	text-align:center;
+}
+
+.cajacentrada{
+	margin:auto;
+}
+
+#cajacent{
+	width:575px;
+	margin-top: 1em;
+	margin-left: auto ;
+  	margin-right: auto ;
+}
+
+.centraelem{
+	margin:auto;
+	text-align:center;
+}
+
+/*estilos para las tablas*/
+
+table { border-right:1px solid #000000; border-bottom:1px solid #ccc; margin:auto}
+th	{ background:#8080ff; padding:5px; border-left:1px solid #000000; border-top:1px solid #000000; }
+table.td	{ padding:5px; border-left:1px solid #ccc; border-top:1px solid #ccc; }
+
+/*caja de elecci�n */
+
+#cajaelec {
+    background: #3d91a2 none repeat scroll 0 0;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    margin-bottom: 25px;
+    padding: 50px;
+    width: 50%;
+}
+/*texto con orientación vertical*/
+.vtext{
+ 	width:1px;
+    word-wrap: break-word;
+}
+
